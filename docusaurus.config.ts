@@ -3,8 +3,8 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'Ma Documentation TypeScript',
-  tagline: 'Documentation technique avancée avec TypeScript',
+  title: 'gl0bal01 | Security Research',
+  tagline: 'Security research, penetration testing and digital investigation techniques',
   favicon: 'img/favicon.ico',
 
   // Configuration spécifique pour gl0bal01.github.io
@@ -22,15 +22,19 @@ const config: Config = {
 
   // Configuration i18n (optionnel)
   i18n: {
-    defaultLocale: 'fr',
-    locales: ['fr'],
+    defaultLocale: 'en',
+    locales: ['en'],
   },
-
+  themes: ['@docusaurus/theme-mermaid'],
+  markdown: {
+    mermaid: true,
+  },
   presets: [
     [
       'classic',
       {
         docs: {
+          routeBasePath: '/',
           sidebarPath: './sidebars.ts',
           editUrl:
             'https://github.com/gl0bal01/gl0bal01.github.io/tree/main/',
@@ -48,80 +52,74 @@ const config: Config = {
   ],
 
   themeConfig: {
-    // Remplacer par votre image de réseau social
-    image: 'img/docusaurus-social-card.jpg',
+    mermaid: {
+      theme: {light: 'neutral', dark: 'forest'},
+    },
+//    image: 'img/logo.svg',
     navbar: {
-      title: 'Ma Documentation',
+      title: 'Om̐',
       logo: {
-        alt: 'Logo du Site',
-        src: 'img/logo.svg',
+        alt: 'gl0bal01',
+        src: '/img/logo.svg',
       },
       items: [
-        {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Documentation',
-        },
+        {to: '/ai', label: 'AI', position: 'left'},
+        {to: '/cyber', label: 'Cyber', position: 'left'},
         {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/gl0bal01/gl0bal01.github.io',
-          label: 'GitHub',
+          label: 'Links',
           position: 'right',
+          items: [
+            {
+              href: 'https://github.com/gl0bal01/',
+              label: 'Github',
+              target: '_blank',
+              rel: null,
+            },
+            {
+              href: 'https://start.me/u/gl0bal01',
+              label: 'Start.me',
+              target: '_blank',
+              rel: null,
+            },
+          ],
         },
       ],
     },
     footer: {
       style: 'dark',
-      links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Documentation',
-              to: '/docs/intro',
-            },
-          ],
-        },
-        {
-          title: 'Communauté',
-          items: [
-            {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
-            },
-          ],
-        },
-        {
-          title: 'Plus',
-          items: [
-            {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/gl0bal01/gl0bal01.github.io',
-            },
-          ],
-        },
-      ],
-      copyright: `Copyright © ${new Date().getFullYear()} gl0bal01.`,
+      copyright: `C0pain Right! © ${new Date().getFullYear()} gl0bal01. Build with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
-      additionalLanguages: ['bash', 'diff', 'json', 'typescript', 'php', 'yaml'],
+      additionalLanguages: ['bash', 'diff', 'json', 'typescript', 'php', 'yaml', 'go'],
     },
   } satisfies Preset.ThemeConfig,
+    headTags: [
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossorigin: 'anonymous',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@600;700;800&display=swap',
+      },
+    },
+  ],
 };
 
 export default config;

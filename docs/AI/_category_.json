@@ -1,0 +1,9 @@
+{
+  "label": "AI",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "slug": "ai",
+    "description": "Essential guides and methodologies for AI implementation, prompt engineering, and optimization."
+  }
+}
