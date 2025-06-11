@@ -88,7 +88,7 @@ Looking to sharpen your cybersecurity skills? Whether you're a beginner or an ex
   <p>Fred is a platform that supports you every step of the way in your OSINT practice. From complete beginners to seasoned practitioners, a wide range of courses will enable you to discover methods and tools to improve your OSINT experience!</p>
   <a href="https://isfred.fr/" target="_blank" rel="noopener noreferrer" style={{textDecoration: 'none'}}>
     <button style={{padding: '1em 1em 0 1em', borderRadius: '6px', border: '1px solid #dddddd', cursor: 'pointer', fontWeight: 'bold'}}>
-      📖 Learn Compliance →
+      📖 Play →
     </button>
   </a>
 </div>

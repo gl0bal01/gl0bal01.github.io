@@ -88,7 +88,7 @@ const config: Config = {
     },
     footer: {
       style: 'dark',
-      copyright: `C0pain Right! © ${new Date().getFullYear()} gl0bal01. Build with Docusaurus.`,
+      copyright: `C0pain Right! © ${new Date().getFullYear()} gl0bal01. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,

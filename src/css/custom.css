@@ -37,10 +37,13 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -.0125em;
   padding-top: .65em;
 }
+@media (min-width: 990px) {
 h1 {font-weight: 800;font-size: 4em; line-height: 1.125em;}
+}
+h1 {font-weight: 800;}
 h2 {font-weight: 800;line-height: 1.1em;}
 h3, h4, h5, h6 {
   font-weight: 600;
 }
-/*ol li a{text-decoration: underline;}
-ol li a:hover{text-decoration: none;}*/
+ol li a{text-decoration: underline;}
+ol li a:hover{text-decoration: none;}
