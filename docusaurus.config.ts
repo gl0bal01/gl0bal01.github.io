@@ -57,17 +57,17 @@ const config: Config = {
     },
 //    image: 'img/logo.svg',
     navbar: {
-      title: 'Om̐',
+      title: '',
       logo: {
         alt: 'gl0bal01',
         src: '/img/logo.svg',
       },
       items: [
         {to: '/ai', label: 'AI', position: 'left'},
-        {to: '/cyber', label: 'Cyber', position: 'left'},
-        {to: '/blog', label: 'Blog', position: 'left'},
+        {to: '/cyber', label: 'CYBER', position: 'left'},
+        {to: '/blog', label: 'BLOG', position: 'left'},
         {
-          label: 'Links',
+          label: 'LINKS',
           position: 'right',
           items: [
             {

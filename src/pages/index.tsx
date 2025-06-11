@@ -16,12 +16,79 @@ function HomepageHeader() {
           {siteConfig.title}
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/blog">
-            Blog
-          </Link>
+        
+        {/* Professional Card Grid */}
+        <div className={styles.cardGrid}>
+          <div className={clsx('card', styles.categoryCard)}>
+            <div className="card__header">
+              <div className={styles.cardIcon}>🤖</div>
+              <h3>AI Security</h3>
+            </div>
+            <div className="card__body">
+              <p>Explore cutting-edge research in artificial intelligence security, 
+              machine learning vulnerabilities, and AI-powered attack detection.</p>
+            </div>
+            <div className="card__footer">
+              <Link
+                className="button button--primary button--block"
+                to="/ai">
+                Explore AI Research
+              </Link>
+            </div>
+          </div>
+          
+          <div className={clsx('card', styles.categoryCard)}>
+            <div className="card__header">
+              <div className={styles.cardIcon}>🛡️</div>
+              <h3>Cybersecurity</h3>
+            </div>
+            <div className="card__body">
+              <p>Comprehensive penetration testing methodologies, vulnerability 
+              assessments, and defensive security strategies.</p>
+            </div>
+            <div className="card__footer">
+              <Link
+                className="button button--primary button--block"
+                to="/cyber">
+                View Cyber Content
+              </Link>
+            </div>
+          </div>
+          
+          <div className={clsx('card', styles.categoryCard)}>
+            <div className="card__header">
+              <div className={styles.cardIcon}>🔍</div>
+              <h3>OSINT</h3>
+            </div>
+            <div className="card__body">
+              <p>Open Source Intelligence gathering techniques, digital investigation 
+              methods, and information reconnaissance strategies.</p>
+            </div>
+            <div className="card__footer">
+              <Link
+                className="button button--primary button--block"
+                to="/osint">
+                Discover OSINT
+              </Link>
+            </div>
+          </div>
+          
+          <div className={clsx('card', styles.categoryCard)}>
+            <div className="card__header">
+              <div className={styles.cardIcon}>📝</div>
+              <h3>Blog</h3>
+            </div>
+            <div className="card__body">
+              <p>Exploring neurodiversity, human psychology, and the madness of mind—alongside cutting-edge research in cybersecurity, threat intelligence, and digital forensics.</p>
+            </div>
+            <div className="card__footer">
+              <Link
+                className="button button--secondary button--block"
+                to="/blog">
+                Read Latest Posts
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </header>
@@ -35,11 +102,11 @@ export default function Home(): ReactNode {
       description="Security research, penetration testing and digital investigation techniques">
       <HomepageHeader />
       <main>
-  <img
-    src={require('@site/static/img/lama.jpg').default}
-    alt="Coucou les c0pains"
-    style={{ width: '100%', height: 'auto' }}
-  />
+        <img
+          src={require('@site/static/img/lama.jpg').default}
+          alt="gl0bal01 Security Research Mascot"
+          className={styles.mascotImage}
+        />
       </main>
     </Layout>
   );

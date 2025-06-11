@@ -1,23 +1,242 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
+/* Hero Banner */
 .heroBanner {
-  padding: 4rem 0;
+  padding: 4rem 0 6rem 0;
   text-align: center;
   position: relative;
   overflow: hidden;
+  background: linear-gradient(135deg, #ff6b6b 0%, #feca57 25%, #48dbfb 50%, #ff9ff3 75%, #54a0ff 100%);
+  animation: rainbow 10s ease infinite;
+  background-size: 400% 400%;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
+@keyframes rainbow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 
-.buttons {
+.heroBanner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.heroBanner .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* Card Grid Layout */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Category Cards - Dark Theme Compatible */
+.categoryCard {
+  background: var(--ifm-card-background-color) !important;
+  border: 1px solid var(--ifm-color-emphasis-200) !important;
+  transition: all 0.3s ease !important;
+  height: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+}
+
+.categoryCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+  border-color: var(--ifm-color-primary) !important;
+}
+
+.categoryCard .card__header {
+  text-align: center;
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.categoryCard .card__body {
+  flex-grow: 1;
+  padding: 0 1.5rem 1rem 1.5rem;
+  text-align: center;
+}
+
+.categoryCard .card__footer {
+  padding: 1rem 1.5rem 1.5rem 1.5rem;
+  margin-top: auto;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  background: var(--ifm-color-emphasis-0);
+}
+
+.cardIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.categoryCard h3 {
+  color: var(--ifm-color-gray-900);
+  margin-bottom: 0;
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
+/* Dark Theme Specific Adjustments */
+[data-theme='dark'] .categoryCard h3 {
+  color: var(--ifm-color-gray-100);
+}
+
+.categoryCard p {
+  color: var(--ifm-color-content-secondary);
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+/* Button Customizations - Fixed Hover Issues */
+.categoryCard .button {
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.5px;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.categoryCard .button--primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+}
+
+.categoryCard .button--primary:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-1px);
+  color: white;
+  text-decoration: none;
+}
+
+.categoryCard .button--secondary {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  border: none;
+  color: white;
+}
+
+.categoryCard .button--secondary:hover {
+  background: linear-gradient(135deg, #3dd771 0%, #32e7cb 100%);
+  transform: translateY(-1px);
+  color: white;
+  text-decoration: none;
+}
+
+/* Mascot Image - Full Width */
+.mascotImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.mascotImage:hover {
+  transform: scale(1.02);
+}
+
+/* Dark Theme Specific Adjustments */
+[data-theme='dark'] .categoryCard {
+  background: var(--ifm-background-color) !important;
+  border-color: var(--ifm-color-emphasis-300) !important;
+}
+
+[data-theme='dark'] .categoryCard:hover {
+  border-color: var(--ifm-color-primary) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme='dark'] .categoryCard .card__header {
+  border-bottom-color: var(--ifm-color-emphasis-300);
+}
+
+[data-theme='dark'] .categoryCard .card__footer {
+  border-top-color: var(--ifm-color-emphasis-300);
+  background: var(--ifm-color-emphasis-100);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 3rem 0 4rem 0;
+  }
+  
+  .cardGrid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .heroBanner {
+    padding: 2rem 0 3rem 0;
+  }
+  
+  .cardGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .cardIcon {
+    font-size: 2.5rem;
+  }
+  
+  .categoryCard .card__header {
+    padding: 1.5rem 1rem 1rem 1rem;
+  }
+  
+  .categoryCard .card__body {
+    padding: 0 1rem 1rem 1rem;
+  }
+  
+  .categoryCard .card__footer {
+    padding: 1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .heroBanner {
+    padding: 1.5rem 0 2rem 0;
+  }
+  
+  .cardIcon {
+    font-size: 2rem;
+  }
+  
+  .categoryCard h3 {
+    font-size: 1.2rem;
+  }
+  
+  .categoryCard .button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
 }
