@@ -5,3 +5,23 @@ pivoting:
 research:
   label: Research
   permalink: /research
+
+ctf:
+  label: Ctf
+  permalink: /ctf
+
+training:
+  label: Training
+  permalink: /training
+
+ai:
+  label: AI
+  permalink: /ai
+
+coding:
+  label: Coding
+  permalink: /coding
+
+productivity:
+  label: Productivity
+  permalink: /productivity

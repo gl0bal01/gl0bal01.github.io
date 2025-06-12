@@ -11,7 +11,7 @@ keywords:
   - global01
   - gl0bal01
 authors: [gl0bal01]
-tags: [prompt, cheatsheet]
+tags: [Prompt, Cheatsheet]
 ---
 
 

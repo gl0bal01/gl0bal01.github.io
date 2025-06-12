@@ -1,0 +1,9 @@
+{
+  "label": "OSINT",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "slug": "osint",
+    "description": "Open Source Intelligence gathering techniques, digital investigation methods, and information reconnaissance strategies."
+  }
+}

@@ -3,12 +3,12 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'gl0bal01 | Security Research',
-  tagline: 'Security research, penetration testing and digital investigation techniques',
+  title: 'gl0bal01 | Research',
+  tagline: 'Security research, penetration testing, digital investigation techniques and human madness',
   favicon: 'img/favicon.ico',
 
   // Configuration spécifique pour gl0bal01.github.io
-  url: 'https://gl0bal01.github.io',
+  url: 'https://gl0bal01.com',
   baseUrl: '/', // Pour un site utilisateur GitHub Pages
   
   // Configuration GitHub Pages
@@ -36,16 +36,30 @@ const config: Config = {
         docs: {
           routeBasePath: '/',
           sidebarPath: './sidebars.ts',
-          editUrl:
-            'https://github.com/gl0bal01/gl0bal01.github.io/tree/main/',
+          editUrl: 'https://github.com/gl0bal01/gl0bal01.github.io/tree/main/',
+          showLastUpdateAuthor: true,
+          showLastUpdateTime: true,
         },
         blog: {
           showReadingTime: true,
-          editUrl:
-            'https://github.com/gl0bal01/gl0bal01.github.io/tree/main/',
+          editUrl: 'https://github.com/gl0bal01/gl0bal01.github.io/tree/main/',
+          blogTitle: 'Blog',
+          blogDescription: 'Exploring neurodiversity, human psychology, and the madness of mind—alongside research in cybersecurity, and digital forensics.',
+          postsPerPage: 30,
         },
         theme: {
           customCss: './src/css/custom.css',
+        },
+        gtag: {
+          trackingID: 'G-NFE7MZ9S3P',
+          anonymizeIP: true,
+        },
+        sitemap: {
+          lastmod: 'date',
+          changefreq: 'weekly',
+          priority: 0.5,
+          ignorePatterns: ['/tags/**'],
+          filename: 'sitemap.xml',
         },
       } satisfies Preset.Options,
     ],
@@ -55,6 +69,9 @@ const config: Config = {
     mermaid: {
       theme: {light: 'neutral', dark: 'forest'},
     },
+   /* announcementBar: {
+      content: `🎉️ ⭐️ If you like this repo, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/gl0bal01/gl0bal01.github.io">GitHub</a> 🥳️`,
+    },*/
 //    image: 'img/logo.svg',
     navbar: {
       title: '',
@@ -65,9 +82,12 @@ const config: Config = {
       items: [
         {to: '/ai', label: 'AI', position: 'left'},
         {to: '/cyber', label: 'CYBER', position: 'left'},
+        {to: '/osint', label: 'OSINT', position: 'left'},
         {to: '/blog', label: 'BLOG', position: 'left'},
-        {
-          label: 'LINKS',
+        {to: 'https://github.com/gl0bal01/', label: 'Github', target: '_blank', rel: null, position: 'right'},
+        {to: 'https://start.me/u/gl0bal01', label: 'Start.me', target: '_blank', rel: null, position: 'right'},
+/*        {
+          label: 'Links',
           position: 'right',
           items: [
             {
@@ -83,12 +103,12 @@ const config: Config = {
               rel: null,
             },
           ],
-        },
+        },*/
       ],
     },
     footer: {
       style: 'dark',
-      copyright: `C0pain Right! © ${new Date().getFullYear()} gl0bal01. Built with Docusaurus.`,
+      copyright: `© ${new Date().getFullYear()} gl0bal01. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,

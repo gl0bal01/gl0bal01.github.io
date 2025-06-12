@@ -1,7 +1,7 @@
 ---
-id: meta-prompting-guide
+id: meta-prompting-claude
 title: "Meta-Prompting: Using Claude to Optimize Your Prompts"
-sidebar_label: "Meta-Prompting Manual"
+sidebar_label: "Meta-Prompting with Claude"
 sidebar_position: 2
 description: "A comprehensive academic reference for systematic prompt optimization using Claude's analytical capabilities to improve AI output quality through iterative refinement methodologies"
 keywords:
@@ -20,7 +20,7 @@ keywords:
   - gl0bal01
   - global01
 authors: [gl0bal01]
-tags: [prompt, claude]
+tags: [Prompt, Claude]
 ---
 
 # Meta-Prompting: Using Claude to Optimize Your Prompts

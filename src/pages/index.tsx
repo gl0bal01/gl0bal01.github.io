@@ -104,7 +104,7 @@ export default function Home(): ReactNode {
       <main>
         <img
           src={require('@site/static/img/lama.jpg').default}
-          alt="gl0bal01 Security Research Mascot"
+          alt="gl0bal01 Research Mascot"
           className={styles.mascotImage}
         />
       </main>

