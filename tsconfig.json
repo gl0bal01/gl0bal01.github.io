@@ -5,7 +5,10 @@
     "strict": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@components/*": ["src/components/*"]
+    }
   },
   "include": ["src/", "docs/", "blog/", "*.ts", "*.tsx"],
   "exclude": [".docusaurus", "build"]
