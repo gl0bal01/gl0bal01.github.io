@@ -69,6 +69,13 @@ const config: Config = {
     mermaid: {
       theme: {light: 'neutral', dark: 'forest'},
     },
+    algolia: {
+      appId: '4X4QPM0QJE',
+      apiKey: '7bd1f7f08cef3ff374e0c7f4f2d89725',
+      indexName: 'gl0bal01',
+      contextualSearch: true,
+      searchPagePath: 'search',
+    },
    /* announcementBar: {
       content: `🎉️ ⭐️ If you like this repo, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/gl0bal01/gl0bal01.github.io">GitHub</a> 🥳️`,
     },*/
