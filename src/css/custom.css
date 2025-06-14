@@ -4,7 +4,51 @@
  * work well for content-centric websites.
  */
 
-/* You can override the default Infima variables here. */
+/* Custom styling for Algolia DocSearch in dark mode */
+html[data-theme='dark'] {
+  --docsearch-modal-background: #1e1e1e;
+  --docsearch-hit-background: #2a2a2a;
+  --docsearch-hit-color: #ffffff;
+  --docsearch-hit-active-color: #ffffff;
+  --docsearch-hit-shadow: none;
+  --docsearch-searchbox-background: #2a2a2a;
+  --docsearch-searchbox-focus-background: #2a2a2a;
+  --docsearch-searchbox-color: #ffffff;
+  --docsearch-highlight-color: #fca311;
+  --docsearch-muted-color: #aaaaaa;
+  --docsearch-container-background: rgba(0, 0, 0, 0.6);
+  --docsearch-footer-background: #1e1e1e;
+}
+
+/* Ensure dropdowns and results use the correct background */
+html[data-theme='dark'] .DocSearch-Modal {
+  background: var(--docsearch-modal-background);
+  color: var(--docsearch-hit-color);
+}
+
+html[data-theme='dark'] .DocSearch-Hit {
+  background: var(--docsearch-hit-background);
+  color: var(--docsearch-hit-color);
+}
+
+html[data-theme='dark'] .DocSearch-Hit a {
+  color: inherit;
+}
+
+html[data-theme='dark'] .DocSearch-SearchBox {
+  background: var(--docsearch-searchbox-background);
+  color: var(--docsearch-searchbox-color);
+}
+
+html[data-theme='dark'] .DocSearch-Input {
+  background: var(--docsearch-searchbox-background);
+  color: var(--docsearch-searchbox-color);
+}
+
+html[data-theme='dark'] .DocSearch-Container {
+  background: var(--docsearch-container-background);
+}
+
 :root {
   --ifm-color-primary: #000000;
   --ifm-color-primary-dark: #000000;
@@ -27,6 +71,8 @@
   --ifm-color-primary-lightest: #ffffff;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+
 .menu__link { font-size: .96em;}
 .navbar__link--active {border-bottom:1px solid #DDDDDD;}
 .theme-doc-sidebar-container .menu__link.menu__link--active {border-left:6px solid #DDDDDD;border-bottom:1px solid #DDDDDD;}
