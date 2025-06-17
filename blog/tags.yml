@@ -25,3 +25,11 @@ coding:
 productivity:
   label: Productivity
   permalink: /productivity
+
+osint:
+  label: Osint
+  permalink: /osint
+
+investigation:
+  label: Investigation
+  permalink: /investigation
