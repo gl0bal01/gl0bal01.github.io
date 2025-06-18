@@ -3,7 +3,7 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'gl0bal01 | Research',
+  title: 'gl0bal01 | Notes & Research',
   tagline: 'Security research, penetration testing, digital investigation techniques and human madness',
   favicon: 'img/favicon.ico',
 
@@ -81,7 +81,7 @@ const config: Config = {
     },*/
 //    image: 'img/logo.svg',
     navbar: {
-      title: '',
+      title: 'gl0bal01',
       logo: {
         alt: 'gl0bal01',
         src: '/img/logo.svg',

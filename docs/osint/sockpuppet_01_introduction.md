@@ -13,7 +13,6 @@ keywords:
   - fake accounts
   - online personas
   - intelligence gathering
-  - global01
 date: "2025-01-01"
 sidebar_position: 1
 ---
