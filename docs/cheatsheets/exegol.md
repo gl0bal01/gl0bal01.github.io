@@ -1,7 +1,7 @@
 ---
 id: exegol-practical-guide
 title: "Comprehensive Exegol Practical Guide: Command Reference for Cybersecurity Professionals"
-sidebar_label: "Exegol"
+sidebar_label: "Exegol Practical"
 sidebar_position: 2
 description: "Complete practical reference commands for Exegol cybersecurity environment - from installation to advanced penetration testing workflows"
 keywords:

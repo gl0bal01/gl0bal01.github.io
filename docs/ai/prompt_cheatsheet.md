@@ -8,8 +8,6 @@ keywords:
   - meta-prompting
   - Action verbs
   - Prompt verbs
-  - global01
-  - gl0bal01
 authors: [gl0bal01]
 tags: [Prompt, Cheatsheet]
 ---

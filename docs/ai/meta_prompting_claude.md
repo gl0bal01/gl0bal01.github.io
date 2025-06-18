@@ -17,8 +17,6 @@ keywords:
   - llm performance
   - recursive improvement
   - prompt gradients
-  - gl0bal01
-  - global01
 authors: [gl0bal01]
 tags: [Prompt, Claude]
 ---

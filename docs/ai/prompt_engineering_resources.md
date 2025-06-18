@@ -5,12 +5,7 @@ description: A comprehensive collection of prompt engineering guides, tutorials,
 sidebar_position: 3
 sidebar_label: Prompt Engineering Resources
 tags:
-  - prompt-engineering
-  - ai
-  - llm
-  - development
-  - tutorials
-  - best-practices
+  - Prompt
 keywords:
   - prompt engineering
   - large language models
@@ -19,8 +14,6 @@ keywords:
   - few shot prompting
   - ReAct prompting
   - developer productivity
-  - gl0bal01
-  - global01
 last_update:
   date: 2025-06-12
   author: gl0bal01

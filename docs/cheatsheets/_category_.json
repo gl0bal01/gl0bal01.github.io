@@ -1,9 +1,9 @@
 {
-  "label": "TOOLS",
+  "label": "CHEATSHEETS",
   "position": 4,
   "link": {
     "type": "generated-index",
-    "slug": "tools",
+    "slug": "cheatsheets",
     "description": "A curated collection of powerful tools for developers and security professionals. Dive into practical resources designed to enhance automation, collaboration, and operational efficiency."
   }
 }
