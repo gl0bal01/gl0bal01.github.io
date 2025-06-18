@@ -90,6 +90,7 @@ const config: Config = {
         {to: '/ai', label: 'AI', position: 'left'},
         {to: '/cyber', label: 'CYBER', position: 'left'},
         {to: '/osint', label: 'OSINT', position: 'left'},
+        {to: '/cheatsheets', label: 'CHEATSHEETS', position: 'left'},
         {to: '/blog', label: 'BLOG', position: 'left'},
         {to: 'https://github.com/gl0bal01/', label: 'Github', target: '_blank', rel: null, position: 'right'},
         {to: 'https://start.me/u/gl0bal01', label: 'Start.me', target: '_blank', rel: null, position: 'right'},
