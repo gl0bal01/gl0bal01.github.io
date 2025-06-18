@@ -5,7 +5,7 @@ slug: git-hidden-gems-commands
 sidebar_label: "Powerful Commands"
 sidebar_position: 3
 authors: [gl0bal01]
-tags: [development, productivity]
+tags: [Development, Productivity]
 keywords: [git commands, git tips, version control, git bisect, git grep, git hooks, git workflow]
 date: 2024-06-18
 ---

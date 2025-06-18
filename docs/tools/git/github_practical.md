@@ -17,7 +17,7 @@ keywords:
   - workflow
   - devops
 authors: [gl0bal01]
-tags: [development, productivity]
+tags: [Development, Productivity]
 date: 2024-06-18
 ---
 
