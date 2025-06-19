@@ -74,8 +74,8 @@ html[data-theme='dark'] .DocSearch-Container {
 
 
 .menu__link { font-size: .96em;}
-.navbar__link--active {border-bottom:1px solid #DDDDDD;}
-.theme-doc-sidebar-container .menu__link.menu__link--active {border-left:6px solid #DDDDDD;border-bottom:1px solid #DDDDDD;}
+.navbar__link--active {border-bottom:2px solid #FFF;}
+.theme-doc-sidebar-container .menu__link.menu__link--active {border-left:6px solid #DDDDDD;border-bottom:2px solid #DDDDDD;}
 .theme-doc-sidebar-item-link-level-2.menu__list-item {font-size: .92em; font-weight: normal;}
 
 h1, h2, h3, h4, h5, h6 {

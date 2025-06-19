@@ -92,12 +92,15 @@ const config: Config = {
         {to: '/osint', label: 'OSINT', position: 'left'},
         {to: '/cheatsheets', label: 'CHEATSHEETS', position: 'left'},
         {to: '/blog', label: 'BLOG', position: 'left'},
-        {to: 'https://github.com/gl0bal01/', label: 'Github', target: '_blank', rel: null, position: 'right'},
-        {to: 'https://start.me/u/gl0bal01', label: 'Start.me', target: '_blank', rel: null, position: 'right'},
-/*        {
+        {
           label: 'Links',
           position: 'right',
           items: [
+            {
+              href: '/blog/ctf-platforms-training',
+              label: '🎭 Play & Learn',
+              rel: null,
+            },
             {
               href: 'https://github.com/gl0bal01/',
               label: 'Github',
@@ -110,8 +113,14 @@ const config: Config = {
               target: '_blank',
               rel: null,
             },
+            {
+              href: 'https://github.com/gl0bal01/bookmarklets',
+              label: 'Bookmarklets',
+              target: '_blank',
+              rel: null,
+            },
           ],
-        },*/
+        },
       ],
     },
     footer: {
@@ -121,7 +130,7 @@ const config: Config = {
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
-      additionalLanguages: ['bash', 'diff', 'json', 'typescript', 'php', 'yaml', 'go'],
+      additionalLanguages: ['bash', 'diff', 'json', 'typescript', 'php', 'yaml', 'go', 'sql'],
     },
   } satisfies Preset.ThemeConfig,
     headTags: [
