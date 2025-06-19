@@ -2,9 +2,9 @@
 slug: ctf-platforms-training
 title: Tired of Boring Security Training? Try These 20+ Engaging CTF Platforms
 authors: [gl0bal01]
-tags: [ctf, training]
-keywords: [ctf platforms, cybersecurity training, capture the flag, hacking challenges, penetration testing, ethical hacking, osint training, blockchain security, web exploitation, reverse engineering, malware analysis, pwn challenges, french ctf, picoctf, overthewire, hacktoria, ethernaut, damn vulnerable defi, powershell training, binary exploitation, bug bounty, vulnerability assessment, security education, infosec training, cyber defense, red team, blue team, incident response, digital forensics, threat hunting, security certifications, cissp, ceh, oscp, sans, comptia security plus, root-me, hack the box, osint4fun, global01, gl0bal01]
-date: 2025-06-10
+tags: [ctf, dev, training]
+keywords: [ctf platforms, cybersecurity training, capture the flag, hacking challenges, penetration testing, ethical hacking, osint training, blockchain security, web exploitation, reverse engineering, malware analysis, pwn challenges, french ctf, picoctf, overthewire, hacktoria, ethernaut, damn vulnerable defi, powershell training, binary exploitation, bug bounty, vulnerability assessment, security education, infosec training, cyber defense, red team, blue team, incident response, digital forensics, threat hunting, security certifications, cissp, ceh, oscp, sans, comptia security plus, root-me, hack the box, osint4fun, iximiuz, advent of code]
+date: 2025-06-19
 ---
 
 Looking to sharpen your cybersecurity skills? Whether you're a beginner or an experienced professional, these platforms offer hands-on challenges that will test and improve your abilities across various domains of information security. From web exploitation to OSINT investigations, here's your complete guide to the best CTF platforms and training games available.
@@ -37,6 +37,11 @@ Looking to sharpen your cybersecurity skills? Whether you're a beginner or an ex
   <a href="#advanced-platforms" style={{textDecoration: 'none'}}>
     <button style={{padding: '1em 1em 0 1em', borderRadius: '6px', border: '1px solid #dddddd', cursor: 'pointer'}}>
       💪 Advanced Exploitation
+    </button>
+  </a>
+  <a href="#dev-platforms" style={{textDecoration: 'none'}}>
+    <button style={{padding: '1em 1em 0 1em', borderRadius: '6px', border: '1px solid #dddddd', cursor: 'pointer'}}>
+      ⌨️ Dev Platforms
     </button>
   </a>
 </div>
@@ -303,36 +308,25 @@ Looking to sharpen your cybersecurity skills? Whether you're a beginner or an ex
   </a>
 </div>
 
-
-## 💡 Tips for Success
+## ⌨️ Dev Platforms {#dev-platforms}
 
 <div style={{padding: '20px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #dddddd'}}>
-  <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px'}}>
-    <div>
-      <h4 style={{marginTop: '0'}}>🎯 Set Clear Goals</h4>
-      <p style={{margin: '0'}}>Identify which cybersecurity domain interests you most and focus your initial efforts there.</p>
-    </div>
-    <div>
-      <h4 style={{marginTop: '0'}}>📅 Practice Regularly</h4>
-      <p style={{margin: '0'}}>Consistency is key to building and maintaining cybersecurity skills.</p>
-    </div>
-    <div>
-      <h4 style={{marginTop: '0'}}>👥 Join Communities</h4>
-      <p style={{margin: '0'}}>Engage with other learners through forums, Discord servers, and local meetups.</p>
-    </div>
-    <div>
-      <h4 style={{marginTop: '0'}}>📝 Document Your Learning</h4>
-      <p style={{margin: '0'}}>Keep notes on techniques and tools you discover during challenges.</p>
-    </div>
-    <div>
-      <h4 style={{marginTop: '0'}}>🔄 Stay Updated</h4>
-      <p style={{margin: '0'}}>Follow cybersecurity news and trends to understand current threats and defense strategies.</p>
-    </div>
-    <div>
-      <h4 style={{marginTop: '0'}}>🤝 Collaborate</h4>
-      <p style={{margin: '0'}}>Work with others on team challenges and share knowledge within the community.</p>
-    </div>
-  </div>
+  <h3 style={{marginTop: '0'}}>📦 labs.iximiuz.com</h3>
+  <p>An indie, hands‑on learning platform created by Ivan Velichko for mastering server-side disciplines like Linux, containers, Kubernetes, networking, DevOps, and SRE. The site combines in-depth blog posts with interactive virtual environments to help you learn by doing.</p>
+  <a href="https://labs.iximiuz.com/" target="_blank" rel="noopener noreferrer" style={{textDecoration: 'none'}}>
+    <button style={{padding: '1em 1em 0 1em', borderRadius: '6px', border: '1px solid #dddddd', cursor: 'pointer', fontWeight: 'bold'}}>
+      💻 Learn by doing →
+    </button>
+  </a>
 </div>
 
+<div style={{padding: '20px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #dddddd'}}>
+  <h3 style={{marginTop: '0'}}>🎓 Advent of Code</h3>
+  <p>Advent of Code is an annual online programming challenge—essentially a coding advent calendar—created by Eric Wastl in 2015. Each year, from December 1 to 25, participants unlock a pair of daily puzzles wrapped in a festive storyline.</p>
+  <a href="https://adventofcode.com/" target="_blank" rel="noopener noreferrer" style={{textDecoration: 'none'}}>
+    <button style={{padding: '1em 1em 0 1em', borderRadius: '6px', border: '1px solid #dddddd', cursor: 'pointer', fontWeight: 'bold'}}>
+      💻 Play & code →
+    </button>
+  </a>
+</div>
 Happy hacking, and may your flags be plentiful! 🚩

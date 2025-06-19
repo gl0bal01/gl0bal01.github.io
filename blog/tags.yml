@@ -33,3 +33,7 @@ osint:
 investigation:
   label: Investigation
   permalink: /investigation
+
+dev:
+  label: Dev
+  permalink: /dev
