@@ -91,7 +91,7 @@ const config: Config = {
         {to: '/cyber', label: 'CYBER', position: 'left'},
         {to: '/osint', label: 'OSINT', position: 'left'},
         {to: '/cheatsheets', label: 'CHEATSHEETS', position: 'left'},
-        {to: '/blog', label: 'BLOG', position: 'left'},
+        {to: '/blog', label: 'BLOG', position: 'left', className: 'blog-button'},
         {
           label: 'Links',
           position: 'right',

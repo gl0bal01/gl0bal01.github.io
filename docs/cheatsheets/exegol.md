@@ -21,7 +21,7 @@ authors: [gl0bal01]
 tags: [Tool, Cyber]
 ---
 
-# Exegol Practical Guide - Quick Reference
+# Exegol Practical Guide
 
 Exegol is a powerful containerized cybersecurity testing environment that provides a comprehensive suite of penetration testing tools in a portable, reproducible format. This guide serves as a quick reference for both beginners and experienced security professionals who need to quickly set up, configure, and use Exegol containers for various cybersecurity tasks.
 <details>

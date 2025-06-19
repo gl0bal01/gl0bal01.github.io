@@ -20,7 +20,7 @@ tags: [Development, DevOps]
 date: 2025-06-18
 ---
 
-# Docker Practical Examples: Complete Mastery Guide
+# Docker Practical Guide
 
 ## What is Docker?
 
