@@ -87,11 +87,11 @@ const config: Config = {
         src: '/img/logo.svg',
       },
       items: [
-        {to: '/ai', label: 'AI', position: 'left'},
-        {to: '/cyber', label: 'CYBER', position: 'left'},
-        {to: '/osint', label: 'OSINT', position: 'left'},
-        {to: '/cheatsheets', label: 'CHEATSHEETS', position: 'left'},
-        {to: '/blog', label: 'BLOG', position: 'left', className: 'blog-button'},
+        {to: '/ai', label: 'Ai', position: 'left'},
+        {to: '/cyber', label: 'Cyber', position: 'left'},
+        {to: '/osint', label: 'Osint', position: 'left'},
+        {to: '/cheatsheets', label: 'Cheatsheets', position: 'left'},
+        {to: '/blog', label: 'Blog', position: 'left', className: 'blog-button'},
         {
           label: 'Links',
           position: 'right',
