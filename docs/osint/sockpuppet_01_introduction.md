@@ -3,7 +3,7 @@ id: "intro-modern-sockpuppet-operations-osint"
 title: "Introduction to Modern Sockpuppet Operations for OSINT"
 description: "A comprehensive analysis of the evolving landscape of digital investigation and platform detection systems in 2025"
 author: "gl0bal01"
-tags: ["OSINT"]
+tags: ["Osint"]
 keywords:
   - sockpuppets
   - OSINT
@@ -14,7 +14,7 @@ keywords:
   - online personas
   - intelligence gathering
 date: "2025-01-01"
-sidebar_position: 1
+sidebar_position: 2
 ---
 import Highlight from '@site/src/components/Highlight';
 
