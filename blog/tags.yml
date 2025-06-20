@@ -37,3 +37,11 @@ investigation:
 dev:
   label: Dev
   permalink: /dev
+
+free:
+  label: Free
+  permalink: /free
+
+hosting:
+  label: Hosting
+  permalink: /hosting
