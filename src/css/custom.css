@@ -74,9 +74,37 @@ html[data-theme='dark'] .DocSearch-Container {
 
 
 .menu__link { font-size: .96em;}
-.navbar__link--active {border-bottom:2px solid #DDDDDD;}
+/*.navbar__link--active {border-bottom:2px solid #DDDDDD;}
 .theme-doc-sidebar-container .menu__link.menu__link--active {border-left:6px solid #DDDDDD;border-bottom:1px solid #DDDDDD;}
 .theme-doc-sidebar-item-link-level-2.menu__list-item {font-size: .92em; font-weight: normal;}
+*/
+
+.menu__link {
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+
+/* Hover effect for light mode */
+html[data-theme='light'] .menu__link:hover, html[data-theme='light'] .navbar__link--active {
+  background-color: #f0f4ff;
+  color: #1a1a1a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effect for dark mode */
+html[data-theme='dark'] .menu__link:hover, html[data-theme='dark'] .navbar__link--active {
+  background-color: #2e2e4d;
+  color: #ffffff;
+  box-shadow: 0 1px 4px rgba(255, 255, 255, 0.08);
+}
+.menu__link--active, .navbar__link--active {
+  background-color: #dbeafe;
+  font-weight: 600;
+}
+.menu__link, .navbar__link--active {
+  border-radius: 6px;
+}
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Host Grotesk', sans-serif;
@@ -109,4 +137,34 @@ p > ul { margin-bottom: 0;}
 
 .blog-button:hover {
   background-color: var(--ifm-color-primary-lightest);
+}
+
+/* Rainbow glow animation */
+@keyframes rainbowGlow {
+  0% { box-shadow: 0 0 8px #ff0055; }
+  25% { box-shadow: 0 0 8px #ffcc00; }
+  50% { box-shadow: 0 0 8px #00ffcc; }
+  75% { box-shadow: 0 0 8px #3366ff; }
+  100% { box-shadow: 0 0 8px #ff0055; }
+}
+
+/* Apply the animation only to the search button */
+.DocSearch-Button {
+  animation: rainbowGlow 4s ease-in-out infinite;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  z-index: 10;
+  position: relative;
+}
+
+/* Light theme glow softness */
+html[data-theme='light'] .DocSearch-Button {
+  background-color: #fff;
+  color: #000;
+}
+
+/* Dark theme glow contrast */
+html[data-theme='dark'] .DocSearch-Button {
+  background-color: #1a1a1a;
+  color: #fff;
 }
