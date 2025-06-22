@@ -106,13 +106,14 @@ html[data-theme='dark'] .menu__link:hover, html[data-theme='dark'] .navbar__link
   border-radius: 6px;
 }
 
+
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Host Grotesk', sans-serif;
   letter-spacing: -.0125em;
   padding-top: .65em;
 }
 @media (min-width: 990px) {
-h1 {font-weight: 800;font-size: 4em; line-height: 1.125em;}
+h1 {font-weight: 800;font-size: 3.8em; line-height: 1.125em;}
 }
 h1 {font-weight: 800;}
 h2 {font-weight: 800;line-height: 1.1em;}
