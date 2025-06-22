@@ -102,8 +102,9 @@ html[data-theme='dark'] .menu__link:hover, html[data-theme='dark'] .navbar__link
   background-color: #dbeafe;
   font-weight: 600;
 }
-.menu__link, .navbar__link--active {
-  border-radius: 6px;
+
+ .navbar__link--active {
+  border-radius: 20px;
 }
 
 
