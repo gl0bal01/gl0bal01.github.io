@@ -79,9 +79,9 @@ const config: Config = {
       contextualSearch: true,
       searchPagePath: 'search',
     },
-   /* announcementBar: {
-      content: `🎉️ ⭐️ If you like this repo, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/gl0bal01/gl0bal01.github.io">GitHub</a> 🥳️`,
-    },*/
+    announcementBar: {
+      content: `🎉️ ⭐️ If you like this repo, give it a star and follow me on <a target="_blank" rel="noopener noreferrer" href="https://github.com/gl0bal01/">GitHub</a> 🥳️`,
+    },
 //    image: 'img/logo.svg',
     navbar: {
       title: 'gl0bal01',
