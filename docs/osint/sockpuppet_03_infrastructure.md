@@ -432,12 +432,12 @@ class FinancialManager:
 - OSINT-specific features and capabilities
 - Team collaboration aspects
 
-<ins>**[Exegol](https://exegol.com):**</ins>
+**[Exegol](https://exegol.com):**
 - One minute create and destroy isolated container
 - Deployment advantages for professional operations
 - Tool categories for different investigation types (osint..)
 
-<ins>**[Qubes OS](https://www.qubes-os.org/):**</ins>
+**[Qubes OS](https://www.qubes-os.org/):**
 - Security-focused operating system
 - Compartmentalized computing
 - Hardware isolation
@@ -451,7 +451,7 @@ class FinancialManager:
 - Built-in privacy tools and applications
 - Ideal for high-security OSINT operations
 
-<ins>**[CSI Linux](https://csilinux.com/):**</ins>
+**[CSI Linux](https://csilinux.com/):**
 - Specialized Linux distribution for digital forensics and OSINT
 - Pre-installed investigation tools and frameworks
 - Designed specifically for cybersecurity professionals
