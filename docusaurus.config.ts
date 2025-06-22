@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'gl0bal01 | Notes & Research',
   tagline: 'Security research, penetration testing, digital investigation techniques and human madness',
-  favicon: 'img/favicon.ico',
+  favicon: 'icons/favicon.ico',
 
   // Configuration spécifique pour gl0bal01.github.io
   url: 'https://gl0bal01.com',
@@ -84,7 +84,7 @@ const config: Config = {
       title: 'gl0bal01',
       logo: {
         alt: 'gl0bal01',
-        src: '/img/logo.svg',
+        src: '/icons/android-icon-48x48.png',
       },
       items: [
         {to: '/ai', label: 'Ai', position: 'left'},
