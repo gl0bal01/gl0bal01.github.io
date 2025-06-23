@@ -3,7 +3,7 @@ id: "infrastructure-architecture-for-persistent-operations"
 title: "Infrastructure Architecture for Persistent Operations"
 description: "Comprehensive technical guide to building secure, scalable infrastructure for professional sockpuppet operations including network security, browser management, and operational compartmentalization"
 author: "gl0bal01"
-tags: ["Infrastructure", "Network Security", "Browser Management", "OPSEC"]
+tags: ["Infrastructure", "Network Security", "Browser Management", "OPSEC", "Osint"]
 keywords:
   - VPN
   - residential proxies
@@ -426,7 +426,7 @@ class FinancialManager:
 
 ### Device and Environment Isolation
 
-<ins>**[Kasm Workspaces](https://www.kasmweb.com/):**</ins>
+**[Kasm Workspaces](https://www.kasmweb.com/):</ins>
 - Detailed explanation of Zero-Trust Web Intermediary model
 - Code example showing security configuration
 - OSINT-specific features and capabilities
@@ -458,7 +458,7 @@ class FinancialManager:
 - Includes automated evidence collection capabilities
 - Optimized for investigative workflows
 
-<ins>**VMware Workstation Pro:**</ins>
+<ins>**VMware Workstation:**</ins>
 - Professional virtualization platform
 - Snapshot and rollback capabilities
 - Network isolation features

@@ -96,6 +96,8 @@ refinery-env\Scripts\activate     # Windows
 
 # Install Binary Refinery with all dependencies
 pip install binary-refinery[extended]
+# or
+pipx install binary-refinery
 
 # Verify installation
 emit "SGVsbG8gV29ybGQ=" | b64
