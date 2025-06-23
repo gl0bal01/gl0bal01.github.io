@@ -3,7 +3,7 @@ id: "advanced-persona-development-and-legend-building"
 title: "Advanced Persona Development and Legend Building"
 description: "Comprehensive guide to creating believable digital personas including psychological profiling, demographic research, and AI-assisted legend construction for professional OSINT operations"
 author: "gl0bal01"
-tags: ["Persona", "Social Engineering", "Sockpuppet", Osint"]
+tags: ["Persona", "Social Engineering", "Sockpuppet", "Osint"]
 keywords:
   - persona creation
   - legend building
