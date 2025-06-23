@@ -426,7 +426,7 @@ class FinancialManager:
 
 ### Device and Environment Isolation
 
-**[Kasm Workspaces](https://www.kasmweb.com/):</ins>
+**[Kasm Workspaces](https://www.kasmweb.com/):**
 - Detailed explanation of Zero-Trust Web Intermediary model
 - Code example showing security configuration
 - OSINT-specific features and capabilities
