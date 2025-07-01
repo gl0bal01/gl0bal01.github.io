@@ -113,14 +113,9 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -.0125em;
   padding-top: .65em;
 }
-@media (min-width: 990px) {
-h1 {font-weight: 800;font-size: 3.8em; line-height: 1.125em;}
-}
-h1 {font-weight: 800;}
-h2 {font-weight: 800;line-height: 1.1em;}
-h3, h4, h5, h6 {
-  font-weight: 600;
-}
+
+h1,h2{font-weight:800;}
+h3,h4,h5,h6{font-weight: 600;}
 #__blog-post-container a,.theme-doc-markdown.markdown a,ol li a{text-decoration: underline;}
 #__blog-post-container a:hover,.theme-doc-markdown.markdown a:hover,ol li a:hover{text-decoration-thickness:2px;}
 ol li a:hover{text-decoration: none;}
