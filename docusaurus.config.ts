@@ -93,6 +93,7 @@ const config: Config = {
         {to: '/ai', label: 'Ai', position: 'left'},
         {to: '/cyber', label: 'Cyber', position: 'left'},
         {to: '/osint', label: 'Osint', position: 'left'},
+        {to: '/reverse-engineering', label: 'Reverse', position: 'left'},
         {to: '/cheatsheets', label: 'Cheatsheets', position: 'left'},
         {to: '/blog', label: 'Blog', position: 'left', className: 'blog-button'},
         {

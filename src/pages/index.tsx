@@ -75,6 +75,22 @@ function HomepageHeader() {
           
           <div className={clsx('card', styles.categoryCard)}>
             <div className="card__header">
+              <div className={styles.cardIcon}>💥</div>
+              <h3>Reverse Engineering</h3>
+            </div>
+            <div className="card__body">
+              <p>Dive into compiled binaries with no source code, peeling back layers of obfuscation to uncover hidden logic, secret keys, and undocumented functionality.</p>
+            </div>
+            <div className="card__footer">
+              <Link
+                className="button button--primary button--block"
+                to="/reverse-engineering">
+                Go for Reverse
+              </Link>
+            </div>
+          </div>
+          <div className={clsx('card', styles.categoryCard)}>
+            <div className="card__header">
               <div className={styles.cardIcon}>📝</div>
               <h3>Blog</h3>
             </div>
