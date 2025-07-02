@@ -14,11 +14,11 @@ keywords:
   - data transformation
   - cyber threat analysis
 sidebar_label: "Binary Refinery Practical"
-sidebar_position: 5
+sidebar_position: 3
 authors:
   - name: gl0bal01
 last_update:
-  date: 2025-06-22
+  date: 2025-07-01
 tags:
   - malware-analysis
   - security-tools

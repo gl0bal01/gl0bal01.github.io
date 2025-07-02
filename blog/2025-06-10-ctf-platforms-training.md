@@ -286,6 +286,17 @@ Looking to sharpen your cybersecurity skills? Whether you're a beginner or an ex
   </a>
 </div>
 
+<div style={{padding: '20px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #dddddd'}}>
+<h3 style={{marginTop: '0'}}>PWN Adventure</h3>
+  <p>Pwnie Island is a limited-release, first-person, true open-world MMORPG set on a beautiful island where anything could happen. That's because this game is intentionally vulnerable to all kinds of silly hacks! Flying, endless cash, and more are all one client change or network proxy away. Are you ready for the mayhem?!</p>
+  <a href="http://www.pwnadventure.com/" target="_blank" rel="noopener noreferrer" style={{textDecoration: 'none'}}>
+    <button style={{padding: '1em 1em 0 1em', borderRadius: '6px', border: '1px solid #dddddd', cursor: 'pointer', fontWeight: 'bold'}}>
+      💻 Go for the Adventure →
+    </button>
+  </a>
+</div>
+
+
 ## 🖥️ System Administration & Scripting
 
 <div style={{padding: '20px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #dddddd'}}>

@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /tags/
 
 Sitemap: https://gl0bal01.com/sitemap.xml
 

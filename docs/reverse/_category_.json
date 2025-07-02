@@ -1,0 +1,9 @@
+{
+  "label": "Reverse Engineering",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "slug": "reverse-engineering",
+    "description": "dive into compiled binaries with no source code, peeling back layers of obfuscation to uncover hidden logic, secret keys, and undocumented functionality."
+  }
+}
