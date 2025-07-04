@@ -146,7 +146,7 @@ gdb ./target_binary
 gef> checksec                           # Security mechanisms analysis
 gef> info proc mappings                 # Memory mapping display
 gef> vmmap                              # Enhanced memory map
-gef> entry-point                        # Show entry point
+gef> entry-break (alias start)          # Find and break at the most obvious entry point
 gef> got                                # Global Offset Table analysis
 ```
 
