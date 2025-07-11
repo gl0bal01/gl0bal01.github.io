@@ -7,7 +7,7 @@ keywords: [ctf platforms, cybersecurity training, capture the flag, hacking chal
 date: 2025-06-19
 ---
 
-Looking to sharpen your cybersecurity skills? Whether you're a beginner or an experienced professional, these platforms offer hands-on challenges that will test and improve your abilities across various domains of information security. From web exploitation to OSINT investigations, here's your complete guide to the best CTF platforms and training games available.
+Looking to sharpen your cybersecurity skills? Whether you're a beginner or an experienced professional, these platforms offer hands-on challenges that will test and improve your abilities across various domains of information security. From pwn, web exploitation to OSINT investigations, here's your complete guide to the best CTF platforms and training games available. You can also find few games for all levels on my [Discord](https://discord.gg/T5tc9Rq8DV)
 
 <!--truncate-->
 

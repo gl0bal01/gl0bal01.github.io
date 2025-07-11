@@ -112,6 +112,12 @@ const config: Config = {
               rel: null,
             },
             {
+              href: 'https://discord.gg/T5tc9Rq8DV',
+              label: 'Discord',
+              target: '_blank',
+              rel: null,
+            },
+            {
               href: 'https://start.me/u/gl0bal01',
               label: 'Start.me',
               target: '_blank',
