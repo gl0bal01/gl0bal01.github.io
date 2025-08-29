@@ -102,6 +102,9 @@ The following Hashcat commands assume you have installed Hashcat with proper GPU
 
 Hashcat represents the most advanced and widely-used password cracking tool, leveraging GPU acceleration for unprecedented cracking speeds across hundreds of hash algorithms.
 
+[Online Google Colab Hash Cracking](https://colab.research.google.com/github/ShutdownRepo/google-colab-hashcat/blob/main/google_colab_hashcat.ipynb)
+
+
 ### 2.1 Basic Hash Cracking Operations
 
 ```bash
@@ -3141,3 +3144,4 @@ Remember that the ultimate goal of password security assessment is not merely to
 8. [HackTricks Brute Force Guide](https://book.hacktricks.wiki/en/generic-hacking/brute-force.html)
 9. [The Hacker Recipes - Credential Cracking](https://www.thehacker.recipes/ad/movement/credentials/cracking)
 10. [RFC 4086: Randomness Requirements for Security](https://datatracker.ietf.org/doc/html/rfc4086)
+
