@@ -435,7 +435,7 @@ class FinancialManager:
 **[Exegol](https://exegol.com):**
 - One minute create and destroy isolated container
 - Deployment advantages for professional operations
-- Tool categories for different investigation types (osint..)
+- Tool categories for different investigation types (OSINT, AD...)
 
 **[Qubes OS](https://www.qubes-os.org/):**
 - Security-focused operating system
@@ -443,6 +443,13 @@ class FinancialManager:
 - Hardware isolation
 - Template-based VMs
 - Advanced security features
+
+**[Whonix](https://www.whonix.org/)**
+- Anonymity-focused operating system
+- Dual-VM architecture: Gateway routes all traffic through Tor; Workstation is isolated from the network
+- Prevents IP leaks and DNS leaks by design
+- Strong protection against network-level surveillance and tracking
+- Ideal for privacy-critical OSINT and investigations requiring deniability
 
 **[Tails](https://tails.net/):**
 - Privacy-focused Linux distribution
