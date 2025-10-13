@@ -93,6 +93,7 @@ const config: Config = {
         {to: '/ai', label: 'Ai', position: 'left'},
         {to: '/cyber', label: 'Cyber', position: 'left'},
         {to: '/osint', label: 'Osint', position: 'left'},
+        {to: '/reverse-engineering', label: 'Reverse', position: 'left'},
         {to: '/cheatsheets', label: 'Cheatsheets', position: 'left'},
         {to: '/blog', label: 'Blog', position: 'left', className: 'blog-button'},
         {
@@ -107,6 +108,12 @@ const config: Config = {
             {
               href: 'https://github.com/gl0bal01/',
               label: 'Github',
+              target: '_blank',
+              rel: null,
+            },
+            {
+              href: 'https://discord.gg/T5tc9Rq8DV',
+              label: 'Discord',
               target: '_blank',
               rel: null,
             },

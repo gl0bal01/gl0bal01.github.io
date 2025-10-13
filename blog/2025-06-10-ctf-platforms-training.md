@@ -7,7 +7,7 @@ keywords: [ctf platforms, cybersecurity training, capture the flag, hacking chal
 date: 2025-06-19
 ---
 
-Looking to sharpen your cybersecurity skills? Whether you're a beginner or an experienced professional, these platforms offer hands-on challenges that will test and improve your abilities across various domains of information security. From web exploitation to OSINT investigations, here's your complete guide to the best CTF platforms and training games available.
+Looking to sharpen your cybersecurity skills? Whether you're a beginner or an experienced professional, these platforms offer hands-on challenges that will test and improve your abilities across various domains of information security. From pwn, web exploitation to OSINT investigations, here's your complete guide to the best CTF platforms and training games available. You can also find few games for all levels on my [Discord](https://discord.gg/T5tc9Rq8DV)
 
 <!--truncate-->
 
@@ -285,6 +285,17 @@ Looking to sharpen your cybersecurity skills? Whether you're a beginner or an ex
     </button>
   </a>
 </div>
+
+<div style={{padding: '20px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #dddddd'}}>
+<h3 style={{marginTop: '0'}}>PWN Adventure</h3>
+  <p>Pwnie Island is a limited-release, first-person, true open-world MMORPG set on a beautiful island where anything could happen. That's because this game is intentionally vulnerable to all kinds of silly hacks! Flying, endless cash, and more are all one client change or network proxy away. Are you ready for the mayhem?!</p>
+  <a href="http://www.pwnadventure.com/" target="_blank" rel="noopener noreferrer" style={{textDecoration: 'none'}}>
+    <button style={{padding: '1em 1em 0 1em', borderRadius: '6px', border: '1px solid #dddddd', cursor: 'pointer', fontWeight: 'bold'}}>
+      💻 Go for the Adventure →
+    </button>
+  </a>
+</div>
+
 
 ## 🖥️ System Administration & Scripting
 
