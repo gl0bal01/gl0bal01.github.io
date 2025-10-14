@@ -95,9 +95,18 @@ html[data-theme='dark'] .menu__link:hover, html[data-theme='dark'] .navbar__link
   color: #ffffff;
   box-shadow: 0 1px 4px rgba(255, 255, 255, 0.08);
 }
-.menu__link--active, .navbar__link--active {
+/* Light theme active link */
+html[data-theme='light'] .menu__link--active {
   background-color: #dbeafe;
   font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* Dark theme active link */
+html[data-theme='dark'] .menu__link--active {
+  background-color: #2e2e4d;
+  font-weight: 600;
+  color: #ffffff;
 }
 
  .navbar__link--active {
@@ -182,4 +191,48 @@ html[data-theme='light'] .DocSearch-Button {
 html[data-theme='dark'] .DocSearch-Button {
   background-color: #1a1a1a;
   color: #fff;
+}
+
+/* Additional dark mode fixes for text visibility */
+html[data-theme='dark'] {
+  /* Ensure all headings are visible */
+  --ifm-heading-color: #ffffff;
+
+  /* Ensure paragraph text is visible */
+  --ifm-font-color-base: #e6e6e6;
+
+  /* Ensure links are visible */
+  --ifm-link-color: #ffffff;
+  --ifm-link-hover-color: #e6e6e6;
+
+  /* Ensure menu text is visible */
+  --ifm-menu-color: #e6e6e6;
+  --ifm-menu-color-active: #ffffff;
+
+  /* Ensure navbar text is visible */
+  --ifm-navbar-link-color: #e6e6e6;
+  --ifm-navbar-link-hover-color: #ffffff;
+
+  /* Background colors */
+  --ifm-background-color: #1a1a1a;
+  --ifm-background-surface-color: #242424;
+}
+
+/* Ensure navbar items are visible in dark mode */
+html[data-theme='dark'] .navbar__item,
+html[data-theme='dark'] .navbar__link {
+  color: #e6e6e6;
+}
+
+html[data-theme='dark'] .navbar__link:hover {
+  color: #ffffff;
+}
+
+/* Ensure sidebar items are visible in dark mode */
+html[data-theme='dark'] .menu__link {
+  color: #e6e6e6;
+}
+
+html[data-theme='dark'] .menu__link:hover {
+  color: #ffffff;
 }
