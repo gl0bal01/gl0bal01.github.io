@@ -1,6 +1,7 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import { rssFeeds, rssPluginOptions } from './rss-feeds.config';
 
 const config: Config = {
   title: 'gl0bal01 | Notes & Research',
@@ -18,7 +19,6 @@ const config: Config = {
   trailingSlash: false,
 
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
 
   // Configuration i18n (optionnel)
   i18n: {
@@ -28,7 +28,22 @@ const config: Config = {
   themes: ['@docusaurus/theme-mermaid'],
   markdown: {
     mermaid: true,
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
   },
+  
+  // 🔥 PLUGINS SECTION - Multi-RSS Plugin
+  plugins: [
+    [
+      './plugins/multi-rss-plugin.ts',
+      {
+        ...rssPluginOptions,
+        feeds: rssFeeds
+      }
+    ]
+  ],
+  
   presets: [
     [
       'classic',
@@ -96,6 +111,29 @@ const config: Config = {
         {to: '/reverse-engineering', label: 'Reverse', position: 'left'},
         {to: '/cheatsheets', label: 'Cheatsheets', position: 'left'},
         {to: '/blog', label: 'Blog', position: 'left', className: 'blog-button'},
+        {to: '/news', label: 'News', position: 'right'},
+/*        {
+          label: 'Feeds',
+          position: 'right',
+          items: [
+            {
+              href: '/news',
+              label: 'All Feeds',
+              rel: null,
+            },
+            {
+              href: '/osint-feeds',
+              label: '🕵️ OSINT Feeds',
+              rel: null,
+            },
+            {
+              href: '/cyber-feeds',
+              label: '🛡️ Cyber Feeds',
+              rel: null,
+            },
+          ],
+        },
+        */
         {
           label: 'Links',
           position: 'right',
