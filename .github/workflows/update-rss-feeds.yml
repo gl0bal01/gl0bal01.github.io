@@ -1,0 +1,57 @@
+name: Update RSS Feeds
+
+on:
+  schedule:
+    - cron: '0 7 * * *' 
+
+  # Allow manual triggering from Actions tab
+  workflow_dispatch:
+
+  # Also run on push to main (for immediate updates after config changes)
+  push:
+    branches:
+      - main
+    paths:
+      - 'rss-feeds.config.ts'
+      - 'docusaurus.config.ts'
+      - '.github/workflows/update-rss-feeds.yml'
+
+jobs:
+  update-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for git operations
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site (fetches fresh RSS feeds)
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+          # Keep git history
+          enable_jekyll: false
+          # Custom domain (if you have one)
+          cname: gl0bal01.com
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "RSS feed update failed at $(date)"
+          # Optional: Add notification service here (Discord webhook, email, etc.)
