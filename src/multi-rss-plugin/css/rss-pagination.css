@@ -54,9 +54,20 @@
   font-weight: 600;
 }
 
-.category-badge {
-  background: var(--ifm-color-primary-light);
-  color: var(--ifm-color-primary-dark);
+/* Light theme category badge */
+html[data-theme='light'] .category-badge {
+  background: #e0e0e0;
+  color: #1a1a1a;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Dark theme category badge */
+html[data-theme='dark'] .category-badge {
+  background: #404040;
+  color: #ffffff;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   font-size: 0.8rem;
@@ -224,10 +235,19 @@
   color: var(--ifm-color-primary-darker);
 }
 
-.pagination-button.active {
-  background: var(--ifm-color-primary);
-  border-color: var(--ifm-color-primary);
-  color: white;
+/* Light theme pagination active button */
+html[data-theme='light'] .pagination-button.active {
+  background: #000000;
+  border-color: #000000;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Dark theme pagination active button */
+html[data-theme='dark'] .pagination-button.active {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #000000;
   font-weight: 600;
 }
 

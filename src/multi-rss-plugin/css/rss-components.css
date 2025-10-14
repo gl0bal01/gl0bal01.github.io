@@ -158,9 +158,19 @@ html[data-theme='dark'] .rss-feed-name {
   color: #1a1a1a;
 }
 
-.rss-category {
-  background: var(--ifm-color-emphasis-200);
-  color: var(--ifm-color-emphasis-700);
+/* Light theme RSS category */
+html[data-theme='light'] .rss-category {
+  background: #e0e0e0;
+  color: #404040;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  text-transform: capitalize;
+}
+
+/* Dark theme RSS category */
+html[data-theme='dark'] .rss-category {
+  background: #404040;
+  color: #e0e0e0;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   text-transform: capitalize;
