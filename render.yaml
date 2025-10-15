@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: gl0bal01
+    runtime: node
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run serve:render
+    envVars:
+      - key: NODE_VERSION
+        value: 20.0.0
+      - key: NODE_ENV
+        value: production

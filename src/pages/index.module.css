@@ -161,6 +161,13 @@
   transform: scale(1.02);
 }
 
+/* Hero Title & Subtitle - Always Black */
+.heroBanner :global(.hero__title),
+.heroBanner :global(.hero__subtitle) {
+  color: #000000 !important;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.3);
+}
+
 /* Dark Theme Specific Adjustments */
 [data-theme='dark'] .categoryCard {
   background: var(--ifm-background-color) !important;
@@ -179,6 +186,29 @@
 [data-theme='dark'] .categoryCard .card__footer {
   border-top-color: var(--ifm-color-emphasis-300);
   background: var(--ifm-color-emphasis-100);
+}
+
+/* Fix button visibility in dark mode */
+[data-theme='dark'] .categoryCard .button--primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  border: none !important;
+}
+
+[data-theme='dark'] .categoryCard .button--primary:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%) !important;
+  color: white !important;
+}
+
+[data-theme='dark'] .categoryCard .button--secondary {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%) !important;
+  color: white !important;
+  border: none !important;
+}
+
+[data-theme='dark'] .categoryCard .button--secondary:hover {
+  background: linear-gradient(135deg, #3dd771 0%, #32e7cb 100%) !important;
+  color: white !important;
 }
 
 /* Responsive Design */

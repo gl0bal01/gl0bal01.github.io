@@ -110,31 +110,7 @@ const config: Config = {
         {to: '/osint', label: 'Osint', position: 'left'},
         {to: '/reverse-engineering', label: 'Reverse', position: 'left'},
         {to: '/cheatsheets', label: 'Cheatsheets', position: 'left'},
-        {to: '/blog', label: 'Blog', position: 'left', className: 'blog-button'},
-        {to: '/news', label: 'News', position: 'right'},
-/*        {
-          label: 'Feeds',
-          position: 'right',
-          items: [
-            {
-              href: '/news',
-              label: 'All Feeds',
-              rel: null,
-            },
-            {
-              href: '/osint-feeds',
-              label: '🕵️ OSINT Feeds',
-              rel: null,
-            },
-            {
-              href: '/cyber-feeds',
-              label: '🛡️ Cyber Feeds',
-              rel: null,
-            },
-          ],
-        },
-        */
-        {
+                {
           label: 'Links',
           position: 'right',
           items: [
@@ -169,6 +145,30 @@ const config: Config = {
             },
           ],
         },
+        {to: '/blog', label: 'Blog', position: 'right', className: 'blog-button'},
+        {to: '/news', label: 'News', position: 'right'},
+/*        {
+          label: 'Feeds',
+          position: 'right',
+          items: [
+            {
+              href: '/news',
+              label: 'All Feeds',
+              rel: null,
+            },
+            {
+              href: '/osint-feeds',
+              label: '🕵️ OSINT Feeds',
+              rel: null,
+            },
+            {
+              href: '/cyber-feeds',
+              label: '🛡️ Cyber Feeds',
+              rel: null,
+            },
+          ],
+        },
+        */
       ],
     },
     footer: {
