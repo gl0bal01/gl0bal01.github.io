@@ -316,3 +316,27 @@ html[data-theme='dark'] {
   --ifm-background-color: #1a1a1a;
   --ifm-background-surface-color: #242424;
 }
+
+/* ========================================
+   BREADCRUMBS STYLING
+   ======================================== */
+
+/* Light theme breadcrumbs */
+html[data-theme='light'] .breadcrumbs__link {
+  color: #1a1a1a;
+}
+
+html[data-theme='light'] .breadcrumbs__item--active .breadcrumbs__link {
+  color: #000000;
+  font-weight: 600;
+}
+
+/* Dark theme breadcrumbs */
+html[data-theme='dark'] .breadcrumbs__link {
+  color: #e6e6e6;
+}
+
+html[data-theme='dark'] .breadcrumbs__item--active .breadcrumbs__link {
+  color: #ffffff;
+  font-weight: 600;
+}

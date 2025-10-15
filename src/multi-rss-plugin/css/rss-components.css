@@ -34,6 +34,16 @@
   font-weight: 700;
 }
 
+/* Light theme - black numbers */
+html[data-theme='light'] .stat-item strong {
+  color: #000000;
+}
+
+/* Dark theme - white numbers */
+html[data-theme='dark'] .stat-item strong {
+  color: #ffffff;
+}
+
 .stat-item span {
   font-size: 0.875rem;
   color: var(--ifm-color-emphasis-700);
@@ -102,6 +112,9 @@
   border-radius: 8px;
   padding: 1.5rem;
   transition: all 0.2s ease;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .rss-item-card:hover {
@@ -205,6 +218,16 @@ html[data-theme='dark'] .rss-category {
 
 .rss-read-more:hover {
   text-decoration: underline;
+}
+
+/* Light theme - black read more link */
+html[data-theme='light'] .rss-read-more {
+  color: #000000;
+}
+
+/* Dark theme - white read more link */
+html[data-theme='dark'] .rss-read-more {
+  color: #ffffff;
 }
 
 /* Latest Items Component */
@@ -445,28 +468,62 @@ html[data-theme='dark'] .rss-category {
     align-items: stretch;
     gap: 1rem;
   }
-  
+
   .category-filter, .search-filter {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .category-filter select, .search-filter input {
     min-width: auto;
     width: 100%;
   }
-  
+
+  .rss-item-card {
+    padding: 1rem;
+    margin: 0;
+  }
+
+  .rss-item-title {
+    font-size: 1.1rem;
+  }
+
   .rss-item-meta, .rss-item-footer {
     flex-direction: column;
     gap: 0.5rem;
+    align-items: flex-start;
   }
-  
+
   .status-overview {
     flex-direction: column;
   }
-  
+
   .rss-layout-cards .rss-feed-items {
     grid-template-columns: 1fr;
+  }
+
+  .rss-stats {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .rss-item-card {
+    padding: 0.75rem;
+    border-radius: 4px;
+  }
+
+  .rss-item-title {
+    font-size: 1rem;
+  }
+
+  .rss-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .stat-item {
+    padding: 0.75rem;
   }
 }
 
