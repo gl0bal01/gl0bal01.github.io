@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkgl_0_bal_01=globalThis.webpackChunkgl_0_bal_01||[]).push([[2325],{2325:(a,e,l)=>{l.d(e,{createPacketServices:()=>b.$});var b=l(51477);l(87960)}}]);
