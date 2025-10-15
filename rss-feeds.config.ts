@@ -132,8 +132,8 @@ export const rssFeeds: RSSFeeds = {
  * Configure plugin behavior
  */
 export const rssPluginOptions: RSSPluginOptions = {
-  maxItemsPerFeed: 20,
+  maxItemsPerFeed: 5,
   concurrency: 4,
   enableSeparateFiles: true,
-  timeout: 15000,
+  timeout: 10000,
 };

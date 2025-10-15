@@ -192,6 +192,7 @@
 [data-theme='dark'] .categoryCard .button--primary {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
   color: white !important;
+  background-color: #000000;
   border: none !important;
 }
 
