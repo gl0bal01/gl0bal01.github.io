@@ -8,10 +8,10 @@ export default function NewsPage(): JSX.Element {
       title="News Dashboard"
       description="Latest news from cybersecurity, AI, tech, and OSINT sources"
     >
-      <main className="container margin-vert--lg">
+      <main className="container margin-vert--lg" style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
         <div className="margin-bottom--lg">
-          <h1>News Feeds</h1>
-          <p>Latest updates</p>
+          <h1 style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)' }}>News Feeds</h1>
+          <p style={{ fontSize: 'clamp(0.9rem, 3vw, 1rem)' }}>Latest updates</p>
         </div>
         <RSSDashboard
           maxItems={50}
