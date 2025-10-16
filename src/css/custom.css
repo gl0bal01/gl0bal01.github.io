@@ -146,6 +146,7 @@ html[data-theme='light'] .menu__link.menu__link--sublist.menu__link--active span
 /* Normal state */
 html[data-theme='light'] .navbar__link {
   color: #1a1a1a;
+ padding: 6px 12px;
 }
 
 /* Hover state */
