@@ -93,6 +93,12 @@ const config: Config = {
       indexName: 'gl0bal01',
       contextualSearch: true,
       searchPagePath: 'search',
+      // Ensure search works across all your content
+      searchParameters: {
+        facetFilters: [],
+      },
+      // Enable more detailed search
+      insights: true,
     },
     announcementBar: {
       content: `🎉️ ⭐️ If you like this repo, give it a star and follow me on <a target="_blank" rel="noopener noreferrer" href="https://github.com/gl0bal01/">GitHub</a> 🥳️`,
