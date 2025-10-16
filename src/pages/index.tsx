@@ -89,6 +89,24 @@ function HomepageHeader() {
               </Link>
             </div>
           </div>
+
+          <div className={clsx('card', styles.categoryCard)}>
+            <div className="card__header">
+              <div className={styles.cardIcon}>📚</div>
+              <h3>Cheatsheets</h3>
+            </div>
+            <div className="card__body">
+              <p>Concise reference guides and technical cheat sheets featuring key security tools, commands, and methodologies.</p>
+            </div>
+            <div className="card__footer">
+              <Link
+                className="button button--primary button--block"
+                to="/cheatsheets">
+                View Cheatsheets
+              </Link>
+            </div>
+          </div>
+
           <div className={clsx('card', styles.categoryCard)}>
             <div className="card__header">
               <div className={styles.cardIcon}>📝</div>
