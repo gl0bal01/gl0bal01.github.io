@@ -340,3 +340,55 @@ html[data-theme='dark'] .breadcrumbs__item--active .breadcrumbs__link {
   color: #ffffff;
   font-weight: 600;
 }
+
+/* ========================================
+   BUTTON STYLING - FIX DARK THEME CONTRAST
+   ======================================== */
+
+/* Light theme buttons */
+html[data-theme='light'] .button--primary {
+  background-color: #000000;
+  color: #ffffff;
+  border-color: #000000;
+}
+
+html[data-theme='light'] .button--primary:hover {
+  background-color: #ffffff;
+  color: #000000;
+  border-color: #000000;
+}
+
+html[data-theme='light'] .button--secondary {
+  background-color: transparent;
+  color: #000000;
+  border-color: #000000;
+}
+
+html[data-theme='light'] .button--secondary:hover {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+/* Dark theme buttons - fix black on black issue */
+html[data-theme='dark'] .button--primary {
+  background-color: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+html[data-theme='dark'] .button--primary:hover {
+  background-color: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+html[data-theme='dark'] .button--secondary {
+  background-color: transparent;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+html[data-theme='dark'] .button--secondary:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
