@@ -1,0 +1,46 @@
+/* TEAM */
+
+Creator: gl0bal01
+Site: https://gl0bal01.com
+GitHub: https://github.com/gl0bal01
+Location: Earth
+
+/* THANKS */
+
+Thanks to the cybersecurity community for continuous learning and knowledge sharing.
+Special thanks to all OSINT researchers and security professionals who contribute to the field.
+
+/* SITE */
+
+Last update: 2025/10/16
+Language: English
+Doctype: HTML5
+IDE: VS Code, Claude Code
+Technologies: Docusaurus 3.9.1, React 19, TypeScript 5.6
+Fonts: Host Grotesk
+Standards: HTML5, CSS3, RSS, Accessibility
+Components: Custom Multi-RSS Plugin, Algolia DocSearch, Mermaid Diagrams
+
+/* CONTENT */
+
+Focus: Cybersecurity, OSINT, Digital Forensics, AI Security
+Content: Research notes, investigation techniques, security analysis
+RSS Feeds: 17+ aggregated security and tech news sources
+Categories: Intelligence, Security, AI, Cheatsheets, Blog
+
+/* PHILOSOPHY */
+
+Knowledge should be shared.
+Security through education.
+Continuous learning and adaptation.
+Open source contributions matter.
+
+                            .
+                           / \
+                          /   \
+                         /     \
+                        /  gl0  \
+                       /  bal01  \
+                      /___________\
+
+            Human knowledge, digitally preserved.

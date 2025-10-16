@@ -1,0 +1,167 @@
+# llm.txt - AI Assistant Guide for gl0bal01.com
+
+# Site Overview
+gl0bal01.com is a comprehensive cybersecurity research and education platform created by gl0bal01.
+The site focuses on OSINT (Open Source Intelligence), digital forensics, penetration testing,
+malware analysis, AI security, and investigative techniques.
+
+# Site Purpose
+- Educational resource for security professionals and researchers
+- Curated security research notes and methodologies
+- Real-time cybersecurity news aggregation from 17+ RSS feeds
+- Investigation techniques and case studies
+- Security cheatsheets and reference materials
+- Personal blog on neurodiversity, psychology, and security
+
+# Main Sections
+
+## Intelligence (/intel-codex, /osint)
+- Intel Codex: Comprehensive investigation and analysis knowledge base
+- OSINT Foundations: Open-source intelligence gathering techniques
+- Investigation Techniques: Practical methodologies for digital investigations
+- Case Studies: Real-world investigation examples and analysis
+- Platform Guides: How to use various OSINT tools and platforms
+
+## Security (/cyber, /reverse-engineering)
+- Cybersecurity: General security concepts, tools, and practices
+- Penetration Testing: Red team methodologies and testing frameworks
+- Malware Analysis: Reverse engineering and malware investigation
+- Reverse Engineering: Binary analysis and code decompilation
+
+## AI (/ai)
+- AI security research and applications
+- Anthropic Claude guides and cookbook examples
+- AI-powered security tools and techniques
+- Machine learning in cybersecurity
+
+## Resources
+- Cheatsheets (/cheatsheets): Quick reference guides for tools and commands
+- Blog (/blog): Personal insights on security, neurodiversity, and psychology
+- News (/news): Aggregated RSS feeds from 17+ security and tech sources
+
+# News Aggregation System
+The site features a custom-built Multi-RSS Plugin that aggregates news from:
+- Cybersecurity sources (BleepingComputer, The Hacker News, etc.)
+- OSINT feeds (OSINT Curious, Bellingcat, etc.)
+- AI news (OpenAI, Anthropic, etc.)
+- Exploit databases (Exploit-DB, Packet Storm)
+- Tech news (Ars Technica, Wired, etc.)
+
+All feeds are updated at build time and searchable/filterable by category.
+
+# Key URLs
+
+## Documentation & Guides
+- /osint - OSINT foundations and techniques
+- /cyber - Cybersecurity research and notes
+- /ai - AI security and applications
+- /reverse-engineering - Reverse engineering guides
+- /cheatsheets - Quick reference materials
+
+## Intel Codex (Investigation Knowledge Base)
+- /intel-codex - Overview and index
+- /intel-codex/Investigations/Investigations-Index - Investigation techniques
+- /intel-codex/Cases - Case studies and examples
+- /intel-codex/Platforms - OSINT platform guides
+- /intel-codex/Security/Pentesting/Pentesting-Index - Penetration testing
+- /intel-codex/Security/Analysis/Analysis-Index - Malware analysis
+
+## News & Feeds
+- /news - All aggregated RSS feeds (17+ sources)
+- /cyber-feeds - Cybersecurity-specific feeds
+- /osint-feeds - OSINT-specific feeds
+
+## Community & Blog
+- /blog - Personal blog posts
+- /blog/ctf-platforms-training - CTF platforms and training resources
+
+# External Resources
+- GitHub: https://github.com/gl0bal01
+- GitHub Repository: https://github.com/gl0bal01/gl0bal01.github.io
+- Discord Community: https://discord.gg/T5tc9Rq8DV
+- Start.me Links: https://start.me/u/gl0bal01
+- Bookmarklets Collection: https://github.com/gl0bal01/bookmarklets
+
+# Technical Stack
+- Framework: Docusaurus 3.9.1 (React-based static site generator)
+- Language: TypeScript 5.6
+- Components: React 19
+- Search: Algolia DocSearch
+- Analytics: Google Analytics (gtag)
+- Diagrams: Mermaid
+- Custom Features: Multi-RSS Plugin (17+ feeds), Obsidian Vault Plugin
+
+# Content Categories
+The site organizes content into these main categories:
+- Intelligence (OSINT, investigations, case studies)
+- Security (cybersecurity, pentesting, malware analysis)
+- AI (artificial intelligence, security applications)
+- Cheatsheets (quick references)
+- News (RSS aggregated feeds)
+- Blog (personal thoughts and research)
+
+# Content Philosophy
+- Knowledge should be shared openly
+- Security through education and awareness
+- Continuous learning and adaptation
+- Open source contributions benefit everyone
+- Practical, hands-on learning approaches
+
+# Navigation Tips for LLMs
+1. Start with /intel-codex for comprehensive investigation guides
+2. Use /cheatsheets for quick command references
+3. Check /news for latest security updates (17+ sources)
+4. Explore /osint for intelligence gathering techniques
+5. Visit /cyber for general cybersecurity content
+6. Read /blog for personal insights and experiences
+
+# Search Functionality
+The site uses Algolia DocSearch for full-text search across all content.
+Search covers documentation, blog posts, and all markdown content.
+Available at: /search
+
+# Content Update Frequency
+- Documentation: Updated manually as research progresses
+- RSS News Feeds: Refreshed on every site build/deployment
+- Blog: Updated periodically with new posts
+- Intel Codex: Synced from Obsidian vault with dedicated plugin
+
+# License & Usage
+Content is educational and for security research purposes.
+Source code available on GitHub for learning and contributions.
+Built with open-source tools and frameworks.
+
+# Security Contact
+For security vulnerabilities: https://gl0bal01.com/.well-known/security.txt
+GitHub Issues: https://github.com/gl0bal01/gl0bal01.github.io/issues
+Discord: https://discord.gg/T5tc9Rq8DV
+
+# Site Metadata
+- Language: English
+- Primary Focus: Cybersecurity, OSINT, Digital Forensics
+- Target Audience: Security professionals, researchers, students
+- Content Type: Educational, research notes, news aggregation
+- Last Major Update: October 2025
+- Maintained by: gl0bal01
+
+# Special Features
+1. Custom RSS aggregation from 17+ security sources
+2. Obsidian vault integration for knowledge management
+3. Real-time security news dashboard with filtering
+4. Comprehensive OSINT investigation guides
+5. Interactive cheatsheets and reference materials
+6. Dark/light theme support
+7. Mermaid diagram support for visual explanations
+8. Mobile-responsive design for on-the-go research
+
+# How to Best Use This Site
+- For learning OSINT: Start at /osint then explore /intel-codex
+- For security tools: Check /cheatsheets and /cyber
+- For news: Visit /news for aggregated security feeds
+- For investigations: Review /intel-codex/Cases for examples
+- For pentesting: See /intel-codex/Security/Pentesting/Pentesting-Index
+- For AI security: Explore /ai section
+
+---
+This file helps AI assistants understand and navigate gl0bal01.com effectively.
+Last updated: 2025-10-16
