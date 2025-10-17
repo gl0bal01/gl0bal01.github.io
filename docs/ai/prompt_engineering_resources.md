@@ -27,6 +27,9 @@ A curated collection of the most valuable resources for learning and mastering p
 
 ### Core Learning Resources
 
+- **[Anthropic's Prompt Engineering Interactive Tutorial](https://github.com/anthropics/prompt-eng-interactive-tutorial/)** - *Anthropic, 2025*  
+   A comprehensive step-by-step understanding of how to engineer optimal prompts within Claude.
+
 - **[Prompt Engineering Guide](https://www.promptingguide.ai/)** - *Prompt Engineering Guide, 2024*  
   Comprehensive guide covering fundamental concepts and advanced techniques
 
@@ -198,5 +201,6 @@ For developers specifically:
 This resource collection is continuously updated. If you have suggestions for additional resources or notice outdated links, please contribute to keeping this guide current and valuable for the community.
 
 ---
+
 
 *Last updated: June 12, 2025*
