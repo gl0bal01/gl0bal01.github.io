@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkgl_0_bal_01=globalThis.webpackChunkgl_0_bal_01||[]).push([[8947],{56600:l=>{l.exports=JSON.parse('{"authors":[{"name":"gl0bal01","title":"Chief of the v0id","url":"https://gl0bal01.com","page":null,"imageURL":"https://github.com/gl0bal01.png","key":"gl0bal01","count":7}]}')}}]);

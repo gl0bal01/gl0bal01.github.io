@@ -2,11 +2,115 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://gl0bal01.com/blog</id>
     <title>gl0bal01 | Notes &amp; Research Blog</title>
-    <updated>2025-07-01T00:00:00.000Z</updated>
+    <updated>2025-10-17T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://gl0bal01.com/blog"/>
     <subtitle>gl0bal01 | Notes &amp; Research Blog</subtitle>
     <icon>https://gl0bal01.com/icons/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Claude Skills — Packaged workflows that make Claude truly work-ready]]></title>
+        <id>https://gl0bal01.com/blog/anthropic-claude-skills</id>
+        <link href="https://gl0bal01.com/blog/anthropic-claude-skills"/>
+        <updated>2025-10-17T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Overview of Anthropic’s new Claude Skills: what they are, why they matter, how they differ from prompts, where they run (Claude.ai, Claude Code, API/Agent SDK), and how to get started.]]></summary>
+        <content type="html"><![CDATA[<p><a href="https://www.anthropic.com/news/skills" target="_blank" rel="noopener noreferrer"><strong>Claude Skills</strong></a> are reusable, versionable “capsules” of task-specific instructions plus optional files and scripts that Claude can load on demand across <strong>Claude.ai</strong>, <strong>Claude Code</strong>, the <strong>API</strong>, and the <strong>Claude Agent SDK</strong>. They’re built as simple folders (with a <code>SKILL.md</code> manifest) that encode your team’s procedures and resources so Claude can act consistently in your real workflows. Skills are rolling out for paid plans (Pro/Max/Team/Enterprise) and can be enabled by admins for org-wide use.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="what-is-a-skill">What is a Skill?<a href="https://gl0bal01.com/blog/anthropic-claude-skills#what-is-a-skill" class="hash-link" aria-label="Direct link to What is a Skill?" title="Direct link to What is a Skill?" translate="no">​</a></h2>
+<p>A <strong>Skill</strong> packages the context Claude needs to do a job “the way your org does it”: instructions, checklists, templates, scripts, and reference artifacts. Instead of cramming everything into a giant system prompt, you keep a tidy folder that Claude selectively loads when relevant. Anthropic positions this as a step toward <strong>practical, company-aware agents</strong>, not just general chat.</p>
+<hr>
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden"><iframe style="position:absolute;top:0;left:0;width:100%;height:100%" src="https://www.youtube.com/embed/kS1MJFZWMq4" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="why-this-matters">Why this matters<a href="https://gl0bal01.com/blog/anthropic-claude-skills#why-this-matters" class="hash-link" aria-label="Direct link to Why this matters" title="Direct link to Why this matters" translate="no">​</a></h3>
+<ul>
+<li><strong>Consistency at scale:</strong> Everyone invokes the same procedure; fewer “hallucinated” steps or off-brand outputs.</li>
+<li><strong>Speed &amp; cost:</strong> Claude routes to the right Skill and loads only the resources needed, reducing token bloat vs. giant prompts.</li>
+<li><strong>Portability:</strong> The same Skill works in Claude.ai, <strong>Claude Code</strong> (local dev), and via API/Agent SDK.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="where-skills-run">Where Skills run<a href="https://gl0bal01.com/blog/anthropic-claude-skills#where-skills-run" class="hash-link" aria-label="Direct link to Where Skills run" title="Direct link to Where Skills run" translate="no">​</a></h2>
+<ul>
+<li><strong>Claude.ai (web):</strong> Toggle <strong>Skills</strong> in Settings. Team/Enterprise admins can enable Skills org-wide.</li>
+<li><strong>Claude Code:</strong> Install Skills from the <code>anthropics/skills</code> marketplace or drop folders into <code>~/.claude/skills</code>; they auto-load when relevant. Share via version control.</li>
+<li><strong>API &amp; Agent SDK:</strong> Same Skills model for building custom agents; initial Anthropic-managed Skills include office docs (PowerPoint, Excel, Word) and PDF handling.</li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong> Several early partners (e.g., Box) are announcing Skills support and agentic document creation workflows that tap your enterprise files.</p>
+</blockquote>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="skills-vs-just-a-system-prompt">Skills vs. “just a system prompt”<a href="https://gl0bal01.com/blog/anthropic-claude-skills#skills-vs-just-a-system-prompt" class="hash-link" aria-label="Direct link to Skills vs. “just a system prompt”" title="Direct link to Skills vs. “just a system prompt”" translate="no">​</a></h2>
+<table><thead><tr><th>Capability</th><th>System Prompt</th><th><strong>Claude Skill</strong></th></tr></thead><tbody><tr><td>Structure</td><td>One big string</td><td><strong>Folder</strong> with <code>SKILL.md</code> + assets</td></tr><tr><td>Modularity</td><td>Low</td><td><strong>High</strong> (compose, version, reuse)</td></tr><tr><td>Routing</td><td>Manual</td><td><strong>Automatic relevance loading</strong></td></tr><tr><td>Files &amp; scripts</td><td>Ad-hoc links</td><td><strong>Co-located artifacts</strong></td></tr><tr><td>Multi-surface</td><td>Manual copy/paste</td><td><strong>Claude.ai, Claude Code, API/SDK</strong></td></tr></tbody></table>
+<p>Independent commentators highlight that Skills shift best practice from mega-prompts to <strong>structured, maintainable</strong> capsules.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="core-concepts">Core concepts<a href="https://gl0bal01.com/blog/anthropic-claude-skills#core-concepts" class="hash-link" aria-label="Direct link to Core concepts" title="Direct link to Core concepts" translate="no">​</a></h2>
+<ul>
+<li><strong><code>SKILL.md</code></strong> — human-readable manifest: intent, instructions, guardrails, inputs/outputs, and references.</li>
+<li><strong>Resources</strong> — templates, brand guides, spreadsheets, scripts, and sample data stored alongside the manifest.</li>
+<li><strong>Relevance &amp; loading</strong> — Claude identifies when a Skill applies and loads it progressively, keeping context lean.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="getting-started-fast-path">Getting started (fast path)<a href="https://gl0bal01.com/blog/anthropic-claude-skills#getting-started-fast-path" class="hash-link" aria-label="Direct link to Getting started (fast path)" title="Direct link to Getting started (fast path)" translate="no">​</a></h2>
+<ol>
+<li><strong>Enable Skills</strong> in Claude.ai settings (admins can flip this org-wide for Team/Enterprise).</li>
+<li>In <strong>Claude Code</strong>, create a new Skill or install from the marketplace; you can also drop a folder into <code>~/.claude/skills</code>.</li>
+<li>For <strong>API/Agent SDK</strong>, include your Skills in the agent config and route tasks through Anthropic’s Skills runtime (see release notes).</li>
+</ol>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="example-brand-safe-instagram-copy-skill">Example: Brand-safe Instagram copy Skill<a href="https://gl0bal01.com/blog/anthropic-claude-skills#example-brand-safe-instagram-copy-skill" class="hash-link" aria-label="Direct link to Example: Brand-safe Instagram copy Skill" title="Direct link to Example: Brand-safe Instagram copy Skill" translate="no">​</a></h2>
+<p><strong>Folder layout</strong></p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token plain">brand-safe-instagram/</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">├─ SKILL.md</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">├─ brand-voice.md</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">├─ banned-phrases.txt</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">├─ legal/claims-policy.md</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">└─ templates/</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">   ├─ caption.mst</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">   └─ hashtag-list.csv</span><br></span></code></pre></div></div>
+<p><strong><code>SKILL.md</code> (excerpt)</strong></p>
+<div class="language-md codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-md codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token title important punctuation" style="color:rgb(248, 248, 242)">#</span><span class="token title important"> Brand-Safe Instagram Copy</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token title important punctuation" style="color:rgb(248, 248, 242)">##</span><span class="token title important"> Purpose</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">Generate short Instagram captions that match our brand voice, comply with claims policy, and include approved hashtags.</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token title important punctuation" style="color:rgb(248, 248, 242)">##</span><span class="token title important"> Inputs</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token list punctuation" style="color:rgb(248, 248, 242)">-</span><span class="token plain"> Product name, key benefits, target persona, mood.</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token title important punctuation" style="color:rgb(248, 248, 242)">##</span><span class="token title important"> Procedure</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token list punctuation" style="color:rgb(248, 248, 242)">1.</span><span class="token plain"> Read </span><span class="token code-snippet code keyword" style="color:rgb(189, 147, 249);font-style:italic">`brand-voice.md`</span><span class="token plain">; follow tone and style.</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token list punctuation" style="color:rgb(248, 248, 242)">2.</span><span class="token plain"> Never use phrases listed in </span><span class="token code-snippet code keyword" style="color:rgb(189, 147, 249);font-style:italic">`banned-phrases.txt`</span><span class="token plain">.</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token list punctuation" style="color:rgb(248, 248, 242)">3.</span><span class="token plain"> If a benefit implies a regulated claim, consult </span><span class="token code-snippet code keyword" style="color:rgb(189, 147, 249);font-style:italic">`legal/claims-policy.md`</span><span class="token plain"> and rewrite to compliant alternatives.</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token list punctuation" style="color:rgb(248, 248, 242)">4.</span><span class="token plain"> Produce 3 caption options using </span><span class="token code-snippet code keyword" style="color:rgb(189, 147, 249);font-style:italic">`templates/caption.mst`</span><span class="token plain"> and include 8–12 tags limited to </span><span class="token code-snippet code keyword" style="color:rgb(189, 147, 249);font-style:italic">`templates/hashtag-list.csv`</span><span class="token plain">.</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token title important punctuation" style="color:rgb(248, 248, 242)">##</span><span class="token title important"> Output</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token list punctuation" style="color:rgb(248, 248, 242)">-</span><span class="token plain"> </span><span class="token code-snippet code keyword" style="color:rgb(189, 147, 249);font-style:italic">`captions`</span><span class="token plain">: array of 3 strings + rationale for choices.</span><br></span></code></pre></div></div>
+<p>This encapsulates instructions, guardrails, and templates that Claude can reliably load in chat, in Claude Code, or via your agent.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="built-in--ecosystem-skills">Built-in &amp; ecosystem Skills<a href="https://gl0bal01.com/blog/anthropic-claude-skills#built-in--ecosystem-skills" class="hash-link" aria-label="Direct link to Built-in &amp; ecosystem Skills" title="Direct link to Built-in &amp; ecosystem Skills" translate="no">​</a></h2>
+<p>Anthropic is shipping <strong>managed Skills</strong> for common office docs—<strong>PowerPoint, Excel, Word, PDF</strong>—as part of the first API/SDK release, with wider marketplace distribution for Claude Code. Expect partner Skills from content and storage platforms (e.g., Box AI) to follow.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="pricing--availability">Pricing &amp; availability<a href="https://gl0bal01.com/blog/anthropic-claude-skills#pricing--availability" class="hash-link" aria-label="Direct link to Pricing &amp; availability" title="Direct link to Pricing &amp; availability" translate="no">​</a></h2>
+<p>Skills are rolling out on paid tiers (Pro, Max, Team, Enterprise). Admins must enable Skills for org-wide use on Team/Enterprise. Check Anthropic’s announcement &amp; release notes for the most current plan details.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="how-skills-interact-with-your-stack">How Skills interact with your stack<a href="https://gl0bal01.com/blog/anthropic-claude-skills#how-skills-interact-with-your-stack" class="hash-link" aria-label="Direct link to How Skills interact with your stack" title="Direct link to How Skills interact with your stack" translate="no">​</a></h2>
+<ul>
+<li><strong>Microsoft 365 &amp; MCP:</strong> Anthropic is expanding enterprise integrations, with Microsoft embracing <strong>Model Context Protocol (MCP)</strong> so agents (including Claude) can securely reach into Outlook, Teams, Word, SharePoint, and OneDrive—prime territory for Skills to orchestrate structured work.</li>
+<li><strong>Enterprise search:</strong> New connectors help Claude fetch the right context from your knowledge bases; Skills then apply your procedures on top.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="governance--safety">Governance &amp; safety<a href="https://gl0bal01.com/blog/anthropic-claude-skills#governance--safety" class="hash-link" aria-label="Direct link to Governance &amp; safety" title="Direct link to Governance &amp; safety" translate="no">​</a></h2>
+<p>Skills make it easier to <strong>codify approvals and compliance</strong> (e.g., “Claims must cite doc X,” “Use only templates in folder Y”). Centralizing these rules in a Skill cuts drift and helps reviewers audit what the agent was instructed to do. This aligns with Anthropic’s pitch for <strong>real-world procedural agents</strong> over raw LLM power.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="faq">FAQ<a href="https://gl0bal01.com/blog/anthropic-claude-skills#faq" class="hash-link" aria-label="Direct link to FAQ" title="Direct link to FAQ" translate="no">​</a></h2>
+<p><strong>How are Skills different from MCP tools or function calling?</strong><br>
+<!-- -->MCP and function calling expose <em>capabilities</em> (APIs, tools). A <strong>Skill</strong> packages <em>procedures + resources</em>—what to do and how—then lets Claude <strong>selectively load</strong> that context wherever you use it. Many teams will use Skills <strong>and</strong> MCP together.</p>
+<p><strong>Do Skills work offline in Claude Code?</strong><br>
+<!-- -->Claude Code installs Skills locally (e.g., <code>~/.claude/skills</code>) and will auto-load relevant ones; behavior still depends on the model session for generation and any external calls your scripts trigger.</p>
+<p><strong>Can I share Skills with my team?</strong><br>
+<!-- -->Yes—version control a folder repo, or publish to the marketplace for Claude Code. Admins can enable Skills org-wide in Claude.ai.</p>
+<p><strong>Any examples of real companies?</strong><br>
+<!-- -->Partners like <strong>Box</strong> have announced agentic document creation and forthcoming Skills support; media coverage notes other early adopters exploring workplace workflows.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="authoring-checklist">Authoring checklist<a href="https://gl0bal01.com/blog/anthropic-claude-skills#authoring-checklist" class="hash-link" aria-label="Direct link to Authoring checklist" title="Direct link to Authoring checklist" translate="no">​</a></h2>
+<ul>
+<li>Define the <strong>job-to-be-done</strong> and outcome.</li>
+<li>Write clear, stepwise procedure in <code>SKILL.md</code>.</li>
+<li>Attach <strong>templates</strong>, <strong>style guides</strong>, <strong>banned lists</strong>, and <strong>example inputs/outputs</strong>.</li>
+<li>Add guardrails and escalation points (“ask legal if …”).</li>
+<li>Version your Skill; ship via repo / marketplace; enable telemetry &amp; review.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="further-reading">Further reading<a href="https://gl0bal01.com/blog/anthropic-claude-skills#further-reading" class="hash-link" aria-label="Direct link to Further reading" title="Direct link to Further reading" translate="no">​</a></h2>
+<ul>
+<li><strong>Anthropic announcement</strong> — “Claude Skills: Customize AI for your workflows.”</li>
+<li><strong>Engineering deep-dive</strong> — “Equipping agents for the real world with Agent Skills.”</li>
+<li><strong>Release notes</strong> — Agent Skills (<code>skills-2025-10-02</code> beta), with initial managed Skills for Office/PDF.</li>
+<li><strong>News &amp; analysis</strong> — VentureBeat explainer; The Verge coverage of Skills &amp; enterprise integrations; industry commentary.</li>
+</ul>
+<hr>
+<p><em>If you’re adopting Skills in a newsroom, dev shop, or brand studio and want a ready-to-fork starter repo (<code>SKILL.md</code> scaffolds, templates, CI checks), you've got one you can clone in <a href="https://github.com/anthropics/skills" target="_blank" rel="noopener noreferrer">under a minute</a>.</em></p>]]></content>
+        <author>
+            <name>gl0bal01</name>
+            <uri>https://gl0bal01.com</uri>
+        </author>
+        <category label="Claude" term="Claude"/>
+        <category label="Agents" term="Agents"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Code That Lives Forever: How DOIs Give Your Projects Eternal Life]]></title>
         <id>https://gl0bal01.com/blog/code-that-live-forever-codeberg-doi-orcid</id>
