@@ -48,6 +48,12 @@
   margin-right: auto;
 }
 
+/* Featured Card - Intel Codex spans full width */
+.featuredCard {
+  grid-column: 1 / -1;
+  border: 2px solid var(--ifm-color-primary) !important;
+}
+
 /* Category Cards - Dark Theme Compatible */
 .categoryCard {
   background: var(--ifm-card-background-color) !important;
@@ -217,7 +223,7 @@
   .heroBanner {
     padding: 3rem 0 4rem 0;
   }
-  
+
   .cardGrid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
@@ -229,25 +235,25 @@
   .heroBanner {
     padding: 2rem 0 3rem 0;
   }
-  
+
   .cardGrid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
     margin-top: 2rem;
   }
-  
+
   .cardIcon {
     font-size: 2.5rem;
   }
-  
+
   .categoryCard .card__header {
     padding: 1.5rem 1rem 1rem 1rem;
   }
-  
+
   .categoryCard .card__body {
     padding: 0 1rem 1rem 1rem;
   }
-  
+
   .categoryCard .card__footer {
     padding: 1rem;
   }
@@ -257,15 +263,15 @@
   .heroBanner {
     padding: 1.5rem 0 2rem 0;
   }
-  
+
   .cardIcon {
     font-size: 2rem;
   }
-  
+
   .categoryCard h3 {
     font-size: 1.2rem;
   }
-  
+
   .categoryCard .button {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;

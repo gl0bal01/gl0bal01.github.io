@@ -16,76 +16,92 @@ function HomepageHeader() {
           {siteConfig.title}
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
-        
-        {/* Professional Card Grid */}
+
+        {/* Cards Grid */}
         <div className={styles.cardGrid}>
-          <div className={clsx('card', styles.categoryCard)}>
+          <div className={clsx('card', styles.categoryCard, styles.featuredCard)}>
             <div className="card__header">
-              <div className={styles.cardIcon}>🤖</div>
-              <h3>AI Security</h3>
+              <div className={styles.cardIcon}>📖</div>
+              <h3>Intel Codex</h3>
             </div>
             <div className="card__body">
-              <p>Explore cutting-edge research in artificial intelligence security, 
-              machine learning vulnerabilities, and AI-powered attack detection.</p>
+              <p>Complete operational manual for digital investigators and security analysts.
+              Access field-tested SOPs, platform-specific guides, pentesting methodologies,
+              malware analysis procedures, and real-world case studies.</p>
             </div>
             <div className="card__footer">
               <Link
                 className="button button--primary button--block"
-                to="/ai">
-                Explore AI Research
+                to="/intel-codex">
+                Explore Intel Codex
               </Link>
             </div>
           </div>
-          
+
+          <div className={clsx('card', styles.categoryCard)}>
+            <div className="card__header">
+              <div className={styles.cardIcon}>🔍</div>
+              <h3>OSINT Foundations</h3>
+            </div>
+            <div className="card__body">
+              <p>Theoretical frameworks, sockpuppet operations, strategic approaches, and fundamental concepts for open-source intelligence work.</p>
+            </div>
+            <div className="card__footer">
+              <Link
+                className="button button--primary button--block"
+                to="/osint">
+                Explore OSINT
+              </Link>
+            </div>
+          </div>
+
           <div className={clsx('card', styles.categoryCard)}>
             <div className="card__header">
               <div className={styles.cardIcon}>🛡️</div>
               <h3>Cybersecurity</h3>
             </div>
             <div className="card__body">
-              <p>Comprehensive penetration testing methodologies, vulnerability 
-              assessments, and defensive security strategies.</p>
+              <p>Security best practices, threat intelligence, defensive strategies, and comprehensive guides for protecting digital assets.</p>
             </div>
             <div className="card__footer">
               <Link
                 className="button button--primary button--block"
                 to="/cyber">
-                View Cyber Content
+                View Security Guides
               </Link>
             </div>
           </div>
-          
+
           <div className={clsx('card', styles.categoryCard)}>
             <div className="card__header">
-              <div className={styles.cardIcon}>🔍</div>
-              <h3>OSINT</h3>
-            </div>
-            <div className="card__body">
-              <p>Open Source Intelligence gathering techniques, digital investigation 
-              methods, and information reconnaissance strategies.</p>
-            </div>
-            <div className="card__footer">
-              <Link
-                className="button button--primary button--block"
-                to="/osint">
-                Discover OSINT
-              </Link>
-            </div>
-          </div>
-          
-          <div className={clsx('card', styles.categoryCard)}>
-            <div className="card__header">
-              <div className={styles.cardIcon}>💥</div>
+              <div className={styles.cardIcon}>⚙️</div>
               <h3>Reverse Engineering</h3>
             </div>
             <div className="card__body">
-              <p>Dive into compiled binaries with no source code, peeling back layers of obfuscation to uncover hidden logic, secret keys, and undocumented functionality.</p>
+              <p>Binary analysis, malware dissection, and reverse engineering techniques for uncovering hidden functionality in compiled code.</p>
             </div>
             <div className="card__footer">
               <Link
                 className="button button--primary button--block"
                 to="/reverse-engineering">
-                Go for Reverse
+                Learn Reverse Engineering
+              </Link>
+            </div>
+          </div>
+
+          <div className={clsx('card', styles.categoryCard)}>
+            <div className="card__header">
+              <div className={styles.cardIcon}>🤖</div>
+              <h3>AI Resources</h3>
+            </div>
+            <div className="card__body">
+              <p>Artificial intelligence security, machine learning vulnerabilities, AI-powered tools, and cutting-edge research in AI applications.</p>
+            </div>
+            <div className="card__footer">
+              <Link
+                className="button button--primary button--block"
+                to="/ai">
+                Explore AI
               </Link>
             </div>
           </div>
@@ -96,30 +112,36 @@ function HomepageHeader() {
               <h3>Cheatsheets</h3>
             </div>
             <div className="card__body">
-              <p>Concise reference guides and technical cheat sheets featuring key security tools, commands, and methodologies.</p>
+              <p>Quick reference guides, command sheets, and concise technical documentation for tools, frameworks, and methodologies.</p>
             </div>
             <div className="card__footer">
               <Link
                 className="button button--primary button--block"
                 to="/cheatsheets">
-                View Cheatsheets
+                Browse Cheatsheets
               </Link>
             </div>
           </div>
 
           <div className={clsx('card', styles.categoryCard)}>
             <div className="card__header">
-              <div className={styles.cardIcon}>📝</div>
-              <h3>Blog</h3>
+              <div className={styles.cardIcon}>📰</div>
+              <h3>News & Blog</h3>
             </div>
             <div className="card__body">
-              <p>Exploring neurodiversity, human psychology, and the madness of mind—alongside cutting-edge research in cybersecurity, threat intelligence, and digital forensics.</p>
+              <p>Latest security news aggregated from trusted sources, plus personal insights on neurodiversity, psychology, and cybersecurity research.</p>
             </div>
             <div className="card__footer">
               <Link
                 className="button button--secondary button--block"
-                to="/blog">
-                Read Latest Posts
+                to="/news">
+                Read News Feeds
+              </Link>
+              <Link
+                className="button button--secondary button--block"
+                to="/blog"
+                style={{marginTop: '0.5rem'}}>
+                View Blog Posts
               </Link>
             </div>
           </div>
@@ -136,11 +158,6 @@ export default function Home(): ReactNode {
       description="Security research, penetration testing and digital investigation techniques">
       <HomepageHeader />
       <main>
-        <img
-          src={require('@site/static/img/lama.jpg').default}
-          alt="gl0bal01 Research Mascot"
-          className={styles.mascotImage}
-        />
       </main>
     </Layout>
   );

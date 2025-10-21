@@ -32,6 +32,13 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
+      - name: Checkout Intel Codex Vault
+        uses: actions/checkout@v4
+        with:
+          repository: gl0bal01/intel-codex
+          path: .temp-vault
+          fetch-depth: 1
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:

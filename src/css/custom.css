@@ -146,7 +146,8 @@ html[data-theme='light'] .menu__link.menu__link--sublist.menu__link--active span
 /* Normal state */
 html[data-theme='light'] .navbar__link {
   color: #1a1a1a;
- padding: 6px 12px;
+  padding: 6px 12px;
+  border-radius: 20px;
 }
 
 /* Hover state */
@@ -154,8 +155,6 @@ html[data-theme='light'] .navbar__link:hover {
   background-color: #e0e0e0;
   color: #000000;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-  border-radius: 20px;
-  padding: 6px 12px;
 }
 
 /* Active state */
@@ -163,7 +162,6 @@ html[data-theme='light'] .navbar__link.navbar__link--active {
   background-color: #000000;
   color: #ffffff;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
-  border-radius: 20px;
 }
 
 /* Active state - hover */
@@ -231,6 +229,8 @@ html[data-theme='dark'] .menu__link.menu__link--sublist.menu__link--active span 
 /* Normal state */
 html[data-theme='dark'] .navbar__link {
   color: #e6e6e6;
+  padding: 6px 12px;
+  border-radius: 20px;
 }
 
 /* Hover state */
@@ -238,8 +238,6 @@ html[data-theme='dark'] .navbar__link:hover {
   background-color: #2a2a2a;
   color: #ffffff;
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
-  border-radius: 20px;
-  padding: 6px 12px;
 }
 
 /* Active state */
@@ -247,7 +245,6 @@ html[data-theme='dark'] .navbar__link.navbar__link--active {
   background-color: #ffffff;
   color: #000000;
   box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
-  border-radius: 16px;
 }
 
 /* Active state - hover */
@@ -264,9 +261,7 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -.0125em;
   padding-top: .65em;
 }
-@media (min-width: 990px) {
-h1 {font-weight: 800;font-size: 3.8em; line-height: 1.125em;}
-}
+
 h1 {font-weight: 800;}
 h2 {font-weight: 800;line-height: 1.1em;}
 h3, h4, h5, h6 {
@@ -394,3 +389,105 @@ html[data-theme='dark'] .button--secondary:hover {
   background-color: #ffffff;
   color: #000000;
 }
+
+/* ========================================
+   GITHUB ICON LINK
+   ======================================== */
+
+.header-github-link {
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s ease;
+}
+
+.header-github-link:hover {
+  opacity: 0.7;
+}
+
+.header-github-link::before {
+  content: '';
+  width: 24px;
+  height: 24px;
+  display: block;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%231a1a1a' d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/%3E%3C/svg%3E")
+    no-repeat;
+}
+
+html[data-theme='dark'] .header-github-link::before {
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23ffffff' d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/%3E%3C/svg%3E")
+    no-repeat;
+}
+
+/* ========================================
+   FOOTER LINK STYLING
+   ======================================== */
+
+/* Footer links - Both themes (footer has dark background) */
+.footer__link-item {
+  color: #e6e6e6;
+  transition: color 0.2s ease;
+}
+
+.footer__link-item:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* Footer titles */
+.footer__title {
+  color: #ffffff;
+}
+
+/* Light theme footer (footer style is 'dark' so links should be light) */
+html[data-theme='light'] .footer__link-item {
+  color: #e6e6e6;
+}
+
+html[data-theme='light'] .footer__link-item:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* Dark theme footer */
+html[data-theme='dark'] .footer__link-item {
+  color: #e6e6e6;
+}
+
+html[data-theme='dark'] .footer__link-item:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* ========================================
+   TABLE OF CONTENTS (RIGHT SIDEBAR) STYLING
+   ======================================== */
+
+/* Light theme TOC */
+html[data-theme='light'] .table-of-contents__link {
+  color: #1a1a1a;
+}
+
+html[data-theme='light'] .table-of-contents__link:hover {
+  color: #000000;
+}
+
+html[data-theme='light'] .table-of-contents__link--active {
+  color: #000000;
+  font-weight: 600;
+}
+
+/* Dark theme TOC - Fix black text issue */
+html[data-theme='dark'] .table-of-contents__link {
+  color: #e6e6e6;
+}
+
+html[data-theme='dark'] .table-of-contents__link:hover {
+  color: #ffffff;
+}
+
+html[data-theme='dark'] .table-of-contents__link--active {
+  color: #ffffff;
+  font-weight: 600;
+}
+
