@@ -2,6 +2,7 @@
 import type { LoadContext, Plugin } from '@docusaurus/types';
 import Parser from 'rss-parser';
 import path from 'path';
+import * as fs from 'fs';
 import type {
   PluginOptions,
   RSSData,
@@ -21,6 +22,22 @@ export default function multiRSSPlugin(
     name: 'docusaurus-plugin-multi-rss',
 
     async loadContent(): Promise<RSSData> {
+      // Skip RSS fetching in development mode (use cached data)
+      const isDev = process.env.NODE_ENV === 'development';
+      const skipFetch = isDev && process.env.SKIP_RSS_FETCH !== 'false';
+      const cacheFile = path.join(context.siteDir, '.docusaurus', 'rss-cache.json');
+
+      // Try to load cached data in dev mode
+      if (skipFetch && fs.existsSync(cacheFile)) {
+        console.log('[Multi-RSS] Development mode: Using cached RSS data');
+        console.log('[Multi-RSS] To fetch fresh data, run: SKIP_RSS_FETCH=false npm start');
+        try {
+          const cachedData = JSON.parse(fs.readFileSync(cacheFile, 'utf-8'));
+          return cachedData;
+        } catch (error) {
+          console.warn('[Multi-RSS] Failed to load cache, fetching fresh data...');
+        }
+      }
       const parser: RSSParser = new Parser({
         timeout: options.timeout || 10000,
         customFields: {
@@ -178,7 +195,19 @@ export default function multiRSSPlugin(
       );
       
       console.log(`[Multi-RSS] Plugin Stats:`, rssData.stats);
-      
+
+      // Save to cache for development use
+      try {
+        const cacheDir = path.dirname(cacheFile);
+        if (!fs.existsSync(cacheDir)) {
+          fs.mkdirSync(cacheDir, { recursive: true });
+        }
+        fs.writeFileSync(cacheFile, JSON.stringify(rssData, null, 2), 'utf-8');
+        console.log('[Multi-RSS] Cached RSS data for development use');
+      } catch (error) {
+        console.warn('[Multi-RSS] Failed to write cache:', error);
+      }
+
       return rssData;
     },
     

@@ -6,7 +6,15 @@
 
 # Generated files
 .docusaurus
+.docusaurus/rss-cache.json
 .cache-loader
+
+# Temporary vault clone (from GitHub)
+.temp-vault/
+
+# Generated intel-codex content (synced from obsidian-vault-plugin)
+intel-codex/
+static/img/intel-codex/
 
 # TypeScript compiled config files
 /*.config.js

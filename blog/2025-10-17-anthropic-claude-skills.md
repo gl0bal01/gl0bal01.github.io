@@ -3,7 +3,7 @@ slug: anthropic-claude-skills
 title: "Claude Skills — Packaged workflows that make Claude truly work-ready"
 authors: gl0bal01
 description: "Overview of Anthropic’s new Claude Skills: what they are, why they matter, how they differ from prompts, where they run (Claude.ai, Claude Code, API/Agent SDK), and how to get started."
-tags: [Claude, Agents]
+tags: [ai]
 date: 2025-10-17
 ---
 
