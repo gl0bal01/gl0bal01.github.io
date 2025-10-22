@@ -223,6 +223,39 @@ export const getRecentActivity = (items: RSSItem[]) => {
 };
 
 // URL and validation utilities
+/**
+ * Sanitize URLs to prevent XSS attacks on the client side
+ * Only allows http, https, mailto, and ftp protocols
+ * Strips dangerous protocols like javascript:, data:, vbscript:, etc.
+ * Returns '#' for invalid/dangerous URLs to prevent navigation
+ */
+export const sanitizeUrl = (url: string | undefined): string => {
+  if (!url) return '#';
+
+  const trimmedUrl = url.trim();
+  if (!trimmedUrl) return '#';
+
+  // Check for dangerous protocols
+  const dangerousProtocols = /^(\s)*(javascript|data|vbscript|file|about):/i;
+  if (dangerousProtocols.test(trimmedUrl)) {
+    console.warn(`[Multi-RSS] Blocked potentially dangerous URL: ${trimmedUrl.substring(0, 50)}...`);
+    return '#';
+  }
+
+  // Only allow safe protocols
+  const safeProtocols = /^(https?|mailto|ftp):/i;
+
+  // If it has a protocol, check if it's safe
+  if (trimmedUrl.includes(':')) {
+    if (!safeProtocols.test(trimmedUrl)) {
+      console.warn(`[Multi-RSS] Blocked URL with unsafe protocol: ${trimmedUrl.substring(0, 50)}...`);
+      return '#';
+    }
+  }
+
+  return trimmedUrl;
+};
+
 export const isValidUrl = (url: string): boolean => {
   try {
     new URL(url);

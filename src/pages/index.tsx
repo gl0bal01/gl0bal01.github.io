@@ -40,6 +40,46 @@ function HomepageHeader() {
 
           <div className={clsx('card', styles.categoryCard)}>
             <div className="card__header">
+              <div className={styles.cardIcon}>📰</div>
+              <h3>News & Blog</h3>
+            </div>
+            <div className="card__body">
+              <p>Latest security news aggregated from trusted sources, plus personal insights on neurodiversity, psychology, and cybersecurity research.</p>
+            </div>
+            <div className="card__footer">
+              <Link
+                className="button button--secondary button--block"
+                to="/news">
+                Read News Feeds
+              </Link>
+              <Link
+                className="button button--secondary button--block"
+                to="/blog"
+                style={{marginTop: '0.5rem'}}>
+                View Blog Posts
+              </Link>
+            </div>
+          </div>
+
+          <div className={clsx('card', styles.categoryCard)}>
+            <div className="card__header">
+              <div className={styles.cardIcon}>📚</div>
+              <h3>Cheatsheets</h3>
+            </div>
+            <div className="card__body">
+              <p>Quick reference guides, command sheets, and concise technical documentation for tools, frameworks, and methodologies.</p>
+            </div>
+            <div className="card__footer">
+              <Link
+                className="button button--primary button--block"
+                to="/cheatsheets">
+                Browse Cheatsheets
+              </Link>
+            </div>
+          </div>
+
+          <div className={clsx('card', styles.categoryCard)}>
+            <div className="card__header">
               <div className={styles.cardIcon}>🔍</div>
               <h3>OSINT Foundations</h3>
             </div>
@@ -102,46 +142,6 @@ function HomepageHeader() {
                 className="button button--primary button--block"
                 to="/ai">
                 Explore AI
-              </Link>
-            </div>
-          </div>
-
-          <div className={clsx('card', styles.categoryCard)}>
-            <div className="card__header">
-              <div className={styles.cardIcon}>📚</div>
-              <h3>Cheatsheets</h3>
-            </div>
-            <div className="card__body">
-              <p>Quick reference guides, command sheets, and concise technical documentation for tools, frameworks, and methodologies.</p>
-            </div>
-            <div className="card__footer">
-              <Link
-                className="button button--primary button--block"
-                to="/cheatsheets">
-                Browse Cheatsheets
-              </Link>
-            </div>
-          </div>
-
-          <div className={clsx('card', styles.categoryCard)}>
-            <div className="card__header">
-              <div className={styles.cardIcon}>📰</div>
-              <h3>News & Blog</h3>
-            </div>
-            <div className="card__body">
-              <p>Latest security news aggregated from trusted sources, plus personal insights on neurodiversity, psychology, and cybersecurity research.</p>
-            </div>
-            <div className="card__footer">
-              <Link
-                className="button button--secondary button--block"
-                to="/news">
-                Read News Feeds
-              </Link>
-              <Link
-                className="button button--secondary button--block"
-                to="/blog"
-                style={{marginTop: '0.5rem'}}>
-                View Blog Posts
               </Link>
             </div>
           </div>

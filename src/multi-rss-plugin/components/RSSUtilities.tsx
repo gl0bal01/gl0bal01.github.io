@@ -9,6 +9,7 @@ import type {
   ProcessedFeed,
   RSSData
 } from '../types/rss';
+import { sanitizeUrl } from '../utils/rssUtils';
 
 // Component to display latest items from all feeds
 export const LatestRSSItems: React.FC<LatestRSSItemsProps> = ({ 
@@ -31,7 +32,7 @@ export const LatestRSSItems: React.FC<LatestRSSItemsProps> = ({
       <ul className="rss-simple-list">
         {items.map((item: RSSItem, index: number) => (
           <li key={index} className="rss-simple-item">
-            <a href={item.link} target="_blank" rel="noopener noreferrer">
+            <a href={sanitizeUrl(item.link)} target="_blank" rel="noopener noreferrer">
               {item.cleanTitle || item.title}
             </a>
             <div className="rss-simple-meta">
@@ -76,7 +77,7 @@ export const CategoryRSSFeed: React.FC<CategoryRSSFeedProps> = ({
         {items.map((item: RSSItem, index: number) => (
           <article key={index} className="rss-category-item">
             <h4>
-              <a href={item.link} target="_blank" rel="noopener noreferrer">
+              <a href={sanitizeUrl(item.link)} target="_blank" rel="noopener noreferrer">
                 {item.cleanTitle || item.title}
               </a>
             </h4>
@@ -127,7 +128,7 @@ export const SingleRSSFeed: React.FC<SingleRSSFeedProps> = ({
       <div className="rss-feed-header">
         <h3>
           {feedData.link ? (
-            <a href={feedData.link} target="_blank" rel="noopener noreferrer">
+            <a href={sanitizeUrl(feedData.link)} target="_blank" rel="noopener noreferrer">
               {feedData.title}
             </a>
           ) : (
@@ -146,7 +147,7 @@ export const SingleRSSFeed: React.FC<SingleRSSFeedProps> = ({
         {items.map((item: RSSItem, index: number) => (
           <article key={index} className={`rss-feed-item rss-item-${layout}`}>
             <h4 className="rss-item-title">
-              <a href={item.link} target="_blank" rel="noopener noreferrer">
+              <a href={sanitizeUrl(item.link)} target="_blank" rel="noopener noreferrer">
                 {item.cleanTitle || item.title}
               </a>
             </h4>
