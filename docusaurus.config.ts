@@ -11,7 +11,7 @@ const config: Config = {
   // Configuration spécifique pour gl0bal01.github.io
   url: 'https://gl0bal01.com',
   baseUrl: '/', // Pour un site utilisateur GitHub Pages
-  
+
   // Configuration GitHub Pages
   organizationName: 'gl0bal01', // Nom d'utilisateur GitHub
   projectName: 'gl0bal01.github.io', // Nom du repository
@@ -53,6 +53,7 @@ const config: Config = {
         showLastUpdateAuthor: false,
         showLastUpdateTime: true,
         sidebarCollapsed: true,
+        breadcrumbs: true,
       },
     ],
     [
@@ -110,6 +111,8 @@ const config: Config = {
           showLastUpdateAuthor: false,
           showLastUpdateTime: true,
           sidebarCollapsed: true,
+          // SEO: Add breadcrumbs for better navigation and SEO
+          breadcrumbs: true,
         },
         blog: {
           showReadingTime: true,
@@ -117,6 +120,14 @@ const config: Config = {
           blogTitle: 'Blog',
           blogDescription: 'Exploring neurodiversity, human psychology, and the madness of mind—alongside research in cybersecurity, and digital forensics.',
           postsPerPage: 30,
+          // SEO: Add feed for blog RSS
+          feedOptions: {
+            type: ['rss', 'atom'],
+            title: 'gl0bal01 Blog - Security Research & Human Psychology',
+            description: 'Latest posts on cybersecurity, OSINT, digital forensics, neurodiversity, and human psychology',
+            copyright: `Copyright © ${new Date().getFullYear()} gl0bal01`,
+            language: 'en',
+          },
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -137,6 +148,15 @@ const config: Config = {
   ],
 
   themeConfig: {
+    // SEO: Social card for link previews (Open Graph, Twitter Cards)
+    image: 'img/lama.jpg',
+
+    // SEO: Additional metadata tags
+    metadata: [
+      {name: 'keywords', content: 'cybersecurity, osint, digital forensics, penetration testing, reverse engineering, malware analysis, AI security, intelligence gathering'},
+      {name: 'twitter:card', content: 'summary_large_image'},
+    ],
+
     colorMode: {
       defaultMode: 'light',
     },
@@ -144,23 +164,24 @@ const config: Config = {
       theme: {light: 'neutral', dark: 'dark'},
     },
     algolia: {
-      askAi: 'RzGFEBJZYB7U',
       appId: '4X4QPM0QJE',
       apiKey: '7bd1f7f08cef3ff374e0c7f4f2d89725',
       indexName: 'gl0bal01',
       contextualSearch: true,
       searchPagePath: 'search',
-      // Ensure search works across all your content
       searchParameters: {
         facetFilters: [],
       },
-      // Enable more detailed search
       insights: true,
+      // Ask AI configuration - Enhanced search with AI-powered answers
+      askAi: {
+        assistantId: 'RzGFEBJZYB7U', // Your Algolia AI assistant ID
+        indexName: 'gl0bal01',
+      },
     },
     /*announcementBar: {
       content: `🎉️ ⭐️ If you like this repo, give it a star and follow me on <a target="_blank" rel="noopener noreferrer" href="https://github.com/gl0bal01/">GitHub</a> 🥳️`,
     },*/
-//    image: 'img/logo.svg',
     navbar: {
       title: 'gl0bal01',
       logo: {
@@ -359,7 +380,8 @@ footer: {
       additionalLanguages: ['bash', 'diff', 'json', 'typescript', 'php', 'yaml', 'go', 'sql'],
     },
   } satisfies Preset.ThemeConfig,
-    headTags: [
+  headTags: [
+    // Preconnect to Google Fonts
     {
       tagName: 'link',
       attributes: {
@@ -375,6 +397,46 @@ footer: {
         crossorigin: 'anonymous',
       },
     },
+    // Preconnect to Algolia for search
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://4X4QPM0QJE-dsn.algolia.net',
+        crossorigin: 'anonymous',
+      },
+    },
+    // Preconnect to Google Analytics
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://www.googletagmanager.com',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://www.google-analytics.com',
+      },
+    },
+    // DNS prefetch for additional performance
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'dns-prefetch',
+        href: 'https://fonts.googleapis.com',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'dns-prefetch',
+        href: 'https://www.googletagmanager.com',
+      },
+    },
+    // Font stylesheet (with display=swap for better performance)
     {
       tagName: 'link',
       attributes: {

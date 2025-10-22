@@ -14,6 +14,38 @@ import type {
 
 type RSSParser = Parser<any, any>;
 
+/**
+ * Sanitize URLs to prevent XSS attacks
+ * Only allows http, https, mailto, and ftp protocols
+ * Strips dangerous protocols like javascript:, data:, vbscript:, etc.
+ */
+function sanitizeUrl(url: string | undefined): string | undefined {
+  if (!url) return undefined;
+
+  const trimmedUrl = url.trim();
+  if (!trimmedUrl) return undefined;
+
+  // Check for dangerous protocols
+  const dangerousProtocols = /^(\s)*(javascript|data|vbscript|file|about):/i;
+  if (dangerousProtocols.test(trimmedUrl)) {
+    console.warn(`[Multi-RSS] Blocked potentially dangerous URL: ${trimmedUrl.substring(0, 50)}...`);
+    return undefined;
+  }
+
+  // Only allow safe protocols
+  const safeProtocols = /^(https?|mailto|ftp):/i;
+
+  // If it has a protocol, check if it's safe
+  if (trimmedUrl.includes(':')) {
+    if (!safeProtocols.test(trimmedUrl)) {
+      console.warn(`[Multi-RSS] Blocked URL with unsafe protocol: ${trimmedUrl.substring(0, 50)}...`);
+      return undefined;
+    }
+  }
+
+  return trimmedUrl;
+}
+
 export default function multiRSSPlugin(
   context: LoadContext,
   options: PluginOptions
@@ -98,14 +130,20 @@ export default function multiRSSPlugin(
                 cleanTitle: item.title?.replace(/[\[\]]/g, '').trim(),
                 publishedDate: new Date(item.pubDate || item.isoDate),
                 author: item.creator || item['dc:creator'] || feed.managingEditor || 'Unknown',
-                summary: item.contentSnippet || 
-                        (item.description?.replace(/<[^>]*>/g, '') || '').substring(0, 200) + '...'
+                summary: item.contentSnippet ||
+                        (item.description?.replace(/<[^>]*>/g, '') || '').substring(0, 200) + '...',
+                // Sanitize URLs to prevent XSS attacks
+                link: sanitizeUrl(item.link),
+                enclosure: item.enclosure ? {
+                  ...item.enclosure,
+                  url: sanitizeUrl(item.enclosure.url) || item.enclosure.url
+                } : undefined
               }));
             
             const processedFeed: ProcessedFeed = {
               title: customTitle || feed.title,
               description: feed.description,
-              link: feed.link,
+              link: sanitizeUrl(feed.link),
               category,
               lastBuildDate: feed.lastBuildDate,
               items: processedItems,

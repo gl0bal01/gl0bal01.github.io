@@ -1,7 +1,7 @@
 import React from 'react';
 import type { RSSItem } from '../types/rss';
 import { usePaginatedRSSItems } from '../hooks/useRSS';
-import { formatRelativeTime, truncateText } from '../utils/rssUtils';
+import { formatRelativeTime, truncateText, sanitizeUrl } from '../utils/rssUtils';
 
 interface PaginatedRSSFeedProps {
   category?: string;
@@ -161,9 +161,9 @@ const PaginatedRSSFeed: React.FC<PaginatedRSSFeedProps> = ({
       >
         <header className="rss-item-header">
           <h3 className="rss-item-title">
-            <a 
-              href={item.link} 
-              target="_blank" 
+            <a
+              href={sanitizeUrl(item.link)}
+              target="_blank"
               rel="noopener noreferrer"
               aria-describedby={showExcerpt ? `${itemId}-excerpt` : undefined}
             >
@@ -206,10 +206,10 @@ const PaginatedRSSFeed: React.FC<PaginatedRSSFeedProps> = ({
           {showAuthor && item.author && item.author !== 'Unknown' && (
             <span className="rss-author">By {item.author}</span>
           )}
-          
-          <a 
-            href={item.link} 
-            target="_blank" 
+
+          <a
+            href={sanitizeUrl(item.link)}
+            target="_blank"
             rel="noopener noreferrer"
             className="rss-read-more"
             aria-label={`Read full article: ${item.cleanTitle || item.title}`}

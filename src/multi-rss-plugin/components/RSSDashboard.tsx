@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import Link from '@docusaurus/Link';
-import type { 
-  RSSDashboardProps, 
-  RSSData, 
-  RSSItem 
+import type {
+  RSSDashboardProps,
+  RSSData,
+  RSSItem
 } from '../types/rss';
+import { sanitizeUrl } from '../utils/rssUtils';
 
 const RSSDashboard: React.FC<RSSDashboardProps> = ({
   maxItems = 20,
@@ -30,10 +31,10 @@ const RSSDashboard: React.FC<RSSDashboardProps> = ({
   const { feeds, categories, allItems, stats, lastUpdated } = rssData;
   
   // Filter items based on category and search
-  let filteredItems: RSSItem[] = selectedCategory === 'all' 
-    ? allItems 
+  let filteredItems: RSSItem[] = selectedCategory === 'all'
+    ? allItems
     : categories[selectedCategory] || [];
-  
+
   if (searchTerm) {
     filteredItems = filteredItems.filter((item: RSSItem) =>
       item.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -41,8 +42,12 @@ const RSSDashboard: React.FC<RSSDashboardProps> = ({
       item.feedTitle?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }
-  
-  const displayItems = filteredItems.slice(0, maxItems);
+
+  // Sanitize URLs in filtered items to prevent XSS from user-filtered data
+  const displayItems = filteredItems.slice(0, maxItems).map(item => ({
+    ...item,
+    link: sanitizeUrl(item.link)
+  }));
   const categoryList = Object.keys(categories).sort();
 
   const formatDate = (dateString: string | Date | undefined): string => {
@@ -134,6 +139,7 @@ const RSSDashboard: React.FC<RSSDashboardProps> = ({
             <article key={`${item.feedKey}-${index}`} className="rss-item-card">
               <div className="rss-item-header">
                 <h3 className="rss-item-title">
+                  {/* URL sanitized in displayItems mapping (line 49) */}
                   <a href={item.link} target="_blank" rel="noopener noreferrer">
                     {item.cleanTitle || item.title}
                   </a>
@@ -157,9 +163,10 @@ const RSSDashboard: React.FC<RSSDashboardProps> = ({
                 {item.author && item.author !== 'Unknown' && (
                   <span className="rss-author">By {item.author}</span>
                 )}
-                <a 
-                  href={item.link} 
-                  target="_blank" 
+                {/* URL sanitized in displayItems mapping (line 49) */}
+                <a
+                  href={item.link}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="rss-read-more"
                 >
