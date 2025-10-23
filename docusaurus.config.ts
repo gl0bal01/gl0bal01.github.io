@@ -173,11 +173,6 @@ const config: Config = {
         facetFilters: [],
       },
       insights: true,
-      // Ask AI configuration - Enhanced search with AI-powered answers
-      askAi: {
-        assistantId: 'RzGFEBJZYB7U', // Your Algolia AI assistant ID
-        indexName: 'gl0bal01',
-      },
     },
     /*announcementBar: {
       content: `🎉️ ⭐️ If you like this repo, give it a star and follow me on <a target="_blank" rel="noopener noreferrer" href="https://github.com/gl0bal01/">GitHub</a> 🥳️`,
@@ -441,7 +436,7 @@ footer: {
       tagName: 'link',
       attributes: {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@600;700;800&display=swap',
+        href: 'https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@600;800&display=swap',
       },
     },
   ],
