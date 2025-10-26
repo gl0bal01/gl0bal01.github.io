@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkgl_0_bal_01=globalThis.webpackChunkgl_0_bal_01||[]).push([[9695],{21060:l=>{l.exports=JSON.parse('{"name":"docusaurus-plugin-content-docs","id":"intel-codex"}')}}]);
