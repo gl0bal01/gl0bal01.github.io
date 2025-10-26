@@ -120,6 +120,8 @@ const config: Config = {
           blogTitle: 'Blog',
           blogDescription: 'Exploring neurodiversity, human psychology, and the madness of mind—alongside research in cybersecurity, and digital forensics.',
           postsPerPage: 30,
+          blogSidebarTitle: 'All posts',
+          blogSidebarCount: 'ALL', // Show all posts in sidebar instead of default 5
           // SEO: Add feed for blog RSS
           feedOptions: {
             type: ['rss', 'atom'],
