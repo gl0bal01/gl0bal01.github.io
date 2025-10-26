@@ -16,13 +16,24 @@ export default function Highlight({ children, color = '#FFFF33', block = false }
       style={{
         backgroundColor: color,
         borderRadius: '0.2rem',
-        color: isDark ? '#000' : '#000', // force black text for readability
+        color: '#000', // always black text for readability on highlight
         padding: '0.2rem 0.4rem',
         display: block ? 'block' : 'inline',
         marginBottom: block ? '0.5rem' : 0,
       }}
+      className="highlight-wrapper"
     >
       {children}
+      <style>{`
+        .highlight-wrapper a {
+          color: #000 !important;
+          text-decoration: underline;
+          font-weight: 600;
+        }
+        .highlight-wrapper a:hover {
+          color: #222 !important;
+        }
+      `}</style>
     </span>
   );
 }
