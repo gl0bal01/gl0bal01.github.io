@@ -31,6 +31,13 @@ jobs:
         with:
           fetch-depth: 0  # Full history for git operations
 
+      - name: Checkout Intel Codex Vault
+        uses: actions/checkout@v4
+        with:
+          repository: gl0bal01/intel-codex
+          path: .temp-vault
+          fetch-depth: 1
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
