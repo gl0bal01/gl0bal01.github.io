@@ -160,6 +160,16 @@ Looking to sharpen your cybersecurity skills? Whether you're a beginner or an ex
   </a>
 </div>
 
+<div style={{padding: '20px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #dddddd'}}>
+  <h3 style={{marginTop: '0'}}>📰 Bellingcat OSINT Challenge</h3>
+  <p>The Bellingcat OSINT Challenge is created by the renowned investigative journalism organization known for groundbreaking open-source investigations. This platform offers realistic scenarios that mirror real-world investigative journalism, teaching advanced OSINT techniques used by professional investigators. Perfect for those who want to learn the methods used in high-profile international investigations.</p>
+  <a href="https://challenge.bellingcat.com/" target="_blank" rel="noopener noreferrer" style={{textDecoration: 'none'}}>
+    <button style={{padding: '1em 1em 0 1em', borderRadius: '6px', border: '1px solid #dddddd', cursor: 'pointer', fontWeight: 'bold'}}>
+      🔎 Investigate Like a Pro →
+    </button>
+  </a>
+</div>
+
 ## 🔗 Blockchain & DeFi Security {#blockchain-security}
 
 <div style={{padding: '20px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #dddddd'}}>
