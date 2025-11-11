@@ -230,6 +230,12 @@ const config: Config = {
           className: 'header-github-link',
           'aria-label': 'GitHub repository',
         },
+        {
+          href: 'https://discord.gg/T5tc9Rq8DV',
+          position: 'right',
+          className: 'header-discord-link',
+          'aria-label': 'Discord community',
+        },
       ],
     },
 footer: {
