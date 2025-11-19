@@ -1290,7 +1290,20 @@ create_jira_tickets('nuclei-results.jsonl')
 
 OSINT operations using Nuclei enable comprehensive target profiling through automated discovery of publicly available information. Replace target domains, IP ranges, and data sources with your specific reconnaissance targets.
 
-### 15.1 Passive Information Gathering
+### 15.1 Basic OSINT Operations
+
+```bash
+# Install Nuclei v2 (alternative version for OSINT workflows)
+go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
+
+# Username enumeration across 600+ sites using osint tag
+nuclei -tags osint -var user=LVC1-F3R
+
+# Social media focused username enumeration
+nuclei -tags osint-social -var user=LVC1-F3R
+```
+
+### 15.2 Passive Information Gathering
 
 ```bash
 # Comprehensive domain reconnaissance
@@ -1309,7 +1322,7 @@ nuclei -l domains.txt -t ssl/certificate-transparency.yaml
 nuclei -l targets.txt -t exposures/configs/google-dorking.yaml
 ```
 
-### 15.2 Exposed Information Discovery
+### 15.3 Exposed Information Discovery
 
 ```bash
 # Sensitive file exposure detection
@@ -1328,7 +1341,7 @@ nuclei -l api_targets.txt -t exposures/apis/ -tags swagger,graphql,api-docs
 nuclei -l targets.txt -t exposures/configs/database-exposure.yaml
 ```
 
-### 15.3 Social Media and Public Platform Reconnaissance
+### 15.4 Social Media and Public Platform Reconnaissance
 
 ```yaml
 # Custom OSINT template for social media discovery
@@ -1379,7 +1392,7 @@ http:
           - 'https?://[^\s<>"]+(?:linkedin|twitter|github|facebook|instagram)[^\s<>"]*'
 ```
 
-### 15.4 Metadata and Document Intelligence
+### 15.5 Metadata and Document Intelligence
 
 ```bash
 # Document metadata extraction
@@ -1395,7 +1408,7 @@ nuclei -l pdf_locations.txt -t exposures/files/pdf-metadata.yaml
 nuclei -l targets.txt -t exposures/files/ -tags office,document,metadata
 ```
 
-### 15.5 Advanced OSINT Template Development
+### 15.6 Advanced OSINT Template Development
 
 ```yaml
 id: comprehensive-osint-reconnaissance
@@ -1512,7 +1525,7 @@ http:
         group: 2
 ```
 
-### 15.6 Corporate Intelligence Gathering
+### 15.7 Corporate Intelligence Gathering
 
 ```bash
 # Employee enumeration through exposed directories
@@ -1531,7 +1544,7 @@ nuclei -l corporate_apps.txt -t technologies/ -tags cms,framework,server
 nuclei -l company_sites.txt -t osint/vendor-discovery.yaml
 ```
 
-### 15.7 Infrastructure and Network Intelligence
+### 15.8 Infrastructure and Network Intelligence
 
 ```yaml
 id: infrastructure-intelligence-gathering
@@ -1619,7 +1632,7 @@ http:
         group: 1
 ```
 
-### 15.8 Automated OSINT Data Aggregation
+### 15.9 Automated OSINT Data Aggregation
 
 ```python
 # Python script for OSINT data aggregation and analysis
@@ -1752,7 +1765,7 @@ targets = ['https://example.com', 'https://api.example.com']
 intelligence = osint.comprehensive_osint(targets)
 ```
 
-### 15.9 OSINT Data Correlation and Analysis
+### 15.10 OSINT Data Correlation and Analysis
 
 ```bash
 # Correlate OSINT findings across multiple sources
@@ -1780,7 +1793,7 @@ grep -o '@[^[:space:]]*' osint_contacts.txt | \
   sort -nr > email_domains.txt
 ```
 
-### 15.10 Integration with External OSINT Tools
+### 15.11 Integration with External OSINT Tools
 
 ```bash
 # Combine Nuclei with Subfinder for comprehensive discovery
@@ -1800,7 +1813,7 @@ nuclei -l shodan_ips.txt -t network/ -o network_osint.json
 whois example.com | grep -E "Email|Phone|Name" > whois_contacts.txt
 ```
 
-### 15.11 Dark Web and Deep Web Reconnaissance
+### 15.12 Dark Web and Deep Web Reconnaissance
 
 ```yaml
 id: deep-web-asset-discovery
@@ -1854,7 +1867,7 @@ http:
         group: 1
 ```
 
-### 15.12 Competitive Intelligence Gathering
+### 15.13 Competitive Intelligence Gathering
 
 ```bash
 # Competitor technology analysis
@@ -1870,7 +1883,7 @@ nuclei -l competitor_ips.txt -t network/ -t ssl/ -o competitor_infrastructure.js
 nuclei -l industry_sites.txt -t exposures/apis/ -tags swagger,graphql -o market_apis.json
 ```
 
-### 15.13 Threat Intelligence Integration
+### 15.14 Threat Intelligence Integration
 
 ```python
 # Threat intelligence correlation with OSINT findings
