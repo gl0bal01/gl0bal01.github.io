@@ -138,16 +138,6 @@ DevBox implements defense-in-depth:
 4. **Service Isolation**: Docker containers with minimal privileges
 5. **Access Control**: Password-protected code-server, app-level auth for Open WebUI
 
-## What's Next?
-
-I'm actively developing DevBox and have several features planned:
-
-- Automated backup configurations
-- Additional pre-configured services (databases, monitoring)
-- Integration with more AI models
-- Enhanced security monitoring and logging
-- Support for additional platforms beyond Ubuntu
-
 ## Try It Out
 
 DevBox is completely open source and available now:
@@ -157,3 +147,4 @@ DevBox is completely open source and available now:
 Whether you're a security researcher, AI developer, or just want a powerful remote development environment, DevBox provides a solid foundation that's both secure and practical.
 
 ---
+
