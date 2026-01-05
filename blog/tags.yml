@@ -45,3 +45,7 @@ free:
 hosting:
   label: Hosting
   permalink: /hosting
+
+pentesting:
+  label: Pentesting
+  permalink: /pentesting
