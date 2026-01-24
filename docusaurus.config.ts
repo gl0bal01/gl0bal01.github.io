@@ -214,11 +214,6 @@ const config: Config = {
               label: 'Reverse',
               'aria-label': 'Reverse engineering resources',
             },
-            {
-              to: '/ai',
-              label: 'AI',
-              'aria-label': 'AI and machine learning resources',
-            },
           ],
         },
         {to: '/cheatsheets', label: 'Cheatsheets', position: 'left', 'aria-label': 'Security and development cheatsheets'},
@@ -320,11 +315,6 @@ footer: {
             label: 'Cybersecurity',
             to: '/cyber',
             'aria-label': 'Cybersecurity resources and guides',
-          },
-          {
-            label: 'AI Resources',
-            to: '/ai',
-            'aria-label': 'Artificial intelligence resources',
           },
           {
             label: 'Cheatsheets',

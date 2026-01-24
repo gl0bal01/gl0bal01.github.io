@@ -17,14 +17,14 @@ Modern developers need powerful remote environments for various reasons: resourc
 - Hours of manual configuration
 - Complex networking and firewall rules
 - Juggling multiple authentication mechanisms
-- Exposing services to the public internet (yikes!)
+- Exposing services to the public internet
 - Wrestling with reverse proxy configurations
 
 **DevBox solves all of this with a single script.**
 
 ## What Makes DevBox Different?
 
-### 🔒 Zero-Trust by Default
+### Zero-Trust by Default
 
 Unlike traditional VPS setups that expose services on public IPs, DevBox implements a zero-trust architecture using [Tailscale](https://tailscale.com/). Only your SSH port faces the internet — everything else lives on your private mesh network.
 
@@ -36,17 +36,21 @@ Unlike traditional VPS setups that expose services on public IPs, DevBox impleme
     [All Your Services: Private & Secure]
 ```
 
-### 🚀 Everything You Need, Pre-Configured
+### Full AI Development Stack
 
-DevBox includes a carefully curated stack for modern development:
+DevBox includes a comprehensive suite of AI coding tools:
 
-- **Code-server**: Full VS Code experience in your browser
-- **Ollama + Open WebUI**: Run LLMs locally without API costs
-- **Exegol**: Complete pentesting toolkit for security research
-- **Traefik**: Automatic service routing with clean internal URLs
-- **Claude Code CLI**: AI-powered coding assistance right in your terminal
+| Tool | Provider | Purpose |
+|------|----------|---------|
+| Claude Code | Anthropic | AI-assisted coding CLI |
+| OpenCode | Open-source | Multi-provider AI coding |
+| Goose | Block | AI coding agent |
+| LLM | Datasette | CLI for language models |
+| Fabric | danielmiessler | AI prompts framework |
 
-### 🎯 Built for Security Professionals
+Plus **Ollama + Open WebUI** for running LLMs locally without API costs.
+
+### Built for Security Professionals
 
 If you do penetration testing or security research, DevBox has you covered:
 
@@ -79,25 +83,39 @@ chmod +x setup.sh
 ```
 
 The script handles:
-- ✅ User creation with sudo privileges
-- ✅ SSH hardening (custom port, key-only auth)
-- ✅ UFW firewall configuration
-- ✅ Tailscale installation and setup
-- ✅ Docker stack deployment
-- ✅ Development tool installation (mise, lazygit, lazyvim)
-- ✅ Shell customization (Oh-My-Zsh with useful aliases)
+- User creation with sudo privileges
+- SSH hardening (custom port, key-only auth)
+- UFW firewall configuration
+- Tailscale installation and setup
+- Docker stack deployment
+- Development tool installation (mise, lazygit, lazydocker, lazyvim)
+- Shell customization (Oh-My-Zsh with useful aliases)
+- AI dev stack installer for Claude Code, OpenCode, Goose, LLM, and Fabric
 
 ## The Architecture
 
 DevBox uses a simple but powerful architecture:
 
-- **Tailscale** creates your private network
-- **Traefik** routes traffic to services using clean URLs
-- **Docker Compose** manages the entire stack
-- **Internal DNS** gives you memorable service URLs
+```
++-------------------------------------------------------------------------+
+|                                   VPS                                   |
+|                                                                         |
+|   [Tailscale] <---> [Your Devices]                                      |
+|        |                                                                |
+|        v                                                                |
+|   [Traefik :80] ----+---- [Open WebUI]      ai.internal                 |
+|        |            +---- [Ollama API]      ollama.internal             |
+|        |            +---- [Traefik Dashboard] traefik.internal          |
+|        |                                                                |
+|        +---> [Docker Socket Proxy] ---> /var/run/docker.sock            |
+|              (internal network, read-only API access)                   |
+|                                                                         |
+|   [Exegol Container] <---> [HTB/THM VPN]                                |
+|   [AI Dev Stack] - Claude Code, OpenCode, Goose, LLM, Fabric            |
++-------------------------------------------------------------------------+
+```
 
 Access your services at:
-- `http://code.internal` - VS Code
 - `http://ai.internal` - Open WebUI
 - `http://traefik.internal` - Traefik dashboard
 - `http://ollama.internal` - Ollama API
@@ -112,7 +130,7 @@ docker exec -it ollama ollama pull llama3.2
 docker exec -it ollama ollama pull codellama
 ```
 
-Access your models through Open WebUI's ChatGPT-like interface or via API calls.
+Access your models through Open WebUI's ChatGPT-like interface or via API calls. Connect your local IDE to the remote Ollama instance using included laptop setup scripts.
 
 ### Penetration Testing Labs
 Connect to HackTheBox, TryHackMe, or corporate VPN environments:
@@ -128,21 +146,36 @@ Multiple developers can access the same environment via Tailscale, with ACLs con
 ### Personal Cloud IDE
 Access your development environment from any device — laptop, tablet, or even your phone.
 
-## Security Features
+## Security Hardening (v2.3)
 
-DevBox implements defense-in-depth:
+DevBox implements defense-in-depth with production-grade container security:
 
-1. **Network Layer**: Only SSH exposed, all services on private mesh
-2. **Authentication**: Key-based SSH only, no password auth
-3. **Firewall**: UFW with default-deny incoming policy
-4. **Service Isolation**: Docker containers with minimal privileges
-5. **Access Control**: Password-protected code-server, app-level auth for Open WebUI
+| Measure | Implementation |
+|---------|----------------|
+| Secrets Management | .env files with 600 permissions |
+| Docker Socket Protection | Traefik uses docker-socket-proxy |
+| Privilege Escalation Prevention | All containers have `no-new-privileges:true` |
+| Capability Dropping | All containers have `cap_drop: ALL` |
+| Resource Limits | Memory, CPU, and PID limits on all containers |
+| Health Checks | All services have health checks configured |
+
+**Network Security:**
+- Only SSH (port 5522) exposed to the public internet
+- All other services accessible only via Tailscale
+- UFW firewall with default deny incoming
+
+**Authentication:**
+- SSH: Key-based only (password disabled, root login disabled)
+- Open WebUI: Application-level auth (disable signup after admin creation)
+- Traefik Dashboard: Basic Auth protected
 
 ## Try It Out
 
 DevBox is completely open source and available now:
 
 **GitHub**: [github.com/gl0bal01/devbox](https://github.com/gl0bal01/devbox)
+
+The repository includes comprehensive documentation: quick reference guides, Ollama optimization tips, remote IDE setup instructions, and troubleshooting guides.
 
 Whether you're a security researcher, AI developer, or just want a powerful remote development environment, DevBox provides a solid foundation that's both secure and practical.
 

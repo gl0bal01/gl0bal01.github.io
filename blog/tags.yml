@@ -14,6 +14,18 @@ training:
   label: Training
   permalink: /training
 
+prompt:
+  label: Prompt
+  permalink: /prompt
+
+cheatsheet:
+  label: Cheatsheet
+  permalink: /cheatsheet
+
+claude:
+  label: Claude
+  permalink: /claude
+
 ai:
   label: AI
   permalink: /ai

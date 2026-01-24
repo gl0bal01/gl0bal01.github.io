@@ -1,5 +1,5 @@
 ---
-id: ai-prompt-engineering-cheatsheet
+slug: ai-prompt-engineering-cheatsheet
 title: "AI Prompt Engineering Cheatsheet: Essential Action Verbs for Better Results"
 sidebar_label: "AI Prompt: Essential Action Verbs"
 sidebar_position: 1
@@ -8,17 +8,13 @@ keywords:
   - meta-prompting
   - Action verbs
   - Prompt verbs
-authors: [gl0bal01]
-tags: [Prompt, Cheatsheet]
+tags: [prompt, cheatsheet, research]
+date: 2025-05-12
+authors: gl0bal01
 ---
 
-
-# AI Prompt Engineering Cheatsheet: Essential Action Verbs for Better Results
-
-## Abstract
-
 Effective AI prompt engineering requires precise action verbs to eliminate ambiguity and improve output quality. This cheatsheet categorizes 60+ essential verbs across eight functional domains with comparative examples demonstrating improved prompt construction.
-
+<!-- truncate -->
 ## Methodology
 
 Action verbs are categorized by cognitive and operational functions. Each category includes weak versus strong prompt examples demonstrating measurable improvement in specificity and output quality.
