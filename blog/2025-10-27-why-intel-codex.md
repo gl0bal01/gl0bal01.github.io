@@ -3,7 +3,7 @@ slug: why-intel-codex
 title: "Why I Built Intel Codex"
 authors: gl0bal01
 description: "The story behind creating a comprehensive operational manual for digital investigators, security analysts, and OSINT practitioners."
-tags: [osint, security, cybersecurity]
+tags: [osint]
 date: 2025-10-26
 ---
 

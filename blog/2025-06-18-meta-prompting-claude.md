@@ -1,5 +1,5 @@
 ---
-id: meta-prompting-claude
+slug: meta-prompting-claude
 title: "Meta-Prompting: Using Claude to Optimize Your Prompts"
 sidebar_label: "Meta-Prompting with Claude"
 sidebar_position: 2
@@ -17,15 +17,14 @@ keywords:
   - llm performance
   - recursive improvement
   - prompt gradients
-authors: [gl0bal01]
-tags: [Prompt, Claude]
+tags: [prompt, claude, ai, research]
+authors: gl0bal01
+date: 2025-06-18
 ---
 
-# Meta-Prompting: Using Claude to Optimize Your Prompts
-
-## Abstract
-
 Meta-prompting leverages Claude's analytical capabilities to systematically improve prompt quality through iterative refinement. This technique transforms prompt engineering from manual trial-and-error into a structured optimization process, yielding measurably better outputs with reduced development time.
+
+<!-- truncate -->
 
 ## Core Methodology
 
