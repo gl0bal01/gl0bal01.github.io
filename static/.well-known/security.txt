@@ -1,0 +1,6 @@
+Contact: mailto:gl0bal01@proton.me
+Contact: https://github.com/gl0bal01/gl0bal01.github.io/issues
+Contact: https://discord.gg/T5tc9Rq8DV
+Expires: 2027-03-17T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://gl0bal01.com/.well-known/security.txt

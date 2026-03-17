@@ -8,19 +8,18 @@ const config: Config = {
   tagline: 'Security research, penetration testing, digital investigation techniques and human madness',
   favicon: 'icons/favicon.ico',
 
-  // Configuration spécifique pour gl0bal01.github.io
   url: 'https://gl0bal01.com',
-  baseUrl: '/', // Pour un site utilisateur GitHub Pages
+  baseUrl: '/',
 
-  // Configuration GitHub Pages
-  organizationName: 'gl0bal01', // Nom d'utilisateur GitHub
-  projectName: 'gl0bal01.github.io', // Nom du repository
-  deploymentBranch: 'gh-pages',
+  organizationName: 'gl0bal01',
+  projectName: 'gl0bal01.github.io',
   trailingSlash: false,
 
-  onBrokenLinks: 'warn', // Temporarily set to warn to allow build with intel-codex broken links
+  // Keep as 'warn' until intel-codex vault broken links are resolved
+  onBrokenLinks: 'warn',
+  onBrokenAnchors: 'warn',
+  onBrokenMarkdownLinks: 'warn',
 
-  // Configuration i18n (optionnel)
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
@@ -28,12 +27,8 @@ const config: Config = {
   themes: ['@docusaurus/theme-mermaid'],
   markdown: {
     mermaid: true,
-    hooks: {
-      onBrokenMarkdownLinks: 'warn',
-    },
   },
   
-  // 🔥 PLUGINS SECTION - Multi-RSS Plugin, Intel Codex Docs Instance & Obsidian Vault Plugin
   plugins: [
     [
       './plugins/multi-rss-plugin.ts',
@@ -142,7 +137,7 @@ const config: Config = {
           lastmod: 'date',
           changefreq: 'weekly',
           priority: 0.5,
-          ignorePatterns: ['/tags/**'],
+          ignorePatterns: ['/tags/**', '/search/**', '/page/**'],
           filename: 'sitemap.xml',
         },
       } satisfies Preset.Options,
@@ -157,10 +152,14 @@ const config: Config = {
     metadata: [
       {name: 'keywords', content: 'cybersecurity, osint, digital forensics, penetration testing, reverse engineering, malware analysis, AI security, intelligence gathering'},
       {name: 'twitter:card', content: 'summary_large_image'},
+      {name: 'twitter:site', content: '@gl0bal01'},
+      {name: 'twitter:creator', content: '@gl0bal01'},
+      {property: 'og:locale', content: 'en_US'},
     ],
 
     colorMode: {
       defaultMode: 'light',
+      respectPrefersColorScheme: true,
     },
     mermaid: {
       theme: {light: 'neutral', dark: 'dark'},
@@ -370,7 +369,7 @@ footer: {
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
-      additionalLanguages: ['bash', 'diff', 'json', 'typescript', 'php', 'yaml', 'go', 'sql'],
+      additionalLanguages: ['bash', 'diff', 'json', 'typescript', 'php', 'yaml', 'go', 'sql', 'python', 'powershell', 'c', 'toml', 'nix', 'lua'],
     },
   } satisfies Preset.ThemeConfig,
   headTags: [
@@ -399,33 +398,11 @@ footer: {
         crossorigin: 'anonymous',
       },
     },
-    // Preconnect to Google Analytics
+    // Preconnect to Google Tag Manager
     {
       tagName: 'link',
       attributes: {
         rel: 'preconnect',
-        href: 'https://www.googletagmanager.com',
-      },
-    },
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'preconnect',
-        href: 'https://www.google-analytics.com',
-      },
-    },
-    // DNS prefetch for additional performance
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'dns-prefetch',
-        href: 'https://fonts.googleapis.com',
-      },
-    },
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'dns-prefetch',
         href: 'https://www.googletagmanager.com',
       },
     },
@@ -436,6 +413,50 @@ footer: {
         rel: 'stylesheet',
         href: 'https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@600;800&display=swap',
       },
+    },
+    // JSON-LD: WebSite schema with SearchAction (enables Google sitelinks search box)
+    {
+      tagName: 'script',
+      attributes: {
+        type: 'application/ld+json',
+      },
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'WebSite',
+            '@id': 'https://gl0bal01.com/#website',
+            url: 'https://gl0bal01.com',
+            name: 'gl0bal01',
+            description: 'Security research, penetration testing, digital investigation techniques and human madness',
+            inLanguage: 'en',
+            potentialAction: {
+              '@type': 'SearchAction',
+              target: {
+                '@type': 'EntryPoint',
+                urlTemplate: 'https://gl0bal01.com/search?q={search_term_string}',
+              },
+              'query-input': 'required name=search_term_string',
+            },
+          },
+          {
+            '@type': 'Organization',
+            '@id': 'https://gl0bal01.com/#organization',
+            name: 'gl0bal01',
+            url: 'https://gl0bal01.com',
+            logo: {
+              '@type': 'ImageObject',
+              url: 'https://gl0bal01.com/icons/android-icon-192x192.png',
+            },
+            sameAs: [
+              'https://github.com/gl0bal01',
+              'https://x.com/gl0bal01',
+              'https://discord.gg/T5tc9Rq8DV',
+              'https://start.me/u/gl0bal01',
+            ],
+          },
+        ],
+      }),
     },
   ],
 };
