@@ -51,9 +51,9 @@ html[data-theme='dark'] .DocSearch-Container {
   --ifm-color-primary-dark: #000000;
   --ifm-color-primary-darker: #000000;
   --ifm-color-primary-darkest: #000000;
-  --ifm-color-primary-light: #000000;
-  --ifm-color-primary-lighter: #000000;
-  --ifm-color-primary-lightest: #000000;
+  --ifm-color-primary-light: #262626;
+  --ifm-color-primary-lighter: #404040;
+  --ifm-color-primary-lightest: #595959;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
@@ -185,7 +185,7 @@ html[data-theme='dark'] .menu__link {
 html[data-theme='dark'] .menu__link:hover {
   background-color: #2a2a2a;
   color: #ffffff;
-  box-shadow: 0 0 6px rgba(255, 255, 255, 1);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
 }
 
 /* Active state - use higher specificity to avoid !important */
@@ -302,6 +302,13 @@ html[data-theme='light'] .DocSearch-Button {
 html[data-theme='dark'] .DocSearch-Button {
   background-color: #1a1a1a;
   color: #fff;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .DocSearch-Button {
+    animation: none;
+  }
 }
 
 /* Global dark mode CSS variables */
@@ -468,25 +475,7 @@ html[data-theme='dark'] .header-discord-link::before {
   color: #ffffff;
 }
 
-/* Light theme footer (footer style is 'dark' so links should be light) */
-html[data-theme='light'] .footer__link-item {
-  color: #e6e6e6;
-}
-
-html[data-theme='light'] .footer__link-item:hover {
-  color: #ffffff;
-  text-decoration: underline;
-}
-
-/* Dark theme footer */
-html[data-theme='dark'] .footer__link-item {
-  color: #e6e6e6;
-}
-
-html[data-theme='dark'] .footer__link-item:hover {
-  color: #ffffff;
-  text-decoration: underline;
-}
+/* Footer always has dark background (style: 'dark'), base rules above apply to both themes */
 
 /* ========================================
    TABLE OF CONTENTS (RIGHT SIDEBAR) STYLING
