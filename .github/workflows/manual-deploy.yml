@@ -30,7 +30,7 @@ jobs:
         run: npm run clear
 
       - name: Build site with fresh RSS feeds
-        run: npm run build
+        run: timeout 600 npm run build
         env:
           NODE_ENV: production
 
@@ -43,6 +43,8 @@ jobs:
           cname: gl0bal01.com
 
       - name: Log deployment
+        env:
+          DEPLOY_REASON: ${{ github.event.inputs.reason }}
         run: |
           echo "Manual deployment completed at $(date)"
-          echo "Reason: ${{ github.event.inputs.reason }}"
+          echo "Reason: $DEPLOY_REASON"
