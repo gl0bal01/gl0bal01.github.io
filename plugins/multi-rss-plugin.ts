@@ -72,6 +72,10 @@ export default function multiRSSPlugin(
       }
       const parser: RSSParser = new Parser({
         timeout: options.timeout || 10000,
+        headers: {
+          'Connection': 'close',
+          'Accept': 'application/rss+xml, application/xml, text/xml, */*',
+        },
         customFields: {
           feed: ['language', 'copyright', 'managingEditor'],
           item: ['description', 'content:encoded', 'dc:creator', 'media:content']

@@ -61,7 +61,9 @@ jobs:
         env:
           # Increase memory for RSS plugin (17+ feeds at build time)
           NODE_OPTIONS: --max-old-space-size=4096
-        run: npm run build
+        run: |
+          # Run build with a timeout to prevent RSS connections from hanging the process
+          timeout 600 npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
