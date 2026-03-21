@@ -1,9 +1,11 @@
 {
-  "label": "Cyber",
+  "label": "Cybersecurity",
   "position": 3,
   "link": {
     "type": "generated-index",
     "slug": "cyber",
-    "description": "Advanced techniques for lateral movement and network traversal in security assessments"
+    "title": "Cybersecurity Guides",
+    "description": "Advanced cybersecurity techniques including network pivoting, PCAP analysis, password cracking, and lateral movement for security assessments.",
+    "keywords": ["cybersecurity", "network security", "penetration testing", "pcap analysis", "password cracking", "pivoting"]
   }
 }

@@ -3,6 +3,8 @@
   "link": {
     "type": "generated-index",
     "slug": "cheatsheets/projectdiscovery",
-    "description": "The definitive reference for mastering ProjectDiscovery's security toolkit."
+    "title": "ProjectDiscovery Tools Cheatsheet",
+    "description": "Complete reference for ProjectDiscovery's security toolkit including Nuclei vulnerability scanner, httpx, subfinder, and other reconnaissance tools.",
+    "keywords": ["projectdiscovery", "nuclei", "httpx", "subfinder", "vulnerability scanner", "security tools", "reconnaissance"]
   }
 }

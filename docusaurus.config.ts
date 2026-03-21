@@ -18,7 +18,6 @@ const config: Config = {
   // Keep as 'warn' until intel-codex vault broken links are resolved
   onBrokenLinks: 'warn',
   onBrokenAnchors: 'warn',
-  onBrokenMarkdownLinks: 'warn',
 
   i18n: {
     defaultLocale: 'en',
@@ -27,6 +26,9 @@ const config: Config = {
   themes: ['@docusaurus/theme-mermaid'],
   markdown: {
     mermaid: true,
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
   },
   
   plugins: [
@@ -113,7 +115,7 @@ const config: Config = {
           showReadingTime: true,
           editUrl: 'https://github.com/gl0bal01/gl0bal01.github.io/tree/main/',
           blogTitle: 'Blog',
-          blogDescription: 'Exploring neurodiversity, human psychology, and the madness of mind—alongside research in cybersecurity, and digital forensics.',
+          blogDescription: 'Articles on cybersecurity, OSINT, AI tools, prompt engineering, penetration testing, and developer productivity.',
           postsPerPage: 30,
           blogSidebarTitle: 'All posts',
           blogSidebarCount: 'ALL', // Show all posts in sidebar instead of default 5
@@ -137,7 +139,14 @@ const config: Config = {
           lastmod: 'date',
           changefreq: 'weekly',
           priority: 0.5,
-          ignorePatterns: ['/tags/**', '/search/**', '/page/**'],
+          ignorePatterns: [
+            '**/tags/**',
+            '**/category/**',
+            '/search/**',
+            '/page/**',
+            '/blog/archive',
+            '/blog/authors',
+          ],
           filename: 'sitemap.xml',
         },
       } satisfies Preset.Options,
@@ -151,10 +160,13 @@ const config: Config = {
     // SEO: Additional metadata tags
     metadata: [
       {name: 'keywords', content: 'cybersecurity, osint, digital forensics, penetration testing, reverse engineering, malware analysis, AI security, intelligence gathering'},
+      {name: 'author', content: 'gl0bal01'},
       {name: 'twitter:card', content: 'summary_large_image'},
       {name: 'twitter:site', content: '@gl0bal01'},
       {name: 'twitter:creator', content: '@gl0bal01'},
       {property: 'og:locale', content: 'en_US'},
+      {property: 'og:site_name', content: 'gl0bal01'},
+      {property: 'og:type', content: 'website'},
     ],
 
     colorMode: {
@@ -181,7 +193,7 @@ const config: Config = {
     navbar: {
       title: 'gl0bal01',
       logo: {
-        alt: 'gl0bal01',
+        alt: 'gl0bal01 - Security Research & OSINT',
         src: '/icons/android-icon-48x48.png',
       },
       items: [
@@ -240,7 +252,7 @@ footer: {
         items: [
           {
             label: 'Overview',
-            to: '/intel-codex/',
+            to: '/intel-codex',
             'aria-label': 'Intel Codex overview page',
           },
           {
@@ -406,6 +418,30 @@ footer: {
         href: 'https://www.googletagmanager.com',
       },
     },
+    // DNS prefetch for third-party domains
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'dns-prefetch',
+        href: 'https://fonts.googleapis.com',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'dns-prefetch',
+        href: 'https://www.googletagmanager.com',
+      },
+    },
+    // Apple touch icon
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'apple-touch-icon',
+        sizes: '180x180',
+        href: '/icons/apple-icon-180x180.png',
+      },
+    },
     // Font stylesheet (with display=swap for better performance)
     {
       tagName: 'link',
@@ -428,8 +464,11 @@ footer: {
             '@id': 'https://gl0bal01.com/#website',
             url: 'https://gl0bal01.com',
             name: 'gl0bal01',
-            description: 'Security research, penetration testing, digital investigation techniques and human madness',
+            description: 'Security research, penetration testing, OSINT, digital investigation techniques, and cybersecurity education resources.',
             inLanguage: 'en',
+            publisher: {
+              '@id': 'https://gl0bal01.com/#organization',
+            },
             potentialAction: {
               '@type': 'SearchAction',
               target: {
@@ -444,15 +483,30 @@ footer: {
             '@id': 'https://gl0bal01.com/#organization',
             name: 'gl0bal01',
             url: 'https://gl0bal01.com',
+            description: 'Security research, penetration testing, OSINT, digital investigation techniques, and cybersecurity education.',
             logo: {
               '@type': 'ImageObject',
               url: 'https://gl0bal01.com/icons/android-icon-192x192.png',
+              width: 192,
+              height: 192,
             },
             sameAs: [
               'https://github.com/gl0bal01',
               'https://x.com/gl0bal01',
               'https://discord.gg/T5tc9Rq8DV',
               'https://start.me/u/gl0bal01',
+            ],
+          },
+          {
+            '@type': 'Person',
+            '@id': 'https://gl0bal01.com/#author',
+            name: 'gl0bal01',
+            url: 'https://gl0bal01.com',
+            image: 'https://github.com/gl0bal01.png',
+            jobTitle: 'Researcher',
+            sameAs: [
+              'https://github.com/gl0bal01',
+              'https://x.com/gl0bal01',
             ],
           },
         ],

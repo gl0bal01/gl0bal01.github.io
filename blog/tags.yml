@@ -1,63 +1,79 @@
 pivoting:
   label: Pivoting
+  description: Network pivoting and lateral movement techniques
   permalink: /pivoting
 
 research:
   label: Research
+  description: Security research and academic findings
   permalink: /research
 
 ctf:
-  label: Ctf
+  label: CTF
+  description: Capture The Flag challenges and competitions
   permalink: /ctf
 
 training:
   label: Training
+  description: Cybersecurity training resources and platforms
   permalink: /training
 
 prompt:
-  label: Prompt
+  label: Prompt Engineering
+  description: AI prompt engineering techniques and best practices
   permalink: /prompt
 
 cheatsheet:
   label: Cheatsheet
+  description: Quick reference guides and command sheets
   permalink: /cheatsheet
 
 claude:
   label: Claude
+  description: Anthropic Claude AI tips and workflows
   permalink: /claude
 
 ai:
   label: AI
+  description: Artificial intelligence tools and security
   permalink: /ai
 
 coding:
   label: Coding
+  description: Software development and programming
   permalink: /coding
 
 productivity:
   label: Productivity
+  description: Developer productivity tools and workflows
   permalink: /productivity
 
 osint:
-  label: Osint
+  label: OSINT
+  description: Open Source Intelligence techniques and tools
   permalink: /osint
 
 investigation:
   label: Investigation
+  description: Digital investigation methodologies
   permalink: /investigation
 
 dev:
-  label: Dev
+  label: Development
+  description: Software development tools and practices
   permalink: /dev
 
 free:
-  label: Free
+  label: Free Resources
+  description: Free tools and resources for security professionals
   permalink: /free
 
 hosting:
   label: Hosting
+  description: Web hosting and deployment solutions
   permalink: /hosting
 
 pentesting:
   label: Pentesting
+  description: Penetration testing methodologies and tools
   permalink: /pentesting

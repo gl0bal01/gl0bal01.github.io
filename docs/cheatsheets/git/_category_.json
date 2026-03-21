@@ -3,6 +3,8 @@
   "link": {
     "type": "generated-index",
     "slug": "cheatsheets/git",
-    "description": "Master the essential and advanced tools of Git for version control and collaboration. Explore practical references, command-line tips, and workflow strategies to streamline development and team productivity."
+    "title": "Git & GitHub Cheatsheets",
+    "description": "Master the essential and advanced tools of Git for version control and collaboration. Explore practical references, command-line tips, and workflow strategies to streamline development and team productivity.",
+    "keywords": ["git", "github", "version control", "git commands", "github actions", "branching", "git workflow"]
   }
 }

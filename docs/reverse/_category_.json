@@ -4,6 +4,8 @@
   "link": {
     "type": "generated-index",
     "slug": "reverse-engineering",
-    "description": "Dive into compiled binaries with no source code, peeling back layers of obfuscation to uncover hidden logic, secret keys, and undocumented functionality."
+    "title": "Reverse Engineering Guides",
+    "description": "Binary analysis, GDB debugging, and reverse engineering techniques for uncovering hidden functionality in compiled code, malware, and firmware.",
+    "keywords": ["reverse engineering", "binary analysis", "gdb", "malware analysis", "disassembly", "debugging"]
   }
 }

@@ -234,7 +234,26 @@ export default function Home(): ReactNode {
   return (
     <Layout description="Security research, penetration testing and digital investigation techniques">
       <HomepageHeader />
-      <main></main>
+      <main>
+        <section className="container margin-vert--lg">
+          <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+            <Heading as="h2">Open-Source Security Knowledge Base</Heading>
+            <p>
+              gl0bal01 is a free, open-source platform providing comprehensive resources for
+              cybersecurity professionals, OSINT practitioners, and digital investigators. From
+              penetration testing methodologies and malware analysis procedures to sockpuppet
+              operations and network forensics, every guide is field-tested and community-driven.
+            </p>
+            <p>
+              The <Link to="/intel-codex">Intel Codex</Link> serves as a complete operational
+              manual with 70+ investigation guides, security analysis SOPs, and platform-specific
+              techniques. All content is available as an{' '}
+              <Link to="https://github.com/gl0bal01/intel-codex">Obsidian vault</Link> for
+              offline use with full graph visualization.
+            </p>
+          </div>
+        </section>
+      </main>
     </Layout>
   );
 }

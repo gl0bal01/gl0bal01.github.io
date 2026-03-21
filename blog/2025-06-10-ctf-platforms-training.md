@@ -3,6 +3,7 @@ slug: ctf-platforms-training
 title: Tired of Boring Security Training? Try These 20+ Engaging CTF Platforms
 authors: [gl0bal01]
 tags: [ctf, dev, training]
+description: "A comprehensive guide to 20+ CTF platforms and cybersecurity training games covering web exploitation, OSINT, reverse engineering, blockchain security, and more for beginners and professionals."
 keywords: [ctf platforms, cybersecurity training, capture the flag, hacking challenges, penetration testing, ethical hacking, osint training, blockchain security, web exploitation, reverse engineering, malware analysis, pwn challenges, french ctf, picoctf, overthewire, hacktoria, ethernaut, damn vulnerable defi, powershell training, binary exploitation, bug bounty, vulnerability assessment, security education, infosec training, cyber defense, red team, blue team, incident response, digital forensics, threat hunting, security certifications, cissp, ceh, oscp, sans, comptia security plus, root-me, hack the box, osint4fun, iximiuz, advent of code]
 date: 2025-06-19
 ---
