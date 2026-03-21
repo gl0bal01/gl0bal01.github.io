@@ -3,6 +3,8 @@ slug: devbox-secure-remote-development
 title: "DevBox: Zero-Trust Dev Environment with AI & Pentesting Built-In"
 authors: [gl0bal01]
 tags: [hosting, dev, ai, coding, productivity, pentesting]
+description: "DevBox is an automated provisioning script that transforms a fresh Ubuntu VPS into a zero-trust development workstation with AI tools, pentesting frameworks, and Tailscale networking in minutes."
+keywords: [devbox, zero trust, development environment, VPS setup, tailscale, pentesting lab, AI development, remote development, ubuntu provisioning, secure workstation, developer tools]
 date: 2026-01-05
 ---
 

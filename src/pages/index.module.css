@@ -484,3 +484,30 @@
     font-size: 0.9rem;
   }
 }
+
+/* Accessibility: Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .heroBanner {
+    animation: none;
+  }
+
+  .discordCard {
+    animation: none !important;
+  }
+
+  .discordCard::before {
+    animation: none;
+  }
+
+  .discordCard .button--primary {
+    animation: none;
+  }
+
+  .gamingBadge {
+    animation: none;
+  }
+
+  .categoryCard:hover {
+    transform: none;
+  }
+}

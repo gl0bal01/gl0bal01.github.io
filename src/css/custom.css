@@ -309,6 +309,11 @@ html[data-theme='dark'] .DocSearch-Button {
   .DocSearch-Button {
     animation: none;
   }
+
+  .menu__link,
+  .navbar__link {
+    transition: none;
+  }
 }
 
 /* Global dark mode CSS variables */

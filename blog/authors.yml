@@ -1,6 +1,9 @@
 gl0bal01:
   name: gl0bal01
-  title: Chief of the v0id
+  title: Researcher
   url: https://gl0bal01.com
   image_url: https://github.com/gl0bal01.png
-  page: false
+  page: true
+  socials:
+    github: gl0bal01
+    x: gl0bal01

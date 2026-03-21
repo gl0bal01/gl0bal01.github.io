@@ -4,6 +4,8 @@
   "link": {
     "type": "generated-index",
     "slug": "cheatsheets",
-    "description": "A curated collection of powerful tools for developers and security professionals. Dive into practical resources designed to enhance automation, collaboration, and operational efficiency."
+    "title": "Security & Development Cheatsheets",
+    "description": "A curated collection of quick reference guides and command sheets for Docker, Git, Tailscale, Nuclei, and other tools used by developers and security professionals.",
+    "keywords": ["cheatsheets", "docker", "git", "tailscale", "nuclei", "security tools", "command reference"]
   }
 }
