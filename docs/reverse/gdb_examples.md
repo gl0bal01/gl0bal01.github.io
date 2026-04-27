@@ -30,6 +30,10 @@ tags:
 
 # GDB GEF Practical Examples: 32-bit and 64-bit Buffer Overflow Exploitation
 
+See [GDB setup](./gdb.md) for installation and environment configuration before working through these examples.
+
+This page walks through complete exploit-development sessions — from initial recon through shellcode execution — for both 32-bit (ret2win) and 64-bit (ROP chain) targets, using GEF's pattern generation, telescope, and ropper integrations.
+
 ## Example 1: 32-bit Buffer Overflow Exploitation
 
 ### Target Application (vuln32.c)
@@ -41,16 +45,16 @@ Buffer Overflow Exploitation Examples (32-bit & 64-bit)
 #include <stdlib.h>
 
 void win() {
-    printf("🎉 Congratulations! You've exploited the 32-bit binary!\n");
-    printf("🚩 Flag: CTF{32bit_buffer_overflow_mastered}\n");
+    printf("[+] Congratulations! You've exploited the 32-bit binary!\n");
+    printf("[FLAG] CTF{32bit_buffer_overflow_mastered}\n");
     system("/bin/sh");
 }
 
 void vulnerable_function(char *input) {
     char buffer[64];
-    printf("📝 Input received: %s\n", input);
+    printf("[*] Input received: %s\n", input);
     strcpy(buffer, input);  // Vulnerable strcpy - no bounds checking
-    printf("📋 Buffer contents: %s\n", buffer);
+    printf("[*] Buffer contents: %s\n", buffer);
 }
 
 int main(int argc, char *argv[]) {
@@ -59,10 +63,10 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     
-    printf("🎯 32-bit Buffer Overflow Challenge\n");
-    printf("📍 Win function address: %p\n", win);
+    printf("[*] 32-bit Buffer Overflow Challenge\n");
+    printf("[+] Win function address: %p\n", win);
     vulnerable_function(argv[1]);
-    printf("✅ Function returned normally\n");
+    printf("[+] Function returned normally\n");
     return 0;
 }
 ```
@@ -280,31 +284,31 @@ Stack level 0, frame at 0xffffd1c8:
 #include <unistd.h>
 
 void win() {
-    printf("🎉 You found the win function!\n");
-    printf("🚩 But you need ROP to get the flag...\n");
+    printf("[+] You found the win function!\n");
+    printf("[!] But you need ROP to get the flag...\n");
 }
 
 void get_flag() {
-    printf("🎯 Flag function reached!\n");
-    printf("🚩 Flag: CTF{64bit_rop_chain_mastered}\n");
+    printf("[+] Flag function reached!\n");
+    printf("[FLAG] CTF{64bit_rop_chain_mastered}\n");
     system("/bin/sh");
 }
 
 void vulnerable_function() {
     char buffer[64];
-    printf("📝 Enter your input: ");
+    printf("[*] Enter your input: ");
     fflush(stdout);
     read(0, buffer, 200);  // Vulnerable read - buffer overflow
-    printf("📋 You entered: %s\n", buffer);
+    printf("[*] You entered: %s\n", buffer);
 }
 
 int main() {
-    printf("🎯 64-bit ROP Chain Challenge\n");
-    printf("📍 Win function: %p\n", win);
-    printf("📍 Flag function: %p\n", get_flag);
+    printf("[*] 64-bit ROP Chain Challenge\n");
+    printf("[+] Win function: %p\n", win);
+    printf("[+] Flag function: %p\n", get_flag);
     
     vulnerable_function();
-    printf("✅ Function returned normally\n");
+    printf("[+] Function returned normally\n");
     return 0;
 }
 ```

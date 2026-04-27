@@ -11,6 +11,12 @@ authors: gl0bal01
 
 # ProjectDiscovery Tools Practical Guide
 
+This guide covers the full ProjectDiscovery toolkit (subfinder, httpx, naabu, katana, nuclei, dnsx, tlsx, and supporting utilities) with hands-on workflows for reconnaissance, enrichment, vulnerability detection, and reporting. Reach for it when you need a methodology-driven recipe for an external assessment, bug bounty engagement, or continuous security monitoring pipeline. For deeper coverage of template authoring and detection logic, see [Nuclei Practical Guide](./projectdiscovery_nuclei.md).
+
+:::warning Authorized use only
+The techniques and tools described here are intended for authorized security testing, bug bounty programs within scope, and personal research on systems you own. Always confirm written authorization, respect the program's Rules of Engagement and Terms of Service, honor declared scope and rate limits, and stop on opt-out signals. Unauthorized scanning is illegal in most jurisdictions.
+:::
+
 ## Table of Contents
 
 1. [Introduction & Methodology](#introduction--methodology)
@@ -38,6 +44,10 @@ This guide follows penetration testing best practices incorporating OSSTMM, NIST
 
 ## Discovery Tools
 
+:::note Tool versions and flag drift
+ProjectDiscovery tools update frequently and CLI flags or config schemas can change between releases. Verify exact flag names and defaults against `--help` and the tool's GitHub README before relying on any one-liner here. The major tools referenced throughout this guide — `subfinder`, `httpx`, `naabu`, `katana`, `nuclei`, `dnsx`, `tlsx` — all live under https://github.com/projectdiscovery.
+:::
+
 ### 1. Subfinder - Passive Subdomain Enumeration
 
 #### Overview
@@ -63,7 +73,12 @@ subfinder -d example.com -sources virustotal,securitytrails
 subfinder -d example.com -v
 ```
 
+
 #### Advanced Configuration
+
+:::tip API keys: env vars or config file, never commit
+Most ProjectDiscovery tools accept credentials either via the YAML provider/config file (e.g. `~/.config/subfinder/provider-config.yaml`) or via environment variables (e.g. `SHODAN_API_KEY`, `CHAOS_API_KEY`, `VIRUSTOTAL_API_KEY`). Prefer environment variables for shared/CI machines and a chmod 600 config file for personal workstations. Never commit real keys — add the config path to `.gitignore` and rotate any key that lands in a repo, log, or screenshot.
+:::
 
 **Configuration File (~/.config/subfinder/provider-config.yaml)**
 ```yaml
@@ -208,6 +223,7 @@ naabu -host example.com -p 1-1000
 # Scan multiple hosts
 naabu -list hosts.txt -p 1-65535
 ```
+
 
 #### Advanced Configuration
 
@@ -1118,6 +1134,7 @@ httpx -list urls.txt -response-time
 httpx -list urls.txt -mc 200,301,302
 ```
 
+
 #### Real-World Scenarios
 
 **Scenario 1: Large-Scale Web Asset Enumeration**
@@ -1547,7 +1564,7 @@ httpx -title -status-code
 ### 13. Nuclei - Vulnerability Scanner
 
 #### Overview
-Nuclei is a fast vulnerability scanner based on YAML templates, capable of scanning for thousands of different security issues.
+Nuclei is a fast vulnerability scanner based on YAML templates, capable of scanning for thousands of different security issues. The summary below focuses on operational use alongside the rest of the ProjectDiscovery toolchain — for template authoring, severity tuning, OOB matchers, and evasion strategies, see the dedicated [Nuclei Practical Guide](./projectdiscovery_nuclei.md).
 
 #### Installation
 ```bash
@@ -1589,6 +1606,8 @@ nuclei -u https://example.com -t exposed-panels/
 # Default credentials
 nuclei -u https://example.com -t default-logins/
 ```
+
+<!-- Verified 2026-04-26: template directories (cves/, exposures/, misconfiguration/, default-logins/, exposed-panels/, technologies/) are now nested under http/ in the nuclei-templates repo. Nuclei resolves shorthand paths (e.g. -t cves/) relative to the templates root, so the commands above remain valid. Full explicit paths are http/cves/, http/exposures/, etc. Source: https://github.com/projectdiscovery/nuclei-templates/tree/main/http -->
 
 #### Real-World Scenarios
 

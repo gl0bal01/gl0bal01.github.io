@@ -56,11 +56,17 @@ GDB/GEF debugging methodologies can be systematically categorized into eight pri
 | Exploitation Tools | 30+ | All Supported | Frequent | Very High | High |
 | Architecture Specific | 40+ | Platform Dependent | Stable | High | Medium |
 
+For hands-on walkthroughs applying these commands to real vulnerable binaries, see [Practical Buffer Overflow Examples](./gdb_examples.md).
+
 ## 2. Installation and Environment Setup
 
 The following commands assume you have appropriate system permissions and network connectivity. Substitute all placeholder values with those specific to your environment.
 
 ### 2.1 GEF Installation Methods
+
+:::note
+GEF is under active development and the `gef.blah.cat` installer always pulls the latest commit. For production or reproducible research environments, consider pinning to a known-good release. Check [hugsy/gef releases](https://github.com/hugsy/gef/releases) (the original) or [bata24/gef releases](https://github.com/bata24/gef/releases) (a feature-extended fork) and install the specific `.py` file from that release tag instead of using the auto-install URL.
+:::
 
 ```bash
 # Automated installation (recommended)
@@ -1486,6 +1492,6 @@ Security practitioners must balance the powerful capabilities of GDB/GEF with re
 - [Practical Reverse Engineering](https://www.amazon.com/Practical-Reverse-Engineering-Reversing-Obfuscation/dp/1118787315)
 - [Intel 64 and IA-32 Architecture Manuals](https://software.intel.com/content/www/us/en/develop/articles/intel-sdm.html)
 - [ARM Architecture Reference Manual](https://developer.arm.com/documentation/ddi0487/latest)
-- [System V ABI Documentation](https://software.intel.com/sites/default/files/article/402129/mpx-linux64-abi.pdf)
+- [System V AMD64 ABI Documentation](https://gitlab.com/x86-psABIs/x86-64-ABI)
 - [GNU Binutils Documentation](https://sourceware.org/binutils/docs/)
-- [ELF Specification](http://www.skyfree.org/linux/references/ELF_Format.pdf)
+- [ELF Specification](http://refspecs.linuxfoundation.org/elf/elf.pdf)

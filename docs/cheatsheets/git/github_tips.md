@@ -380,6 +380,10 @@ chmod +x .git/hooks/pre-commit
 - `commit-msg`: Validate commit messages
 - `post-merge`: Update dependencies after merge
 
+:::note
+For team projects, consider a hooks framework like husky or lefthook so hooks live in the repo, not just `.git/hooks/`.
+:::
+
 ### 19. Git Tag - Version Marking
 
 Mark important points in history:
@@ -424,6 +428,7 @@ git shortlog -sn
 ## 🎁 Bonus Tools
 
 ### Git Standup
+<!-- last release 2.3.2, Feb 2020; no new release since (may be unmaintained — one doc-fix commit in Jul 2025 but no release cut) -->
 Remember what you did yesterday:
 
 ```bash

@@ -3,7 +3,7 @@ id: pcap-guide
 title: "Comprehensive PCAP Analysis and Network Forensics"
 sidebar_label: "PCAP Analysis"
 sidebar_position: 3
-description: "An exhaustive academic reference analyzing packet capture methodologies, traffic analysis tools, and network forensics techniques for security research and incident response"
+description: "Exhaustive reference for packet capture, traffic analysis, and network forensics — tcpdump, Wireshark, tshark, Scapy, Zeek, Binary Refinery, and more."
 keywords:
   - pcap
   - wireshark
@@ -24,6 +24,12 @@ tags: [PCAP, Network-Forensics, Traffic-Analysis]
 ---
 
 # Comprehensive PCAP Analysis and Network Forensics: An Academic Reference Manual
+
+This manual is the reference for pcap-based network forensics workflows: capture raw traffic with tcpdump or Wireshark, dissect and extract fields with tshark or Scapy, reconstruct sessions and generate structured logs with Zeek, decode multi-stage payloads with Binary Refinery, and triage hosts with NetworkMiner. Use it when responding to an incident, hunting threats in stored captures, or solving CTF network challenges.
+
+:::warning
+Packet capture must be **lawfully authorized** before it begins. Unauthorized interception of network communications violates wiretap statutes in most jurisdictions (e.g., 18 U.S.C. § 2511 in the US). Captures containing IP addresses, usernames, or message content may be personal data under GDPR and equivalent laws — minimize scope, encrypt stored files, and define a retention policy. TLS decryption requires authorization from the data controller; do not decrypt traffic you are not authorized to inspect.
+:::
 
 ## Abstract
 
@@ -390,13 +396,17 @@ Wireshark is the de facto standard for interactive packet analysis. Its signific
 
 ### 3.1 Capture Filters vs Display Filters
 
+:::note
+Wireshark/tshark display-filter syntax has minor changes across major versions. Verify filter behaviour against the version installed (`tshark -v`).
+:::
+
 A critical distinction that often confuses newcomers: Wireshark has **two completely different filter systems** that serve different purposes.
 
 **Capture filters** (BPF syntax) determine which packets are saved to the capture buffer. They execute in the kernel and cannot be changed after capture starts. They use the same syntax as tcpdump (Section 2.2).
 
 **Display filters** are Wireshark's proprietary filter language applied post-capture. They operate on dissected protocol fields and can be modified at any time during analysis. Display filters are far more expressive than BPF because they have access to the full protocol dissection tree.
 
-```
+```text
 # CAPTURE FILTER (BPF syntax - applied before capture)
 tcp port 80 and host 192.168.1.100
 
@@ -408,7 +418,7 @@ http.request.method == "GET" && ip.addr == 192.168.1.100
 
 Display filters use a `protocol.field` syntax with comparison operators. Every field visible in Wireshark's packet detail pane can be used as a filter:
 
-```
+```text
 # Filter by IP address (source or destination)
 ip.addr == 192.168.1.100
 ip.src == 10.0.0.1
@@ -484,7 +494,7 @@ Stream following is one of Wireshark's most powerful features. It reconstructs t
 
 - **Follow HTTP Stream**: Reconstructs HTTP request/response pairs with automatic decompression of gzip/deflate content encoding.
 
-```
+```text
 # Display filter to isolate a specific TCP stream
 # The stream index is assigned sequentially by Wireshark
 tcp.stream eq 42
@@ -530,7 +540,7 @@ Wireshark can reassemble and export files transferred over several protocols:
 
 - **Export TFTP Objects** (`File > Export Objects > TFTP`): Extracts files from TFTP transfers (common in network device configuration and PXE boot scenarios).
 
-```
+```text
 # Display filter to identify HTTP file downloads
 http.content_type contains "application"
 http.response.code == 200 && http.content_length > 10000
@@ -565,7 +575,7 @@ In Wireshark: `Edit > Preferences > Protocols > TLS > (Pre)-Master-Secret log fi
 
 If you possess the server's RSA private key and the session uses RSA key exchange (not ECDHE/DHE), configure it in `Edit > Preferences > Protocols > TLS > RSA keys list`:
 
-```
+```text
 IP: 10.0.0.1, Port: 443, Protocol: http, Key File: /path/to/server.key
 ```
 
@@ -1264,8 +1274,8 @@ zeek -r capture.pcap ja3
 cat ssl.log | zeek-cut ja3 server_name id.orig_h | sort | uniq -c | sort -rn
 
 # Known malicious JA3 hashes (examples — always verify against current threat intel)
-# Cobalt Strike default: a0e9f5d64349fb13191bc781f81f42e1
-# Metasploit Meterpreter: 72a589da586844d7f0818ce684948eea
+# Cobalt Strike default: a0e9f5d64349fb13191bc781f81f42e1 <!-- TODO: verify -->
+# Metasploit Meterpreter: 72a589da586844d7f0818ce684948eea <!-- TODO: verify -->
 cat ssl.log | zeek-cut ja3 id.orig_h id.resp_h server_name | \
   grep -E "a0e9f5d64349fb13191bc781f81f42e1|72a589da586844d7f0818ce684948eea"
 
@@ -1434,6 +1444,8 @@ ngrep -q -I capture.pcap "password" "tcp port 80"
 
 ### 9.2 Credential Discovery
 
+Credentials recovered from cleartext traffic (FTP, HTTP Basic Auth, SMTP AUTH) can feed directly into offline cracking or replay attacks. See [Brute-Force Techniques](../cyber/bruteforce_guide.md) for context on how extracted credentials are used in credential-stuffing and password-spraying workflows.
+
 ```bash
 # Search for authentication-related strings in cleartext protocols
 ngrep -I capture.pcap -i "user|pass|login|auth|token|cookie|session" "tcp port 80 or tcp port 21 or tcp port 25 or tcp port 110"
@@ -1585,7 +1597,7 @@ tshark -r capture.pcap -Y "tls.handshake.type == 11" -T fields \
 
 ### 10.3 SMB and Lateral Movement Analysis
 
-SMB traffic analysis is critical for detecting lateral movement in Windows environments. Attackers frequently use SMB for file transfers, remote execution (PsExec, WMI), and credential relay attacks.
+SMB traffic analysis is critical for detecting lateral movement in Windows environments. Attackers frequently use SMB for file transfers, remote execution (PsExec, WMI), and credential relay attacks. For the attacker-side techniques that generate this traffic — including tunneling, port forwarding, and pivot-host chaining — see [Pivoting and Tunneling](../cyber/pivoting_guide.md).
 
 ```bash
 # Identify SMB file access patterns
@@ -1614,6 +1626,10 @@ cat ntlm.log | zeek-cut ts id.orig_h id.resp_h username domainname 2>/dev/null
 ```
 
 ### 10.4 Encrypted Traffic Analysis
+
+:::note
+Modern network traffic is overwhelmingly encrypted. TLS 1.3 is now dominant, Encrypted Client Hello (ECH) conceals the SNI, and DNS-over-HTTPS/DNS-over-TLS (DoH/DoT) hides resolver queries. When full decryption is unavailable, analysis shifts to metadata: JA3/JA4 client fingerprints, certificate subjects, SNI values visible in pre-ECH handshakes, flow size and timing, and behavioural patterns. The techniques below reflect this metadata-focused reality.
+:::
 
 When decryption is not possible, metadata analysis of encrypted traffic can still reveal significant intelligence:
 

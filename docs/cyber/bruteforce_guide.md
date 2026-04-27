@@ -29,20 +29,24 @@ tags: [Cracking, Brute-Force]
 
 This comprehensive academic reference presents an exhaustive analysis of password cracking methodologies, brute force techniques, and hash analysis employed in modern cybersecurity operations. We examine primary cracking frameworks, attack vectors, and optimization strategies across multiple platforms, providing detailed implementation examples, performance considerations, and defensive countermeasures. This manual serves as both theoretical foundation and practical implementation guide for cybersecurity researchers and practitioners.
 
+:::warning[Authorized Use Only]
+All techniques in this manual must only be employed within the scope of authorized penetration testing engagements, red team exercises with explicit management approval, or systems you own outright. Unauthorized use is illegal. Online attacks risk triggering account lockout and IDS/IPS detection — always follow your rules of engagement (ROE) before executing any live-system technique.
+:::
+
 ## 1. Introduction
 
-Password cracking constitutes a fundamental technique in cybersecurity for credential recovery, vulnerability assessment, and security research. This methodology enables security professionals to evaluate password strength, recover lost credentials, and assess organizational security posture through systematic analysis of password policies and implementations.
+Password cracking constitutes a fundamental technique in cybersecurity for credential recovery, vulnerability assessment, and security research. This methodology enables security professionals to evaluate password strength, recover lost credentials, and assess organizational security posture through systematic analysis of password policies and implementations. All use of these techniques must occur only against systems for which explicit written authorization has been obtained.
 
 ### 1.1 Password Cracking Taxonomy
 
-Password cracking methodologies can be systematically categorized into six primary classes:
+Password cracking methodologies can be systematically categorized into six primary classes (mapped to MITRE ATT&CK T1110 — Brute Force):
 
-1. **Dictionary Attacks**: Systematic testing of common passwords and wordlists
-2. **Brute Force Attacks**: Exhaustive enumeration of all possible password combinations
-3. **Hybrid Attacks**: Combination of dictionary words with rule-based mutations
-4. **Mask Attacks**: Targeted brute force using known password patterns
-5. **Rainbow Table Attacks**: Pre-computed hash lookup for rapid password recovery
-6. **Rule-Based Attacks**: Intelligent password generation using linguistic patterns
+1. **Dictionary Attacks**: Systematic testing of common passwords and wordlists (T1110.001 — Password Guessing)
+2. **Brute Force Attacks**: Exhaustive enumeration of all possible password combinations (T1110.001)
+3. **Hybrid Attacks**: Combination of dictionary words with rule-based mutations (T1110.002 — Password Cracking)
+4. **Mask Attacks**: Targeted brute force using known password patterns (T1110.002)
+5. **Rainbow Table Attacks**: Pre-computed hash lookup for rapid password recovery (T1110.002)
+6. **Rule-Based Attacks**: Intelligent password generation using linguistic patterns (T1110.002)
 
 ### 1.2 Attack Selection Decision Framework
 
@@ -103,6 +107,10 @@ flowchart TD
 
 :::note
 The following Hashcat commands assume you have installed Hashcat with proper GPU drivers (CUDA for NVIDIA, OpenCL for AMD). Replace hash files, wordlists, and output paths with those specific to your environment. Ensure you have sufficient GPU memory and cooling for extended operations.
+:::
+
+:::note[Tool versions]
+Tool flags evolve. Verify against current docs (hashcat 6.2.x+, john-jumbo, hydra 9.x+ as of 2025) — `--help` is authoritative.
 :::
 
 Hashcat represents the most advanced and widely-used password cracking tool, leveraging GPU acceleration for unprecedented cracking speeds across hundreds of hash algorithms.
@@ -461,6 +469,10 @@ john --max-run-time=3600 passwords.txt
 All online attack tools should only be used against systems you own or have explicit written authorization to test. Always be mindful of rate limiting, account lockout policies, and detection mechanisms.
 :::
 
+:::warning[Detection and Lockout Risk]
+Online brute-force tools (Hydra, Medusa, CrackMapExec) generate high volumes of authentication failures. Even modest thread counts can trigger account lockouts, IDS/IPS alerts, or SIEM rules within seconds. On live engagements: confirm the lockout threshold with your client before running, use `-t 1` or low thread counts, and prefer password spraying (one password across many users) over per-account brute force to stay below lockout thresholds.
+:::
+
 ### 4.1 Hydra: Network Service Brute Force
 
 ```bash
@@ -559,7 +571,7 @@ medusa -s -h target_ip -U users.txt -P passwords.txt -M ssh
 # SMB authentication testing
 crackmapexec smb target_ip -u users.txt -p passwords.txt
 
-# Password spraying
+# Password spraying (T1110.003 — Password Spraying)
 crackmapexec smb targets.txt -u administrator -p Password123
 
 # Hash spraying
@@ -605,7 +617,7 @@ crackmapexec smb targets.txt -u users.txt -p passwords.txt --timeout 60
 # Username enumeration
 kerbrute userenum --dc dc.domain.com -d domain.com users.txt
 
-# Password spraying
+# Password spraying (T1110.003 — Password Spraying)
 kerbrute passwordspray --dc dc.domain.com -d domain.com users.txt Password123
 
 # Brute force single user
@@ -666,7 +678,8 @@ ophcrack -g -d /path/to/tables -f sam_file.txt
 
 # Online rainbow table services (academic research only)
 # CrackStation, HashKiller, OnlineHashCrack
-curl -X POST -F "hash=5d41402abc4b2a76b9719d911017c592" https://crackstation.net/api/
+# NOTE: CrackStation does NOT offer a public API.
+# Hash lookup must be performed manually via the web form at https://crackstation.net/
 ```
 
 ### 5.2 Mask Attack Optimization
@@ -1115,6 +1128,7 @@ EOF
 grep ":::" secretsdump_output.txt | cut -d: -f4 > ntlm_hashes.txt
 
 # Extract NetNTLMv2 from Responder logs
+# (For capturing hashes from network traffic, see the [PCAP Analysis Guide](../cyber/pcap_guide.md))
 grep "NTLMv2" Responder-Session.log | cut -d: -f4- > netntlmv2_hashes.txt
 ```
 
@@ -1287,7 +1301,9 @@ EOF
 ```bash
 # AWS GPU instance setup
 aws ec2 run-instances \
-    --image-id ami-0abcdef1234567890 \
+    --image-id ami-XXXXXXXXXXXXXXXXX \  # Replace with current Deep Learning AMI for your region.
+                                         # Find the latest AMI: https://aws.amazon.com/releasenotes/aws-deep-learning-ami/
+                                         # Or query: aws ec2 describe-images --owners amazon --filters "Name=name,Values=Deep Learning AMI GPU*" --query "sort_by(Images,&CreationDate)[-1].ImageId"
     --count 1 \
     --instance-type p3.2xlarge \
     --key-name my-key-pair \
@@ -1698,7 +1714,10 @@ secretsdump.py -ntds ntds.dit -system system.hive LOCAL
 # Golden ticket attack preparation
 ticketer.py -nthash krbtgt_hash -domain-sid domain_sid -domain domain.com administrator
 
-# Credential spraying against AD
+# After obtaining valid credentials via spraying or hash cracking, lateral movement
+# and pivoting techniques are covered in the [Pivoting Guide](../cyber/pivoting_guide.md).
+
+# Credential spraying against AD (T1110.003 — Password Spraying)
 crackmapexec smb targets.txt -u users.txt -p 'Password123' --continue-on-success
 
 # LDAP authentication testing
@@ -2546,7 +2565,6 @@ When vulnerabilities are discovered during authorized testing:
 ### 12.4 Ethical Guidelines
 
 ```python
-```python
 # Ethical checklist for password security testing
 ethical_checklist = {
     "authorization": {
@@ -3103,19 +3121,19 @@ The evolution of password cracking tools toward GPU acceleration, cloud computin
 
 ### 14.1 Key Takeaways
 
-<ins>**For Security Professionals:**</ins>
+**For Security Professionals:**
 - Password cracking remains a critical component of security assessments
 - Modern tools provide unprecedented speed and capability through GPU acceleration
 - Automation frameworks enable comprehensive and repeatable testing methodologies
 - Proper authorization and ethical guidelines are essential for responsible testing
 
-<ins>**For Organizations:**</ins>
+**For Organizations:**
 - Default credentials represent critical vulnerabilities across all device types
 - Password complexity alone is insufficient; implement multi-factor authentication
 - Regular password policy assessment and user training are essential
 - Monitoring and detection capabilities must evolve to address modern attack techniques
 
-<ins>**For Defenders:**</ins>
+**For Defenders:**
 - Understanding attacker methodologies enables better defensive strategies
 - Rate limiting, account lockout, and behavioral analysis provide effective countermeasures
 - Honeypots and deception technologies can provide early warning of attacks
@@ -3123,7 +3141,7 @@ The evolution of password cracking tools toward GPU acceleration, cloud computin
 
 ### 14.2 Future Research Directions
 
-<ins>Future research should focus on:</ins>
+Future research should focus on:
 
 1. **Machine Learning Integration**: Development of AI-assisted password generation and pattern recognition
 2. **Quantum Resistance**: Preparation for quantum computing impacts on cryptographic hash functions

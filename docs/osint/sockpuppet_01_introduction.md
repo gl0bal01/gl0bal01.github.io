@@ -1,7 +1,7 @@
 ---
 id: "intro-modern-sockpuppet-operations-osint"
 title: "Introduction to Modern Sockpuppet Operations for OSINT"
-description: "A comprehensive analysis of the evolving landscape of digital investigation and platform detection systems in 2025"
+description: "Introduction to authorized OSINT sockpuppet research in 2025: platform detection evolution, legitimate use cases, and the legal and ethical framework."
 author: "gl0bal01"
 tags: ["Osint"]
 keywords:
@@ -20,9 +20,15 @@ import Highlight from '@site/src/components/Highlight';
 
 # Introduction to Modern Sockpuppet Operations for OSINT
 
+This series is written for **authorized OSINT research, journalism, law-enforcement work conducted under warrant, IRB-approved academic study, and red-team engagements with documented scope of authorization**. It analyzes the technical, legal, and ethical environment in which legitimate practitioners operate. Readers without one of these mandates are not the intended audience.
+
+:::warning Scope and authorization
+The techniques surveyed here are intended for use within applicable laws, platform agreements where consent is granted, and the documented authorization of an investigation, research protocol, or engagement contract. Operating outside that envelope is out of scope for this documentation.
+:::
+
 ## Abstract
 
-The landscape of digital investigation has evolved dramatically over the past five years. Traditional sockpuppet techniques that were effective in 2020 are now easily **detected** by sophisticated platform algorithms achieving **94-97% accuracy rates**. This document analyzes the current state of sockpuppet operations for legitimate Open Source Intelligence (OSINT) investigations, examining the technological arms race between investigators and detection systems, legal frameworks governing digital impersonation, and professional methodologies required for persistent operations in 2025.
+The landscape of digital investigation has evolved dramatically over the past five years. Traditional sockpuppet techniques that were effective in 2020 are now easily **detected** by sophisticated platform algorithms. Meta's Community Standards Enforcement Reports show proactive detection rates above 99% for fake accounts — meaning platforms find and remove the vast majority of violating accounts before any user report is filed.[^1] This document analyzes the current state of sockpuppet operations for legitimate Open Source Intelligence (OSINT) investigations, examining the technological arms race between investigators and detection systems, legal frameworks governing digital impersonation, and professional methodologies required for persistent operations in 2025.
 
 ## Executive Summary
 
@@ -34,7 +40,7 @@ The landscape of digital investigation has evolved dramatically over the past fi
 
 ## Intended Audience
 
-This report addresses OSINT practitioners, law enforcement analysts, corporate intelligence teams, academic researchers, and legal professionals…
+This report addresses OSINT practitioners, law enforcement analysts, corporate intelligence teams, academic researchers, and legal professionals engaged in authorized investigations, litigation support, or documented research under applicable ethical and legal frameworks.
 
 ## The Evolution of Platform Security
 
@@ -164,3 +170,18 @@ This report addresses OSINT practitioners, law enforcement analysts, corporate i
 1. [Ferrara, E., Varol, O., Davis, C., Menczer, F., & Flammini, A. (2016). The rise of social bots. Communications of the ACM, 59(7), 96-104.](https://dl.acm.org/doi/10.1145/2818717)
 
 2. [Stringhini, G., Kruegel, C., & Vigna, G. (2010). Detecting spammers on social networks. Proceedings of the 26th Annual Computer Security Applications Conference, 1-9.](https://dl.acm.org/doi/10.1145/1920261.1920263)
+
+---
+
+## Series Navigation
+
+This is **Part 01** of the Sockpuppet Operations for OSINT series. Other published parts:
+
+| Part | Title | Link |
+| --- | --- | --- |
+| 01 | Introduction (this document) | — |
+| 03 | Infrastructure | [./sockpuppet_03_infrastructure.md](./sockpuppet_03_infrastructure.md) |
+| 04 | Persona Development | [./sockpuppet_04_persona_development.md](./sockpuppet_04_persona_development.md) |
+| 06 | Platform Tactics | [./sockpuppet_06_platform_tactics.md](./sockpuppet_06_platform_tactics.md) |
+
+> Parts **02** and **05** are not currently published.

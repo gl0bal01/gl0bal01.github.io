@@ -11,6 +11,16 @@ authors: [gl0bal01]
 
 # Nuclei Practical Guide
 
+This guide is a working reference for [Nuclei](https://github.com/projectdiscovery/nuclei) — ProjectDiscovery's YAML-driven vulnerability scanner. It covers installation, template authoring, scanning workflows across HTTP/DNS/TCP/SSL/code/file protocols, evasion strategies, and integration with the broader ProjectDiscovery toolchain (see also [ProjectDiscovery Tools Practical Guide](./projectdiscovery_tools.md)). Use it when you need concrete, copy-pasteable patterns rather than conceptual overview.
+
+:::warning Authorized use only
+Nuclei is an offensive security tool. Run it only against systems you own or have explicit written authorization to test (in-scope bug-bounty assets, contracted engagements, or your own research lab). Respect program scope, terms of service, and rate limits — custom or aggressive templates can hit production hard, generate noisy alerts, or cause denial of service. Throttle with `-rate-limit` / `-bulk-size` and prefer authenticated staging environments where possible.
+:::
+
+:::note Versions and references
+Nuclei flags and the template schema evolve frequently. Verify any specific flag or directive against `nuclei --help` and the official docs at [docs.projectdiscovery.io/tools/nuclei](https://docs.projectdiscovery.io/tools/nuclei). The community template set lives at [github.com/projectdiscovery/nuclei-templates](https://github.com/projectdiscovery/nuclei-templates). Examples in this guide are not pinned to a specific Nuclei release.
+:::
+
 ## Abstract
 
 This comprehensive practical reference presents an exhaustive analysis of Nuclei vulnerability scanning methodologies, template development, and advanced operational techniques. We examine seventeen primary scanning categories across multiple protocols, providing detailed implementation examples, template customization strategies, and detection evasion techniques. This manual serves as both theoretical foundation and practical implementation guide for cybersecurity researchers, penetration testers, and security practitioners.
@@ -42,6 +52,10 @@ Nuclei scanning methodologies can be systematically categorized into seven prima
 - **Custom Protocol Testing**: Specialized protocol analysis through custom templates
 
 ### 1.3 Template Effectiveness Matrix
+
+:::note Template counts drift
+Template counts evolve daily as the community contributes. The figures below were collected at the time of writing — run `nuclei -ut -stats` (or `nuclei -tl` to enumerate templates) for current counts in your local installation.
+:::
 
 | Category | Templates | Severity Coverage | Protocol Support | Update Frequency | Detection Accuracy |
 |----------|-----------|------------------|------------------|------------------|-------------------|
@@ -1795,6 +1809,8 @@ grep -o '@[^[:space:]]*' osint_contacts.txt | \
 
 ### 15.11 Integration with External OSINT Tools
 
+Nuclei pairs naturally with the rest of the ProjectDiscovery stack — Subfinder feeds it subdomains, Httpx narrows lists to live hosts, Naabu surfaces open ports, and Katana provides crawled URLs. See the companion [ProjectDiscovery Tools Practical Guide](./projectdiscovery_tools.md) for those workflows.
+
 ```bash
 # Combine Nuclei with Subfinder for comprehensive discovery
 subfinder -d example.com -o subdomains.txt
@@ -2845,7 +2861,7 @@ Security practitioners must balance the offensive capabilities of Nuclei with re
 
 ## References
 
-- [Nuclei Official Documentation](https://docs.nuclei.sh/)
+- [Nuclei Official Documentation](https://docs.projectdiscovery.io/tools/nuclei/overview)
 - [ProjectDiscovery Nuclei GitHub Repository](https://github.com/projectdiscovery/nuclei)
 - [Nuclei Templates Repository](https://github.com/projectdiscovery/nuclei-templates)
 - [OWASP Testing Guide](https://owasp.org/www-project-web-security-testing-guide/)
@@ -2853,7 +2869,7 @@ Security practitioners must balance the offensive capabilities of Nuclei with re
 - [CVE Details Database](https://www.cvedetails.com/)
 - [MITRE ATT&CK Framework](https://attack.mitre.org/)
 - [ProjectDiscovery Blog: Ultimate Nuclei Guide](https://blog.projectdiscovery.io/ultimate-nuclei-guide/)
-- [Nuclei Template Creation Guide](https://nuclei.projectdiscovery.io/templating-guide/)
+- [Nuclei Template Creation Guide](https://docs.projectdiscovery.io/templates/introduction)
 - [YAML Specification](https://yaml.org/spec/1.2/spec.html)
 - [HTTP/1.1 Specification (RFC 7230)](https://tools.ietf.org/html/rfc7230)
 - [DNS Protocol Specification (RFC 1035)](https://tools.ietf.org/html/rfc1035)

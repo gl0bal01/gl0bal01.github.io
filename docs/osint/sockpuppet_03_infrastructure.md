@@ -20,15 +20,39 @@ import Highlight from '@site/src/components/Highlight';
 
 # Infrastructure Architecture for Persistent Operations
 
+The foundation of long-term research personas has evolved from simple IP masking to comprehensive digital infrastructure management. This document describes the technical building blocks investigators, journalists, and authorized red-teamers use to maintain durable, compartmentalized accounts for legitimate OSINT work — covering network, browser, communication, and financial infrastructure. See [Introduction](./sockpuppet_01_introduction.md) for foundational concepts and [Persona Development](./sockpuppet_04_persona_development.md) for how this infrastructure supports identity construction.
+
+:::warning Authorization required
+
+The techniques in this document enable persona infrastructure for OSINT investigators, journalists, academic researchers, and authorized red-team operators. Using them for platform abuse, fraud, harassment, or unauthorized surveillance is illegal in most jurisdictions and violates the terms of service of every major platform. Verify local law and platform ToS before applying any of this material.
+
+Operate only with appropriate authorization: IRB approval for academic research, written rules of engagement for red-team work, and badge/warrant authority for law enforcement. If you cannot point to a specific authorization basis, do not proceed.
+
+:::
+
 ## Abstract
 
 The foundation of successful long-term sockpuppet operations has evolved from simple IP masking to comprehensive digital infrastructure management. Professional investigators now operate with the same level of technical sophistication as corporate IT departments. This document provides detailed technical specifications for building secure, scalable infrastructure that can support persistent operations while evading sophisticated detection systems.
 
 ## Network Infrastructure Architecture
 
+Researchers building durable investigation accounts need stable network infrastructure that survives platform-side fingerprinting and avoids correlating multiple personas back to a single investigator. The techniques below describe how to achieve that within the bounds of authorized research.
+
+:::note Detection landscape
+
+Major platforms (Meta, Google, X) actively block known residential proxy ranges, datacenter ASNs, and hosting providers; quality and detection rates change continuously as platforms and proxy vendors iterate against each other. Validate your infrastructure against your specific research target before relying on it.
+
+:::
+
 ### The Residential IP Revolution
 
 Traditional VPN services have become obsolete for account creation due to widespread platform detection and blacklisting. Modern professional operations require residential IP infrastructure that mimics legitimate home internet connections.
+
+:::note
+
+Pricing and feature tiers change frequently. Check the vendor's current pricing page before relying on figures. Major providers include [Bright Data](https://brightdata.com/pricing), [Oxylabs](https://oxylabs.io/pricing), [Decodo (formerly Smartproxy)](https://decodo.com/proxies/residential-proxies/pricing), [NetNut](https://netnut.io/pricing), and [Soax](https://soax.com/pricing).
+
+:::
 
 **Residential Proxy Service Requirements:**
 - **Real Home Internet Connections:** Access to genuine residential ISP connections, not datacenter IPs
@@ -129,32 +153,54 @@ block_list = [
 
 ## Browser Management and Fingerprinting
 
+Researchers managing multiple investigation accounts need per-persona browser environments that prevent cross-account correlation through shared fingerprints; the techniques below describe how to achieve that within the bounds of authorized research.
+
 ### Anti-Detection Browser Solutions
 
 Modern platforms analyze dozens of browser characteristics to create unique fingerprints for tracking and correlation. Professional operations require specialized browser solutions that create unique, persistent fingerprints for each persona.
 
+:::note
+
+Pricing and feature tiers change frequently. Check the vendor's current pricing page before relying on figures.
+
+:::
+
 **Commercial Anti-Detection Browsers:**
 
-<ins>**[Multilogin](https://multilogin.com/):**</ins>
+<ins>**[Multilogin](https://multilogin.com/):**</ins> ([pricing](https://multilogin.com/pricing))
 - Unique browser fingerprints for each profile
 - Team collaboration features
 - API integration for automation
 - Compliance audit trails
-- Advanced profile management
+- Advanced profile management; metered by concurrent profiles and team seats
 
-<ins>**[AdsPower](https://adspower.com):**</ins>
+<ins>**[AdsPower](https://adspower.com):**</ins> ([pricing](https://www.adspower.com/pricing))
 - Mass profile management capabilities
 - Automation framework integration
 - Team workspace functionality
 - Mobile device simulation
-- RPA integration support
+- RPA integration support; starter, pro, and enterprise tiers
 
-<ins>**[Octo Browser](https://octobrowser.net/):**</ins>
+<ins>**[Octo Browser](https://octobrowser.net/):**</ins> ([pricing](https://octobrowser.net/pricing))
 - Cost-effective solution for small teams
 - Basic fingerprint management
 - Profile synchronization
 - API access for automation
-- Mobile app support
+- Mobile app support; tiered by profile count
+
+<ins>**[GoLogin](https://gologin.com/):**</ins> ([pricing](https://gologin.com/pricing))
+- Multi-account browser with 53 configurable fingerprint parameters
+- Built-in proxy management
+- Cloud profile storage and sync
+- API and automation support
+- Tiered by number of profiles
+
+<ins>**[Kameleo](https://kameleo.io/):**</ins> ([pricing](https://kameleo.io/pricing))
+- Anti-detect browser engineered for automation at scale
+- Integrates with Puppeteer, Playwright, and Selenium
+- Supports Chromium and Firefox-based profiles
+- Live masking status report for detection evasion validation
+- Tiered by feature set and automation access
 
 <Highlight>**Open Source Alternatives:**</Highlight><br />
 
@@ -238,6 +284,8 @@ const fingerprintConfig = {
 
 ## Communication Infrastructure
 
+Investigation personas need dedicated email and messaging infrastructure so platform verifications, source contact, and team coordination cannot be correlated back to the investigator's real identity; the techniques below describe how to achieve that within the bounds of authorized research.
+
 ### Secure Email Management
 
 Professional operations require dedicated email infrastructure that provides verification capabilities while maintaining operational security.
@@ -289,6 +337,12 @@ class EmailManager:
 ### Phone Number Infrastructure
 
 Modern platforms increasingly require phone verification, making phone number infrastructure critical for successful operations.
+
+:::warning Legal gray zone for virtual phone services
+
+Virtual phone services (TextVerified, Silent Link, MySudo, and similar) operate in legal gray zones in many jurisdictions. Some platforms explicitly prohibit non-VoIP rentals in their ToS, and some countries restrict anonymous SIM acquisition. Verify local law and the service's terms before using, and document the authorization basis for your investigation.
+
+:::
 
 **Professional Phone Services:**
 
@@ -357,6 +411,14 @@ class PhoneManager:
 - Advanced group features
 
 ## Financial Infrastructure
+
+Research budgets that pay for proxies, phone numbers, and antidetect browsers should not link back to the investigator's real identity, since payment trails are a common deanonymization vector. The techniques below describe how to fund authorized research operations privately.
+
+:::warning Legitimate operational privacy only
+
+Cryptocurrency and privacy payment tools described here are for legitimate operational privacy — keeping a research budget from linking an investigator to their personas. Using these tools to evade KYC/AML controls for fraud, sanctions evasion, money laundering, or any non-authorized purpose is illegal under most national and international financial regulations. Verify the legality of each method in your jurisdiction and document the authorization for the research spend.
+
+:::
 
 ### Anonymous Payment Methods
 
@@ -524,7 +586,7 @@ vm_template:
 - Enterprise integration
 
 **File Organization Structure:**
-```
+```text
 /encrypted_volume/
 ├── personas/
 │   ├── persona_001/
@@ -634,45 +696,27 @@ find "$LOCAL_BACKUP" -name "backup_*.tar.gz.gpg" -mtime +30 -delete
 
 ## Professional Platform Services
 
-### SockPuppet.io Alias Platform
-
-The SockPuppet.io Alias platform represents the current state-of-the-art in professional sockpuppet infrastructure, providing comprehensive digital infrastructure as a service.
-
-**Core Platform Features:**
-- **Virtual Desktop Infrastructure:** Isolated computing environments for each persona
-- **Virtual Phone System:** Dedicated phone numbers with SMS capabilities
-- **Mobile Internet Connectivity:** Genuine mobile network connections
-- **Centralized Management:** Single interface for multiple persona management
-- **Compliance Features:** Audit trails and documentation for legal requirements
-- **Team Collaboration:** Multi-user access with role-based permissions
-
-**Technical Specifications:**
-- **Infrastructure:** Enterprise-grade cloud infrastructure with 99.9% uptime SLA
-- **Security:** End-to-end encryption with zero-knowledge architecture
-- **Scalability:** Support for hundreds of simultaneous personas
-- **Integration:** API access for custom tool integration
-- **Compliance:** SOC2 Type II compliance and audit trail capabilities
-
-**Pricing Structure:**
-- **Professional Plan:** $99/month for 10 personas
-- **Enterprise Plan:** $299/month for 50 personas
-- **Custom Enterprise:** Tailored solutions for large organizations
-
 ### Alternative Professional Services
 
-**Multilogin:**
+:::note
+
+Pricing and feature tiers change frequently. Check the vendor's current pricing page before relying on figures.
+
+:::
+
+**[Multilogin](https://multilogin.com/)** ([pricing](https://multilogin.com/pricing)):
 - Browser fingerprint management
 - Team collaboration features
 - API integration capabilities
 - Advanced automation support
-- Compliance audit features
+- Compliance audit features; metered by concurrent profiles and team seats
 
-**AdsPower:**
+**[AdsPower](https://www.adspower.com/)** ([pricing](https://www.adspower.com/pricing)):
 - Mass account management
 - RPA integration support
 - Team workspace functionality
 - Mobile device simulation
-- Cost-effective pricing
+- Starter, pro, and enterprise tiers
 
 ## Infrastructure Monitoring and Maintenance
 
@@ -721,6 +765,12 @@ class SecurityMonitor:
 - Resource allocation optimization
 - Network route optimization
 - Storage cleanup and defragmentation
+
+## Related
+
+- [Introduction to Research Personas](./sockpuppet_01_introduction.md) — foundational concepts and authorization framing
+- [Persona Development](./sockpuppet_04_persona_development.md) — how this infrastructure supports identity construction
+- [Platform Tactics](./sockpuppet_06_platform_tactics.md) — platform-specific considerations that drive infrastructure choices
 
 ---
 

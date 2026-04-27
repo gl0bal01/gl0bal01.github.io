@@ -1,7 +1,7 @@
 ---
 id: "platform-specific-operational-tactics"
 title: "Platform-Specific Operational Tactics"
-description: "Detailed tactical guidance for successful sockpuppet operations across major social media platforms including Facebook, Twitter, LinkedIn, TikTok, and Instagram"
+description: "Tactical guidance for authorized sockpuppet research across Facebook, X (formerly Twitter), LinkedIn, TikTok, and Instagram in OSINT engagements"
 author: "gl0bal01"
 tags: ["Platform Tactics", "Social Media", "Operational Techniques", "Detection Evasion"]
 keywords:
@@ -19,15 +19,29 @@ sidebar_position: 6
 
 # Platform-Specific Operational Tactics
 
+Each major social media platform has developed unique detection signatures, behavioral expectations, and algorithmic preferences that require tailored operational approaches for OSINT and threat-intelligence research.
+
+:::warning Platform ToS
+Many techniques described here describe behavior that platforms restrict or prohibit under their Terms of Service. They are documented for authorized OSINT research, security research, and threat-intelligence engagements where the researcher has the legal authority to operate research accounts. Verify your authorization scope and the current platform ToS before using any technique.
+:::
+
+:::note Platforms not covered
+This file does not cover Reddit (post-2023 API gating), Threads, or Bluesky. Researchers working those platforms should treat them as out-of-scope for this guide and consult current platform documentation.
+:::
+
+**Series cross-links:** [Introduction](./sockpuppet_01_introduction.md) · [Infrastructure](./sockpuppet_03_infrastructure.md) · [Persona Development](./sockpuppet_04_persona_development.md) (parts 02 and 05 are not currently published).
+
 ## Abstract
 
-Each major social media platform has developed unique detection signatures, behavioral expectations, and algorithmic preferences that require tailored operational approaches. This document provides detailed tactical guidance for successful sockpuppet creation, aging, and maintenance across Facebook, Twitter/X, LinkedIn, TikTok, and Instagram, incorporating the latest platform security updates and detection countermeasures from 2024-2025.
+Each major social media platform has developed unique detection signatures, behavioral expectations, and algorithmic preferences that require tailored operational approaches. This document provides detailed tactical guidance for sockpuppet creation, aging, and maintenance across Facebook, X (formerly Twitter), LinkedIn, TikTok, and Instagram in the context of authorized research, incorporating platform security updates and detection countermeasures observed through 2024-2025.
 
 ## Facebook/Meta Operations
 
+Facebook research operations require believable account persistence; the techniques below describe how researchers maintain that persistence under Meta's detection systems within an authorized engagement.
+
 ### The Fortress Environment
 
-Facebook represents the most challenging platform for sockpuppet operations, with Meta's aggressive detection systems achieving 94-97% accuracy in fake account identification [^1]. Success requires understanding both technical detection methods and behavioral expectations.
+Facebook represents the most challenging platform for sockpuppet operations. Meta's Community Standards Enforcement Reports consistently record proactive detection rates above 99% for fake accounts — the share of violating accounts Meta removes before any user report is filed [^1]. Success requires understanding both technical detection methods and behavioral expectations.
 
 **Critical Success Factors:**
 ```yaml
@@ -86,7 +100,7 @@ class FacebookAccountCreation:
 ```
 
 **Phone Verification Requirements:**
-- **Real Phone Numbers Only:** Virtual phone services frequently detected
+- **Phone Number Source:** Major platforms (Meta, Google, X) maintain active blocklists of known VoIP/virtual-number prefixes, cross-checked via number-intelligence APIs (e.g. Twilio Lookup, Ekata). Quality of detection varies by provider and country — mass SMS gateways (TextNow, Google Voice) are blocked most reliably, while premium eSIM/MVNO services (MySudo, Silent Link) are detected less often. The cat-and-mouse continues: a number that passes today may be blocklisted tomorrow. Real cellular SIM cards remain the most reliable option for high-assurance verifications.
 - **SMS Verification:** Must receive and respond to SMS verification
 - **Number Portability:** Maintain access for potential re-verification
 - **Geographic Consistency:** Phone area code matching claimed location
@@ -211,15 +225,21 @@ class FacebookEngagementManager:
             }
 ```
 
-## Twitter/X Operations
+## X (formerly Twitter) Operations
+
+X research operations rely on tracking discourse, narratives, and account networks; the tactics below describe how researchers maintain a credible operating account on X without triggering platform anti-abuse signals.
+
+:::note X API access tiers
+As of 2025, X offers four fixed tiers: **Free** (500 posts/month, 100 reads/month), **Basic** ($200/month, 50 k posts, 15 k reads), **Pro** ($5,000/month, 300 k posts, 1 M reads), and **Enterprise** (custom pricing). A pay-per-use closed beta launched in late 2025 but has not replaced the fixed tiers for new developers. Bulk research operations require paid Basic or higher. Pricing has changed repeatedly since 2023 — always verify against [developer.x.com](https://developer.x.com/en/products/x-api) before budgeting for a tactic.
+:::
 
 ### Algorithm Adaptation Strategy
 
-Twitter's algorithmic timeline and recommendation system requires specific strategies for account discovery and engagement [^2].
+X's algorithmic timeline and recommendation system requires specific strategies for account discovery and engagement [^2].
 
 **Account Optimization Framework:**
 ```yaml
-twitter_optimization:
+x_optimization:
   profile_setup:
     username: "Professional or interest-based handle"
     display_name: "Real name matching persona"
@@ -236,11 +256,11 @@ twitter_optimization:
     list_creation: "Create 1-2 interest-based lists"
 ```
 
-### Content Strategy for Twitter
+### Content Strategy for X
 
 **Tweet Type Distribution:**
 ```python
-class TwitterContentStrategy:
+class XContentStrategy:
     def __init__(self, persona_profile):
         self.persona = persona_profile
         self.industry = persona_profile.employment.industry
@@ -291,7 +311,7 @@ class TwitterContentStrategy:
 
 **Strategic Following Framework:**
 ```yaml
-twitter_following_strategy:
+x_following_strategy:
   phase_1_initial: # Week 1-2
     targets: "50-100 accounts"
     categories:
@@ -314,11 +334,13 @@ twitter_following_strategy:
 **Engagement Quality Indicators:**
 - **Reply Rate:** Percentage of your tweets receiving replies
 - **Mention Frequency:** How often others mention your account
-- **List Additions:** Being added to relevant Twitter lists
+- **List Additions:** Being added to relevant X lists
 - **Retweet Quality:** Retweets from verified or influential accounts
 - **DM Initiation:** Direct messages initiated by connections
 
 ## LinkedIn Professional Network Operations
+
+LinkedIn research operations depend on a credible career narrative; the techniques below describe how researchers build that narrative to support authorized investigative or threat-intelligence work.
 
 ### Professional Credibility Building
 
@@ -342,7 +364,7 @@ linkedin_profile_strategy:
     detail_level: "Comprehensive but not excessive"
     achievement_focus: "Quantified results where possible"
     timeline_consistency: "No gaps or overlaps"
-    verification_resistance: "Large companies with limited verification"
+    verification_note: "LinkedIn now offers Verifications (work-email domain check, government-ID via CLEAR/Persona/DigiLocker) for accounts that opt in. Verified profiles display a badge next to the member's name; profiles without a badge remain valid but may receive lower visibility and trust. Verification is entirely opt-in — the absence of a badge does not trigger account action. Company-domain verification requires the employer's LinkedIn page to have enabled their domain."
     
   skills_endorsements:
     initial_skills: "10-15 core professional skills"
@@ -461,6 +483,12 @@ class LinkedInContentManager:
 
 ## TikTok Operations
 
+TikTok research operations require credible video output and trend participation; the techniques below describe how researchers maintain a believable presence on a video-first platform during authorized engagements.
+
+:::note Algorithm volatility
+TikTok's algorithm changes frequently (often quarterly). Treat the specifics below as illustrative; validate against current platform behavior before relying on them.
+:::
+
 ### Video-First Platform Strategy
 
 TikTok's unique video-centric environment requires different approaches to content creation and audience engagement [^4].
@@ -551,11 +579,13 @@ tiktok_engagement_tactics:
   cross_platform_promotion:
     instagram_reels: "Repurpose TikTok content"
     youtube_shorts: "Extend content reach"
-    twitter_clips: "Share highlights with commentary"
+    x_clips: "Share highlights with commentary"
     facebook_videos: "Adapt for older demographic"
 ```
 
 ## Instagram Operations
+
+Instagram research operations depend on aesthetic consistency to maintain account credibility; the techniques below describe how researchers sustain that visual identity within an authorized engagement.
 
 ### Visual Storytelling Strategy
 
@@ -675,7 +705,7 @@ class PlatformRiskManager:
             'facebook': 'very_high',
             'instagram': 'high',
             'linkedin': 'medium_high',
-            'twitter': 'medium',
+            'x': 'medium',
             'tiktok': 'medium_low'
         }
         
@@ -701,7 +731,7 @@ class PlatformRiskManager:
 
 **Platform-Specific Countermeasures:**
 - **Facebook:** Enhanced mobile app usage, real phone verification, gradual network building
-- **Twitter:** Authentic engagement patterns, industry-relevant content, professional networking focus
+- **X:** Authentic engagement patterns, industry-relevant content, professional networking focus
 - **LinkedIn:** Professional credential verification resistance, industry expertise demonstration
 - **TikTok:** Authentic video content creation, trend participation, community engagement
 - **Instagram:** Visual consistency, aesthetic development, lifestyle authenticity

@@ -102,6 +102,10 @@ curl -L https://github.com/jdx/mise/releases/download/v2024.12.0/mise-v2024.12.0
 chmod +x /usr/local/bin/mise
 ```
 
+:::note
+Pinned version may be stale. Check https://github.com/jdx/mise/releases for the latest.
+:::
+
 ### Shell Activation
 
 ```bash

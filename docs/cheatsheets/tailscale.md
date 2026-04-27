@@ -649,6 +649,10 @@ tailscale serve --https=443 localhost:5000  # Synology DSM
 
 ### Synology NAS Remote Access
 
+:::note
+Tailscale and DSM evolve. Verify against current `tailscale` CLI (`tailscale version`) and DSM release notes.
+:::
+
 ```bash
 # Install Tailscale on Synology NAS
 # Download package from Tailscale website for your Synology model

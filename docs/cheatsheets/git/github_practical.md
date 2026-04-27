@@ -23,6 +23,8 @@ date: 2024-06-18
 
 # Git Practical Examples
 
+This is a practical command reference for everyday Git and GitHub workflows — from initializing repositories and managing branches to collaborating via pull requests and recovering from mistakes. Use it alongside `git --help` or `man git` when you need a quick reminder of the right incantation.
+
 ## Repository Setup & Configuration
 _Set up a new or existing repository, configure user identity, and manage remote connections for secure collaboration._
 

@@ -22,6 +22,8 @@ date: 2024-06-18
 
 # Comprehensive GitHub Development Operations: A Technical Reference Manual
 
+This is a long-form technical reference for GitHub as a development platform — covering Git fundamentals, the `gh` CLI, GitHub Actions, REST/GraphQL APIs, and enterprise collaboration patterns. Use it when you need depth on a specific GitHub workflow or want a single document to point engineers, DevOps practitioners, or platform admins at; for quick command lookups, see the companion practical and tips cheatsheets linked from the GitHub CLI section below.
+
 ## Abstract
 
 This comprehensive technical reference presents an exhaustive analysis of GitHub platform capabilities, command-line interfaces, automation frameworks, and enterprise integration methodologies employed in modern software development operations. We examine the complete GitHub ecosystem including Git fundamentals, GitHub CLI operations, Actions workflows, API integration, and advanced collaboration patterns. This manual serves as both theoretical foundation and practical implementation guide for software engineers, DevOps practitioners, and platform administrators.
@@ -673,6 +675,12 @@ git shortlog -sn
 Ensure GitHub CLI (gh) is installed and authenticated before running these commands. Authentication can be performed via `gh auth login`. Replace placeholder values with your specific repository names, issue numbers, and usernames.
 :::
 
+:::note Currency
+GitHub Actions and the `gh` CLI evolve. Verify against [https://cli.github.com/manual/](https://cli.github.com/manual/) and [https://docs.github.com/actions](https://docs.github.com/actions) for current syntax — the examples below reflect commands and workflow features that were stable at the time of writing.
+:::
+
+For quick command examples see [practical examples](./github_practical.md) and [advanced tips](./github_tips.md).
+
 The GitHub CLI provides powerful command-line access to GitHub's features, enabling efficient automation and integration with development workflows.
 
 ### 4.1 Authentication and Configuration
@@ -1285,7 +1293,7 @@ runs:
     
     - name: Cache dependencies
       id: cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           ~/.npm
@@ -1367,7 +1375,7 @@ jobs:
           sarif_file: 'trivy-results.sarif'
       
       - name: Dependency Review
-        uses: actions/dependency-review-action@v3
+        uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: moderate
 
@@ -1450,7 +1458,7 @@ jobs:
           ./performance-tests --gpu --threads=16
       
       - name: Archive artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: gpu-build
           path: |
@@ -1483,7 +1491,7 @@ jobs:
           output-file: sbom.spdx.json
       
       - name: Upload SBOM
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sbom
           path: sbom.spdx.json
@@ -3483,14 +3491,14 @@ jobs:
     steps:
       - name: Add issue to project
         if: github.event_name == 'issues' && github.event.action == 'opened'
-        uses: actions/add-to-project@v0.4.0
+        uses: actions/add-to-project@v1.0.2
         with:
           project-url: https://github.com/orgs/myorg/projects/1
           github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
 
       - name: Move to "In Progress" when PR opened
         if: github.event_name == 'pull_request' && github.event.action == 'opened'
-        uses: actions/add-to-project@v0.4.0
+        uses: actions/add-to-project@v1.0.2
         with:
           project-url: https://github.com/orgs/myorg/projects/1
           github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
@@ -3623,12 +3631,10 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v3.0.0
         with:
           tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
           body: |
             ## Changes in ${{ github.ref_name }}
             
@@ -3637,6 +3643,8 @@ jobs:
             **Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ steps.changelog.outputs.previous_tag }}...${{ github.ref_name }}
           draft: false
           prerelease: ${{ contains(github.ref_name, '-') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Close milestone
         run: |

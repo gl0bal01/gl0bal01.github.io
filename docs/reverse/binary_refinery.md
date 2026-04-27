@@ -1,7 +1,7 @@
 ---
 id: binary-refinery-practical-guide
 title: "Comprehensive Binary Refinery Practical Guide"
-description: "Comprehensive guide to Binary Refinery - the ultimate command-line toolkit for malware analysis, binary data manipulation, and cybersecurity investigations. Learn from basic operations to advanced forensic workflows."
+description: "A practical reference for Binary Refinery: the command-line toolkit for malware analysis, binary data manipulation, and forensic investigations. Basic ops to advanced workflows."
 keywords: 
   - binary refinery
   - malware analysis
@@ -30,6 +30,10 @@ tags:
 # Binary Refinery Practical Guide
 
 Binary Refinery is the most powerful command-line toolkit for analyzing and manipulating binary data in cybersecurity investigations. This comprehensive guide covers everything from basic operations to advanced malware analysis workflows, making it your definitive reference for mastering Binary Refinery.
+
+:::warning Authorized Use Only
+The techniques in this guide are intended for malware analysis, CTF challenges, and authorized security research on systems you own or have explicit written permission to examine. Applying them to systems or files without authorization may be illegal.
+:::
 
 ## Table of Contents
 
@@ -103,6 +107,10 @@ pipx install binary-refinery
 emit "SGVsbG8gV29ybGQ=" | b64
 # Output: Hello World
 ```
+
+:::note Unit names and flags evolve
+Binary Refinery's unit names and CLI flags change between releases. If a command fails, check the current docs at https://binary-refinery.readthedocs.io/ and run the relevant unit with `--help`.
+:::
 
 ### Configuration Options
 
@@ -406,6 +414,8 @@ emit loader.exe | pe --resource PAYLOAD | xor 0xFF | zlib | pemeta
 ```
 
 ## Network Traffic Analysis
+
+Binary Refinery can extract and decode data from PCAP captures. For deeper Wireshark/tshark-based packet analysis workflows, see the [PCAP Analysis guide](../cyber/pcap_guide.md).
 
 ### PCAP File Analysis
 
@@ -901,22 +911,22 @@ emit atom-bomber.exe | strings | grep -E "(GlobalAddAtom|SetWindowLong|CallWindo
 #### Code Signing Analysis
 
 ```bash
-# Extract and analyze certificates
-emit signed-malware.exe | pe --certificates | carve --pattern "-----BEGIN CERTIFICATE-----"
+# Extract raw DER signature from PE (Binary Refinery unit: pesig)
+emit signed-malware.exe | pesig | carve --pattern "-----BEGIN CERTIFICATE-----"
 
-# Verify certificate chains
-emit suspicious-signed.dll | pe --verify-certificates
+# Verify certificate chains (pipe pesig output to openssl)
+emit suspicious-signed.dll | pesig | openssl pkcs7 -inform DER -print_certs -noout
 
 # Find certificate metadata
-emit cert-metadata.exe | pe --certificates | openssl x509 -text -noout
+emit cert-metadata.exe | pesig | openssl pkcs7 -inform DER -print_certs | openssl x509 -text -noout
 
-# Compare signing timestamps
-emit timestamped.exe | pe --timestamp | python -c "
+# Compare signing timestamps (pemeta -P extracts timestamps)
+emit timestamped.exe | pemeta -P | python -c "
 import datetime, sys
 for line in sys.stdin:
     ts = int(line.strip())
     dt = datetime.datetime.fromtimestamp(ts)
-    print(f'{dt} UTC - {dt.strftime(\"%A %B %d, %Y\")}')"
+    print(f'{dt} UTC - {dt.strftime("%A %B %d, %Y")}')"
 ```
 
 #### Build Environment Analysis
@@ -928,11 +938,11 @@ emit compiled-malware.exe | strings | grep -E "(C:\\\\.*\\\\(src|build|debug|rel
 # Find compiler and toolchain information
 emit binary.dll | strings | grep -E "(Microsoft|GNU|Clang|Visual Studio)"
 
-# Analyze debug information
-emit debug-info.exe | pe --debug-info
+# Analyze debug information (pemeta -D parses PDB path from debug directory)
+emit debug-info.exe | pemeta -D
 
-# Extract version information tampering
-emit version-spoofed.dll | pe --version-info | grep -E "(FileVersion|ProductVersion)"
+# Extract version information (pemeta -V parses VERSION resource)
+emit version-spoofed.dll | pemeta -V | grep -E "(FileVersion|ProductVersion)"
 ```
 
 #### Dependency Analysis
@@ -1242,17 +1252,17 @@ Binary Refinery's Windows implementation offers enhanced PE analysis and Windows
 #### Windows Registry Analysis
 
 ```bash
-# Registry hive analysis (Windows)
-emit NTUSER.DAT | carve --pattern "regf" | reg-parse
+# Registry hive analysis (Binary Refinery unit: winreg)
+emit NTUSER.DAT | winreg
 
-# Extract registry persistence mechanisms
-emit SOFTWARE.hive | reg-query "Microsoft\\Windows\\CurrentVersion\\Run"
+# Extract registry persistence mechanisms (winreg uses path patterns)
+emit SOFTWARE.hive | winreg "Microsoft/Windows/CurrentVersion/Run"
 
 # Find suspicious registry modifications
 emit SYSTEM.hive | strings | grep -E "(Image Path|ServiceDll|Parameters)"
 
-# Analyze Windows event logs
-emit Security.evtx | evtx-parse | grep -E "(4624|4625|4688)"
+# Analyze Windows event logs (Binary Refinery unit: evtx)
+emit Security.evtx | evtx | grep -E "(4624|4625|4688)"
 ```
 
 #### Windows Memory Analysis Integration
@@ -1264,8 +1274,9 @@ emit memory.dmp | strings | xtp --pattern "cmd\.exe|powershell\.exe|rundll32\.ex
 # Extract Windows service information
 emit process-list.txt | grep -E "svchost|service|System"
 
-# Windows driver analysis
-emit suspicious.sys | pe --driver-info
+# Windows driver analysis (Binary Refinery has no driver-specific flag;
+# use pemeta for PE header info on .sys files)
+emit suspicious.sys | pemeta
 
 # Extract Windows crash dump information
 emit crashdump.dmp | carve --pattern "PAGEDUMP|DMP" | peek
@@ -1336,8 +1347,9 @@ emit com.evil.plist | plist --parse
 # Application bundle analysis
 emit Malware.app/Contents/Info.plist | plist --parse
 
-# Keychain analysis
-emit login.keychain | keychain --extract
+# Keychain analysis (use external tools: security(1) command or chainbreaker)
+# Binary Refinery has no built-in keychain unit; parse the extracted binary with:
+emit login.keychain | strings | grep -E "(password|account|service)"
 
 # Safari extension analysis
 emit extension.safariextz | unzip | peek
@@ -2621,7 +2633,7 @@ emit malware.bin | strings | grep -P '(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{3
 emit sample.exe | strings | grep -B 2 -A 2 -E "(password|secret|token|key)" > credential_context.txt
 
 # Extract structured data patterns
-emit config.bin | strings | grep -E '^[A-Za-z_]+\s*[:=]\s*.+
+emit config.bin | strings | grep -E '^[A-Za-z_]+\s*[:=]\s*.+'
 ```
 
 ## Conclusion

@@ -17,7 +17,7 @@ keywords:
   - production
 authors: [gl0bal01]
 tags: [Development, DevOps]
-date: 2025-06-18
+date: 2024-06-18
 ---
 
 # Docker Practical Guide
@@ -347,21 +347,21 @@ volumes:
 
 ```bash
 # Docker Compose commands
-docker-compose up -d  # Start services in background
-docker-compose up --build  # Rebuild and start
-docker-compose down --volumes  # Stop and remove everything
-docker-compose logs -f web  # Follow service logs
+docker compose up -d  # Start services in background
+docker compose up --build  # Rebuild and start
+docker compose down --volumes  # Stop and remove everything
+docker compose logs -f web  # Follow service logs
 
 # Service management
-docker-compose ps  # List services
-docker-compose scale web=3  # Scale service
-docker-compose exec web bash  # Execute in service
-docker-compose restart web  # Restart specific service
+docker compose ps  # List services
+docker compose scale web=3  # Scale service
+docker compose exec web bash  # Execute in service
+docker compose restart web  # Restart specific service
 
 # Development workflows
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
-docker-compose --profile development up  # Use profiles
-docker-compose run --rm web python manage.py migrate
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+docker compose --profile development up  # Use profiles
+docker compose run --rm web python manage.py migrate
 ```
 
 ## Networking & Storage

