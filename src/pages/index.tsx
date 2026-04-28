@@ -204,25 +204,6 @@ function HomepageHeader() {
               </Link>
             </div>
           </div>
-
-          <div className={clsx("card", styles.categoryCard)}>
-            <div className="card__header">
-              <div className={styles.cardIcon}>🤖</div>
-              <h3>AI Resources</h3>
-            </div>
-            <div className="card__body">
-              <p>
-                Artificial intelligence security, machine learning
-                vulnerabilities, AI-powered tools, and cutting-edge research in
-                AI applications.
-              </p>
-            </div>
-            <div className="card__footer">
-              <Link className="button button--primary button--block" to="/ai">
-                Explore AI
-              </Link>
-            </div>
-          </div>
         </div>
       </div>
     </header>
