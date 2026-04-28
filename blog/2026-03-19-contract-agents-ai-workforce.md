@@ -1,47 +1,41 @@
 ---
 slug: contract-agents-ai-workforce
-title: "Contract Agents: 125 AI Specialists That Actually Follow the Rules"
+title: "Contract Agents v3.0: 52 AI Specialists That Follow the Rules"
 authors: gl0bal01
 tags: [ai, coding, productivity]
 keywords: [contract agents, ai agents, claude code, multi-agent systems, ai workforce, agent contract, ai coding assistants, kilo cli, goose, opencode, developer productivity, agent orchestration]
-description: "AI agents are powerful but chaotic — they hallucinate workflows, ignore constraints, and forget rules between sessions. Contract Agents solves this with 125 specialized agents governed by a single shared contract."
+description: "AI agents are powerful but chaotic — they hallucinate workflows, ignore constraints, and forget rules between sessions. Contract Agents v3.0 cuts to 52 dense specialists governed by a single shared contract."
 date: 2026-03-19
 ---
 
-You ask an AI agent to refactor a module. It rewrites half the codebase. You ask it to fix a bug. It adds three features you didn't request. You ask it to deploy. It force-pushes to main.
+You ask an AI agent to fix a bug. It fixes the bug, refactors three unrelated functions, renames some variables "for clarity", and force-pushes to main. You ask it to deploy. It does — to production, without asking, because you didn't say not to.
 
-AI agents have a discipline problem. **Contract Agents** is the fix.
+AI agents have a discipline problem. They're powerful, and that power without guardrails is genuinely dangerous. Not in the science fiction sense — in the "I now have to spend two hours reverting a cascade of well-intentioned changes I never requested" sense.
+
+The root cause is that every agent operates in a vacuum. No shared rules, no accountability, no memory of corrections. It's like hiring contractors and giving none of them an employee handbook, then being surprised when they all work differently.
+
+**[Contract Agents v3.0](https://github.com/gl0bal01/contract-agents)** is the handbook. 52 specialized agents across 8 divisions, all governed by one shared contract. The agents don't decide how to behave — the contract does.
 
 <!-- truncate -->
 
-## The Problem
-
-AI coding agents are getting powerful fast. But power without discipline is a liability. Here's what actually happens in practice:
-
-- **Scope creep** — Ask for a one-line fix, get a 500-line refactor
-- **Inconsistency** — Same task, different agent, wildly different approach
-- **Silent risk** — Destructive operations without asking, secrets committed, hooks bypassed
-- **No verification** — "Done!" (nothing was tested)
-- **Amnesia** — Corrections from yesterday are forgotten today
-
-The root cause? Every agent operates in a vacuum. No shared rules, no accountability, no structure. It's like hiring 125 contractors and giving none of them an employee handbook.
-
-## The Solution: One Contract to Rule Them All
-
-**[Contract Agents](https://github.com/gl0bal01/contract-agents)** is a system of 125 specialized AI agents across 10 divisions — all governed by a single shared contract: `AGENTS_CONTRACT.md`.
+## One Contract, Everything Inherits From It
 
 ```
 ┌─────────────────────────────────────────────┐
-│         CONTRACT-AGENTS                     │
+│         CONTRACT-AGENTS  v3.0               │
 │                                             │
-│   125 AI Agents • 10 Divisions • 1 Contract │
+│   52 AI Agents • 8 Divisions • 1 Contract   │
 │                                             │
 │   eng-*  test-*  design-*  mkt-*  prod-*    │
-│   pm-*   game-*  spatial-*  spec-* support- │
+│   pm-*   game-*  spec-*                     │
 └─────────────────────────────────────────────┘
 ```
 
-The contract isn't a suggestion — it's the employee handbook. Every agent loads it before doing anything. It enforces:
+`AGENTS_CONTRACT.md` opens with: *"Shared rules for all agents. Individual agent files add domain-specific rules on top. When instructions conflict, this contract wins."*
+
+Every agent loads it before doing anything. The individual agent files are minimal — shared behavior lives in the contract, each specialist only adds what's specific to their domain. This means no behavioral drift between agents, and corrections to the contract propagate everywhere.
+
+What the contract enforces:
 
 | Rule | What It Prevents |
 |------|------------------|
@@ -52,6 +46,8 @@ The contract isn't a suggestion — it's the employee handbook. Every agent load
 | **Verification Chain** | Automated → tests → full → manual — in that order |
 | **Commit Discipline** | Safe, bisectable git history |
 | **Self-Improvement** | Agents learn from your corrections |
+
+The Approval Gates rule is the one that matters most for the force-push-to-main problem. The agent literally stops and waits. You approve or you don't. It doesn't decide for you.
 
 ## Think of It Like a Company
 
@@ -65,33 +61,24 @@ You're the executive. You set direction. The agents do the work.
 | `pm-senior` | Strategic advisor — helps you plan |
 | Division agents (`eng-*`, `test-*`, etc.) | Specialists you delegate to |
 
-The orchestrator doesn't just start working — it presents a proposed pipeline (which agents, in what order, and why) and **waits for your approval** before delegating anything.
+The orchestrator doesn't just start working — it presents a proposed pipeline (which agents, in what order, and why) and waits for your approval before delegating anything. That pause is intentional. It's where you course-correct before the work is already done.
 
-## 10 Divisions, 125 Specialists
+## 8 Divisions, 52 Specialists
 
-Each agent is minimal by design. Domain-specific rules only — everything shared lives in the contract. No bloat, no duplication.
+Each agent encodes specific failure modes, named thresholds, or distinct workflow lanes — not just job titles. The question I asked for every one: *does this encode knowledge the model would otherwise miss, or a distinct workflow lane worth reserving?* v3.0 cut 58% of the previous roster on that basis. The ones that survived are dense.
 
-| Division | Prefix | Count | Examples |
-|----------|--------|-------|----------|
-| Engineering | `eng-*` | 23 | frontend, backend, devops, security, mobile, AI/ML |
-| Testing & QA | `test-*` | 11 | penetration testing, API testing, accessibility, Docker security |
-| Design | `design-*` | 8 | UI, UX research, brand, visual storytelling |
-| Marketing | `mkt-*` | 17 | SEO, growth hacking, social media, content |
-| Product | `prod-*` | 5 | competitive intel, feedback synthesis, sprint planning |
-| Project Management | `pm-*` | 7 | Jira workflows, studio ops, indie business strategy |
-| Game Dev | `game-*` | 19 | Unity, Unreal, Godot, Roblox, narrative, audio |
-| Spatial Computing | `spatial-*` | 6 | visionOS, WebXR, Metal, spatial interfaces |
-| Specialized | `spec-*` | 22 | forensics, blockchain audit, compliance, architecture |
-| Support | `support-*` | 6 | legal, finance, infrastructure, customer support |
+| Division | Prefix | Examples |
+|----------|--------|----------|
+| Engineering | `eng-*` | frontend, backend, devops, security, mobile, git-workflow, database-migration, kubernetes, api-designer, rust, go |
+| Testing & QA | `test-*` | penetration testing, API testing, accessibility, load testing |
+| Design | `design-*` | UI (token-first, WCAG AA), UX architecture, brand |
+| Marketing | `mkt-*` | SEO, growth, social media, email deliverability, YouTube strategy |
+| Product | `prod-*` | competitive intel, feedback synthesis, pricing strategy |
+| Project Management | `pm-*` | sprint planning, indie business strategy |
+| Game Dev | `game-*` | Unity, Godot, Unreal, narrative, audio |
+| Specialized | `spec-*` | forensics, blockchain audit, compliance |
 
-## What Makes This Different
-
-**Most "agent" projects are single mega-prompts.** They cram everything into one system prompt and hope for the best. Contract Agents takes the opposite approach:
-
-1. **Separation of concerns** — Each agent has one job. The contract handles shared behavior.
-2. **Agent files are tiny** — Shared rules live in the contract, not duplicated across 125 files.
-3. **Cross-tool compatibility** — Same agents work in Claude Code, Kilo CLI, Goose, and OpenCode.
-4. **Human-guided** — Nothing happens without your direction. Agents propose, you approve.
+**v3.0 additions worth knowing:** `eng-rust-engineer` (borrow checker, async runtime, unsafe contracts), `eng-database-migration-specialist` (expand-contract pattern, replica-lag-aware backfills), `eng-kubernetes-operator` (liveness-probe gotchas, PDBs, QoS classes), `test-load-tester` (p50/p95/p99 reporting, CI regression gating), `prod-pricing-strategist` (Van Westendorp PSM, decoy pricing, cohort testing).
 
 ## Quick Start
 
@@ -114,7 +101,7 @@ make install SCOPE=local LOCAL_PATH=~/my-project
 make install-claude DIVISION=eng
 ```
 
-Manual install is just as simple — copy the agent markdown files to your tool's agents directory:
+Manual install — just copy the markdown files to your tool's agents directory:
 
 ```bash
 cp agents/*.md ~/.claude/agents/     # Claude Code
@@ -122,9 +109,9 @@ cp agents/*.md ~/.kilo/agents/       # Kilo CLI
 cp agents/*.md ~/.goose/agents/      # Goose
 ```
 
-## Usage
+## Using It
 
-**Don't know where to start?** Three options:
+Three entry points depending on how much you know upfront:
 
 ```
 # Let the orchestrator figure it out
@@ -139,12 +126,8 @@ cp agents/*.md ~/.goose/agents/      # Goose
 "Use mkt-seo-strategist to optimize the landing page"
 ```
 
-## The Bottom Line
-
-AI agents without rules are liabilities. AI agents with a shared contract are a workforce.
-
-125 specialists. 10 divisions. 1 contract. You set the direction — they do the work. That's the deal.
+A concrete session: I needed a database migration with backward compatibility, tests, and a brief doc update. Three agents — `eng-database-migration-specialist`, `test-reality-checker`, `spec-compliance-auditor` — coordinated by the orchestrator. It proposed the pipeline, I approved, each agent touched only its lane. No one renamed my variables.
 
 ---
 
-**Open source (MIT). Works with Claude Code, Kilo CLI, Goose, and OpenCode. [github.com/gl0bal01/contract-agents](https://github.com/gl0bal01/contract-agents)**
+Works with Claude Code, Kilo CLI, Goose, and OpenCode. AI agents without rules are liabilities; with a shared contract, they're a workforce. Check it out: **[github.com/gl0bal01/contract-agents](https://github.com/gl0bal01/contract-agents)**

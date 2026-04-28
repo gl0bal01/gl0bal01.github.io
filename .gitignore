@@ -19,6 +19,10 @@ static/img/intel-codex/
 # TypeScript compiled config files
 /*.config.js
 
+# Claude Code
+.omc/
+CLAUDE.md
+
 # Misc
 .DS_Store
 .env

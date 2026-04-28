@@ -1,0 +1,166 @@
+---
+slug: docusaurus-plugin-obsidian-vault
+title: "Publish Your Obsidian Vault to Docusaurus"
+authors: gl0bal01
+tags: [tools, coding, productivity]
+keywords: [obsidian docusaurus, obsidian plugin, wikilinks docusaurus, obsidian publish alternative, docusaurus vault sync, obsidian callouts mdx, obsidian github docusaurus]
+description: "A Docusaurus plugin that syncs your Obsidian vault at build time — wikilink conversion, callout-to-admonition, asset handling, sidebar generation. Local or GitHub source. The same plugin that powers gl0bal01.com/intel-codex."
+date: 2025-11-06
+---
+
+I have an Obsidian vault. I have a Docusaurus site. I wanted most of the vault on the site — not a copy maintained separately, not a manual export, but the actual vault, synced at build time and published directly.
+
+The problem: Obsidian and Docusaurus don't speak the same language. Wikilinks (`[[Page Name]]`) break MDX. Callouts (`> [!note] Title`) render as nothing. File paths assume vault-root-relative addressing that Docusaurus doesn't know about. You can't just point Docusaurus at a vault folder and expect it to work.
+
+**[docusaurus-plugin-obsidian-vault](https://github.com/gl0bal01/docusaurus-plugin-obsidian-vault)** handles the translation. At build time: pull the vault, transform the syntax, copy the assets, generate the sidebars, publish. The vault stays in Obsidian. The site stays in Docusaurus. They sync.
+
+<!-- truncate -->
+
+## What It Transforms
+
+**Wikilinks → markdown links.** `[[Page Name]]` becomes `[Page Name](./Page Name.md)`, with correct relative paths calculated based on file depth. `[[folder/Page|Custom Label]]` and `[[Page#Section]]` anchors both work.
+
+**Callouts → admonitions.** Obsidian's callout syntax:
+```markdown
+> [!note] Important Note
+> This is the content.
+```
+Becomes Docusaurus admonitions:
+```markdown
+:::note Important Note
+This is the content.
+:::
+```
+Supported types: `note`, `tip`, `info`, `warning`, `danger`, `caution`.
+
+**Assets copied automatically.** Images and other files are moved to the configured assets path and references updated.
+
+**Sidebar generated.** `_category_.json` files are auto-generated for each folder. You can specify a file (e.g., `START.md`) to use as each category's index page.
+
+**MDX escaping.** Characters that break MDX compilation are sanitized before they reach the build.
+
+## Basic Setup
+
+```bash
+npm install docusaurus-plugin-obsidian-vault
+```
+
+```typescript
+// docusaurus.config.ts
+plugins: [
+  [
+    'docusaurus-plugin-obsidian-vault',
+    {
+      vaultSource: {
+        type: 'local',
+        path: '/path/to/your/obsidian-vault',
+      },
+      docsPath: 'docs/vault',
+      assetsPath: 'static/img/vault',
+    },
+  ],
+],
+```
+
+That's the minimum. Local vault, syncs to `docs/vault`, assets to `static/img/vault`.
+
+## GitHub Source (the CI/CD Pattern)
+
+If your vault lives in a separate GitHub repo — private or public — the plugin pulls it at build time. The workflow: clone the vault in CI before Docusaurus builds, then the plugin picks it up from the cloned path.
+
+```typescript
+vaultSource: {
+  type: 'github',
+  repository: 'username/vault-repo',
+  branch: 'main',
+  path: '.temp-vault',   // where CI clones it
+}
+```
+
+```yaml
+# .github/workflows/deploy.yml
+- name: Checkout vault
+  uses: actions/checkout@v4
+  with:
+    repository: username/vault-repo
+    path: .temp-vault
+    token: ${{ secrets.GITHUB_TOKEN }}
+
+- name: Build site
+  run: npm run build
+```
+
+The vault folder (`.temp-vault`, the output `docs/vault`) goes in `.gitignore` — it's generated, not committed.
+
+## Multi-Instance Setup
+
+The more powerful pattern: a completely separate docs section for the vault, with its own sidebar, route, and navigation. This is how Intel Codex runs on this site — the vault is a separate Docusaurus docs instance at `/intel-codex`, independent from the main docs.
+
+It requires two plugin entries: one `@docusaurus/plugin-content-docs` instance to define the docs section, one `docusaurus-plugin-obsidian-vault` entry to sync into it.
+
+```typescript
+plugins: [
+  // 1. Define the vault as a separate docs instance
+  [
+    '@docusaurus/plugin-content-docs',
+    {
+      id: 'intel-codex',
+      path: 'intel-codex',
+      routeBasePath: 'intel-codex',
+      sidebarPath: './sidebars-intel-codex.ts',
+    },
+  ],
+
+  // 2. Sync the vault into that instance
+  [
+    'docusaurus-plugin-obsidian-vault',
+    {
+      vaultSource: {
+        type: 'github',
+        repository: 'username/vault-repo',
+        path: '.temp-vault',
+      },
+      docsPath: 'intel-codex',
+      assetsPath: 'static/img/intel-codex',
+      exclude: ['**/.obsidian/**', '**/Templates/**', '**/Private/**'],
+      categoryIndexFile: 'START.md',
+      transformations: {
+        convertWikilinks: true,
+        convertCallouts: true,
+        preserveFrontmatter: true,
+      },
+    },
+  ],
+],
+```
+
+The sidebar file for the vault instance (`sidebars-intel-codex.ts`) is just autogenerated:
+
+```typescript
+const sidebars = {
+  intelCodexSidebar: [{ type: 'autogenerated', dirName: '.' }],
+};
+export default sidebars;
+```
+
+## Filtering and Banners
+
+The `exclude` option takes glob patterns — useful for keeping private notes, templates, and `.obsidian` config out of the public build:
+
+```typescript
+exclude: ['**/.obsidian/**', '**/Private/**', '**/Templates/**']
+```
+
+Banners let you add context to every synced file — attribution, edit links, sync notices:
+
+```typescript
+bannerTop: ':::info\nThis file syncs from the [vault repo](https://github.com/user/vault). Edit there, not here.\n:::'
+```
+
+## Live Demo
+
+The Intel Codex section of this site — [gl0bal01.com/intel-codex](https://gl0bal01.com/intel-codex) — is built entirely with this plugin. The vault lives in a separate GitHub repo, clones at deploy time, transforms, and publishes. The Obsidian graph stays intact for local use; the Docusaurus site gets the readable web version.
+
+---
+
+If you use Obsidian and Docusaurus and want the vault accessible without maintaining two copies of everything: **[github.com/gl0bal01/docusaurus-plugin-obsidian-vault](https://github.com/gl0bal01/docusaurus-plugin-obsidian-vault)**
