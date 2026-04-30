@@ -77,3 +77,13 @@ pentesting:
   label: Pentesting
   description: Penetration testing methodologies and tools
   permalink: /pentesting
+
+diary:
+  label: Diary
+  description: Personal essays and lived-experience notes
+  permalink: /diary
+
+asperger:
+  label: Asperger
+  description: Asperger syndrome — symptoms, diagnosis, daily life
+  permalink: /asperger
