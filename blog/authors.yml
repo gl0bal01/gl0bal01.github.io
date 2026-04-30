@@ -7,3 +7,11 @@ gl0bal01:
   socials:
     github: gl0bal01
     x: gl0bal01
+
+nina81:
+  name: Nina
+  title: Parent
+  url: /blog/authors/nina81
+  image_url: /img/nina.png
+  page: true
+  socials: {}
