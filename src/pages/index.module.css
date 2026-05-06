@@ -1,35 +1,34 @@
-/* Hero Banner */
+/* Hero — dark, security-toned, single accent line */
 .heroBanner {
-  padding: 4rem 0 6rem 0;
-  text-align: center;
   position: relative;
+  padding: 5rem 0 5rem 0;
+  text-align: center;
   overflow: hidden;
-  background: linear-gradient(135deg, #ff6b6b 0%, #feca57 25%, #48dbfb 50%, #ff9ff3 75%, #54a0ff 100%);
-  animation: rainbow 10s ease infinite;
-  background-size: 400% 400%;
+  background: radial-gradient(ellipse at top, #1b2033 0%, #0b0e17 60%, #07090f 100%);
+  color: #e6edf7;
+  border-bottom: 1px solid rgba(120, 160, 255, 0.12);
 }
 
-@keyframes rainbow {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.heroBanner::before {
+.heroBanner::after {
   content: '';
   position: absolute;
-  top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.1);
-  z-index: 1;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(102, 217, 255, 0.5), transparent);
+}
+
+.heroGrid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(120, 160, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 160, 255, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  pointer-events: none;
 }
 
 .heroBanner .container {
@@ -37,28 +36,75 @@
   z-index: 2;
 }
 
-/* Card Grid Layout */
+.heroTitle {
+  color: #ffffff !important;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);
+}
+
+.heroSubtitle {
+  color: #b8c4dc !important;
+  max-width: 680px;
+  margin: 0.75rem auto 0 auto;
+  font-size: 1.15rem;
+  line-height: 1.5;
+}
+
+.heroStats {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 1.75rem;
+  font-size: 0.95rem;
+  color: #93a3c2;
+}
+
+.heroStats li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.heroStats strong {
+  color: #66d9ff;
+  font-weight: 700;
+}
+
+.heroStats li + li::before {
+  content: '·';
+  color: rgba(120, 160, 255, 0.4);
+  margin-right: 1.75rem;
+  margin-left: -1.75rem;
+}
+
+/* Main / sections */
+.main {
+  background: var(--ifm-background-color);
+}
+
+.cardSection {
+  padding: 3rem 1rem 4rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Card grid */
 .cardGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+  gap: 1.5rem;
 }
 
-/* Featured Card - Intel Codex spans full width */
-.featuredCard {
-  grid-column: 1 / -1;
-  border: 2px solid var(--ifm-color-primary) !important;
-}
-
-/* Category Cards - Dark Theme Compatible */
+/* Category cards */
 .categoryCard {
   background: var(--ifm-card-background-color) !important;
   border: 1px solid var(--ifm-color-emphasis-200) !important;
-  transition: all 0.3s ease !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -67,271 +113,148 @@
 }
 
 .categoryCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-4px);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12) !important;
   border-color: var(--ifm-color-primary) !important;
 }
 
 .categoryCard .card__header {
-  text-align: center;
-  padding: 1.5rem 1.5rem 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1.25rem 1.25rem 1rem 1.25rem;
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
 }
 
-.categoryCard .card__body {
-  flex-grow: 1;
-  padding: 0 1.5rem 1rem 1.5rem;
-  text-align: center;
-}
-
-.categoryCard .card__footer {
-  padding: 1rem 1.5rem 1.5rem 1.5rem;
-  margin-top: auto;
-  border-top: 1px solid var(--ifm-color-emphasis-200);
-  background: var(--ifm-color-emphasis-0);
-}
-
-.cardIcon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  display: block;
-}
-
-/* Discord Icon for Card */
-.discordIcon {
-  width: 3rem;
-  height: 3rem;
-  display: inline-block;
-  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23ffffff' d='M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z'/%3E%3C/svg%3E")
-    no-repeat center center;
-  background-size: contain;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-}
-
-[data-theme='dark'] .discordIcon {
-  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23ffffff' d='M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z'/%3E%3C/svg%3E")
-    no-repeat center center;
-  background-size: contain;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-}
-
-/* Gaming Discord Card Styling */
-@keyframes gamingGradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-@keyframes neonGlow {
-  0%, 100% {
-    box-shadow:
-      0 0 10px rgba(0, 255, 255, 0.5),
-      0 0 20px rgba(255, 0, 255, 0.3),
-      0 0 30px rgba(0, 255, 127, 0.2),
-      inset 0 0 60px rgba(0, 255, 255, 0.1);
-  }
-  50% {
-    box-shadow:
-      0 0 20px rgba(0, 255, 255, 0.7),
-      0 0 30px rgba(255, 0, 255, 0.5),
-      0 0 40px rgba(0, 255, 127, 0.3),
-      inset 0 0 80px rgba(255, 0, 255, 0.15);
-  }
-}
-
-@keyframes borderPulse {
-  0%, 100% {
-    border-color: rgba(0, 255, 255, 0.6);
-  }
-  25% {
-    border-color: rgba(255, 0, 255, 0.6);
-  }
-  50% {
-    border-color: rgba(0, 255, 127, 0.6);
-  }
-  75% {
-    border-color: rgba(255, 0, 255, 0.6);
-  }
-}
-
-.discordCard {
-  background: linear-gradient(
-    135deg,
-    #1a1a2e 0%,
-    #16213e 20%,
-    #0f3460 40%,
-    #16213e 60%,
-    #1a1a2e 80%,
-    #16213e 100%
-  ) !important;
-  background-size: 200% 200% !important;
-  animation: gamingGradient 6s ease infinite, neonGlow 3s ease-in-out infinite !important;
-  border: 2px solid rgba(0, 255, 255, 0.6) !important;
-  animation: gamingGradient 6s ease infinite, neonGlow 3s ease-in-out infinite, borderPulse 4s linear infinite !important;
-  position: relative;
-  overflow: hidden;
-}
-
-.discordCard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(0, 255, 255, 0.2),
-    rgba(255, 0, 255, 0.2),
-    transparent
-  );
-  animation: scanline 3s linear infinite;
-  pointer-events: none;
-}
-
-@keyframes scanline {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
-  }
-}
-
-.discordCard::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 255, 255, 0.03) 2px,
-      rgba(0, 255, 255, 0.03) 4px
-    );
-  pointer-events: none;
-  z-index: 1;
-}
-
-.discordCard .card__header,
-.discordCard .card__body,
-.discordCard .card__footer {
-  position: relative;
-  z-index: 2;
-  border-color: rgba(0, 255, 255, 0.2) !important;
-}
-
-.discordCard h3,
-.discordCard p {
-  color: #ffffff !important;
-  text-shadow:
-    0 0 10px rgba(0, 255, 255, 0.5),
-    0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.discordCard .button--primary {
-  background: linear-gradient(135deg, #00ffff 0%, #ff00ff 100%) !important;
-  color: #000000 !important;
-  font-weight: 700 !important;
-  border: none !important;
-  text-shadow: none !important;
-  box-shadow:
-    0 0 10px rgba(0, 255, 255, 0.5),
-    0 4px 15px rgba(0, 0, 0, 0.3) !important;
-  animation: buttonGlow 2s ease-in-out infinite;
-}
-
-@keyframes buttonGlow {
-  0%, 100% {
-    box-shadow:
-      0 0 10px rgba(0, 255, 255, 0.5),
-      0 4px 15px rgba(0, 0, 0, 0.3);
-  }
-  50% {
-    box-shadow:
-      0 0 20px rgba(0, 255, 255, 0.8),
-      0 0 30px rgba(255, 0, 255, 0.5),
-      0 4px 15px rgba(0, 0, 0, 0.3);
-  }
-}
-
-.discordCard .button--primary:hover {
-  background: linear-gradient(135deg, #ff00ff 0%, #00ffff 100%) !important;
-  color: #000000 !important;
-  transform: translateY(-2px) scale(1.02);
-}
-
-[data-theme='dark'] .discordCard {
-  animation: gamingGradient 6s ease infinite, neonGlow 3s ease-in-out infinite, borderPulse 4s linear infinite !important;
-}
-
-[data-theme='dark'] .discordCard h3,
-[data-theme='dark'] .discordCard p {
-  color: #ffffff !important;
-}
-
-.gamingBadge {
-  display: inline-block;
-  animation: bounce 1.5s ease-in-out infinite;
-  font-size: 1.2em;
-  margin-left: 0.3rem;
-  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  25% {
-    transform: translateY(-5px) rotate(-10deg);
-  }
-  50% {
-    transform: translateY(0) rotate(0deg);
-  }
-  75% {
-    transform: translateY(-3px) rotate(10deg);
-  }
-}
-
 .categoryCard h3 {
-  color: var(--ifm-color-gray-900);
-  margin-bottom: 0;
+  margin: 0;
   font-weight: 600;
-  font-size: 1.3rem;
+  font-size: 1.15rem;
+  color: var(--ifm-color-gray-900);
 }
 
-/* Dark Theme Specific Adjustments */
 [data-theme='dark'] .categoryCard h3 {
   color: var(--ifm-color-gray-100);
 }
 
-.categoryCard p {
-  color: var(--ifm-color-content-secondary);
-  line-height: 1.6;
-  margin-bottom: 0;
+.categoryCard .card__body {
+  flex-grow: 1;
+  padding: 1rem 1.25rem;
 }
 
-/* Button Customizations - Fixed Hover Issues */
+.categoryCard p {
+  color: var(--ifm-color-content-secondary);
+  line-height: 1.55;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.categoryCard .card__footer {
+  padding: 0.75rem 1.25rem 1.25rem 1.25rem;
+  margin-top: auto;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+/* SVG icon styling */
+.cardIcon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.12));
+  color: var(--ifm-color-primary);
+}
+
+[data-theme='dark'] .cardIcon {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.18), rgba(118, 75, 162, 0.18));
+  color: #8fb3ff;
+}
+
+.svgIcon {
+  width: 24px;
+  height: 24px;
+}
+
+/* Featured card — Intel Codex full-width */
+.featuredCard {
+  border: 1px solid var(--ifm-color-emphasis-300) !important;
+  background:
+    linear-gradient(135deg, rgba(102, 126, 234, 0.06), rgba(118, 75, 162, 0.04)),
+    var(--ifm-card-background-color) !important;
+  position: relative;
+}
+
+.featuredCard::before {
+  content: 'Flagship';
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ifm-color-primary);
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  opacity: 0.85;
+}
+
+.featuredCard .card__header {
+  padding: 1.75rem 1.75rem 1.25rem 1.75rem;
+  border-bottom: none;
+}
+
+.featuredCard .cardIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+}
+
+.featuredCard .svgIcon {
+  width: 30px;
+  height: 30px;
+}
+
+.featuredCard h3 {
+  font-size: 1.65rem;
+  font-weight: 700;
+}
+
+.featuredCard .card__body {
+  padding: 0 1.75rem 1.5rem 1.75rem;
+}
+
+.featuredCard .card__body p {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  max-width: 760px;
+}
+
+.featuredCard .card__footer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, max-content));
+  gap: 0.75rem;
+  padding: 0 1.75rem 1.75rem 1.75rem;
+  border-top: none;
+}
+
+.featuredCard .card__footer .button {
+  margin-top: 0 !important;
+  width: auto;
+}
+
+/* Buttons */
 .categoryCard .button {
   font-weight: 600;
   text-transform: none;
-  letter-spacing: 0.5px;
-  border-radius: 8px;
-  padding: 0.75rem 1.5rem;
-  transition: all 0.3s ease;
-  position: relative;
-  z-index: 2;
+  letter-spacing: 0.3px;
+  border-radius: 6px;
+  padding: 0.6rem 1.25rem;
+  transition: transform 0.2s ease, background 0.2s ease;
   cursor: pointer;
   text-decoration: none;
 }
@@ -350,164 +273,187 @@
 }
 
 .categoryCard .button--secondary {
-  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-  border: none;
-  color: white;
+  background: transparent;
+  border: 1px solid var(--ifm-color-emphasis-400);
+  color: var(--ifm-color-content);
 }
 
 .categoryCard .button--secondary:hover {
-  background: linear-gradient(135deg, #3dd771 0%, #32e7cb 100%);
-  transform: translateY(-1px);
-  color: white;
+  background: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-content);
   text-decoration: none;
+  transform: translateY(-1px);
 }
 
-/* Mascot Image - Full Width */
-.mascotImage {
-  width: 100%;
-  height: auto;
-  display: block;
-  transition: transform 0.3s ease;
+[data-theme='dark'] .categoryCard .button--primary,
+[data-theme='dark'] .categoryCard .button--primary:hover {
+  color: white !important;
 }
 
-.mascotImage:hover {
-  transform: scale(1.02);
+/* Discord card — toned down: single soft glow, no scanline/grid/badge bounce */
+.discordCard {
+  background:
+    radial-gradient(circle at 20% 10%, rgba(88, 101, 242, 0.18), transparent 50%),
+    linear-gradient(135deg, #1a1d2e 0%, #2a2f4a 100%) !important;
+  border: 1px solid rgba(88, 101, 242, 0.45) !important;
+  box-shadow: 0 0 24px rgba(88, 101, 242, 0.15);
+  transition: box-shadow 0.3s ease, transform 0.25s ease, border-color 0.25s ease !important;
 }
 
-/* Hero Title & Subtitle - Always Black */
-.heroBanner :global(.hero__title),
-.heroBanner :global(.hero__subtitle) {
-  color: #000000 !important;
-  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.3);
+.discordCard:hover {
+  border-color: rgba(88, 101, 242, 0.85) !important;
+  box-shadow: 0 0 36px rgba(88, 101, 242, 0.35) !important;
 }
 
-/* Dark Theme Specific Adjustments */
+.discordCard .card__header,
+.discordCard .card__footer {
+  border-color: rgba(88, 101, 242, 0.18) !important;
+}
+
+.discordCard h3,
+.discordCard p {
+  color: #ffffff !important;
+}
+
+.discordCard .cardIcon {
+  background: rgba(88, 101, 242, 0.2);
+  color: #ffffff;
+}
+
+.discordSvg {
+  width: 26px;
+  height: 26px;
+}
+
+.discordCard .button--primary {
+  background: #5865f2 !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.discordCard .button--primary:hover {
+  background: #4752c4 !important;
+  color: #ffffff !important;
+}
+
+.gamingBadge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 0.15rem 0.45rem;
+  margin-left: 0.5rem;
+  border-radius: 4px;
+  background: rgba(88, 101, 242, 0.25);
+  color: #c7d2ff;
+  vertical-align: middle;
+}
+
+/* Dark mode card adjustments */
 [data-theme='dark'] .categoryCard {
-  background: var(--ifm-background-color) !important;
+  background: var(--ifm-background-surface-color) !important;
   border-color: var(--ifm-color-emphasis-300) !important;
 }
 
 [data-theme='dark'] .categoryCard:hover {
   border-color: var(--ifm-color-primary) !important;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.4) !important;
 }
 
-[data-theme='dark'] .categoryCard .card__header {
-  border-bottom-color: var(--ifm-color-emphasis-300);
-}
-
-[data-theme='dark'] .categoryCard .card__footer {
-  border-top-color: var(--ifm-color-emphasis-300);
-  background: var(--ifm-color-emphasis-100);
-}
-
-/* Fix button visibility in dark mode */
-[data-theme='dark'] .categoryCard .button--primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  color: white !important;
-  background-color: #000000;
-  border: none !important;
-}
-
-[data-theme='dark'] .categoryCard .button--primary:hover {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%) !important;
-  color: white !important;
+[data-theme='dark'] .featuredCard {
+  background:
+    linear-gradient(135deg, rgba(102, 126, 234, 0.10), rgba(118, 75, 162, 0.06)),
+    var(--ifm-background-surface-color) !important;
 }
 
 [data-theme='dark'] .categoryCard .button--secondary {
-  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%) !important;
-  color: white !important;
-  border: none !important;
+  border-color: var(--ifm-color-emphasis-400);
+  color: var(--ifm-color-content);
 }
 
 [data-theme='dark'] .categoryCard .button--secondary:hover {
-  background: linear-gradient(135deg, #3dd771 0%, #32e7cb 100%) !important;
-  color: white !important;
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-content);
 }
 
-/* Responsive Design */
-@media screen and (max-width: 996px) {
+/* Responsive */
+@media (max-width: 996px) {
   .heroBanner {
-    padding: 3rem 0 4rem 0;
+    padding: 3.5rem 0 3.5rem 0;
   }
 
-  .cardGrid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2.5rem;
+  .featuredCard .card__header {
+    flex-wrap: wrap;
+  }
+
+  .featuredCard h3 {
+    font-size: 1.4rem;
   }
 }
 
-@media screen and (max-width: 768px) {
+@media (max-width: 768px) {
   .heroBanner {
-    padding: 2rem 0 3rem 0;
+    padding: 2.75rem 0 2.75rem 0;
+  }
+
+  .heroSubtitle {
+    font-size: 1rem;
+  }
+
+  .heroStats {
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 1.5rem;
+  }
+
+  .heroStats li + li::before {
+    display: none;
   }
 
   .cardGrid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
-    margin-top: 2rem;
   }
 
-  .cardIcon {
-    font-size: 2.5rem;
+  .featuredCard::before {
+    display: none;
   }
 
+  .featuredCard .card__footer {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
   .categoryCard .card__header {
-    padding: 1.5rem 1rem 1rem 1rem;
+    padding: 1rem;
   }
 
   .categoryCard .card__body {
-    padding: 0 1rem 1rem 1rem;
+    padding: 0.85rem 1rem;
   }
 
   .categoryCard .card__footer {
-    padding: 1rem;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .heroBanner {
-    padding: 1.5rem 0 2rem 0;
-  }
-
-  .cardIcon {
-    font-size: 2rem;
+    padding: 0.75rem 1rem 1rem 1rem;
   }
 
   .categoryCard h3 {
-    font-size: 1.2rem;
+    font-size: 1.05rem;
   }
 
-  .categoryCard .button {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+  .featuredCard h3 {
+    font-size: 1.25rem;
   }
 }
 
-/* Accessibility: Respect reduced motion preferences */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .heroBanner {
-    animation: none;
-  }
-
-  .discordCard {
-    animation: none !important;
-  }
-
-  .discordCard::before {
-    animation: none;
-  }
-
-  .discordCard .button--primary {
-    animation: none;
-  }
-
-  .gamingBadge {
-    animation: none;
-  }
-
-  .categoryCard:hover {
-    transform: none;
+  .categoryCard,
+  .categoryCard:hover,
+  .discordCard,
+  .discordCard:hover,
+  .categoryCard .button,
+  .categoryCard .button:hover {
+    transition: none !important;
+    transform: none !important;
   }
 }
