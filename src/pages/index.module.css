@@ -119,11 +119,20 @@
 }
 
 .categoryCard .card__header {
-  display: flex;
+  display: flex !important;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
+  justify-content: flex-start;
+  text-align: left;
   gap: 0.9rem;
   padding: 1.25rem 1.25rem 1rem 1.25rem;
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.categoryCard .card__header > h3 {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .categoryCard h3 {
@@ -382,10 +391,6 @@
     padding: 3.5rem 0 3.5rem 0;
   }
 
-  .featuredCard .card__header {
-    flex-wrap: wrap;
-  }
-
   .featuredCard h3 {
     font-size: 1.4rem;
   }
@@ -402,8 +407,14 @@
 
   .heroStats {
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: 0.4rem;
     margin-top: 1.5rem;
+  }
+
+  .heroStats li {
+    justify-content: center;
   }
 
   .heroStats li + li::before {

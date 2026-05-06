@@ -4,8 +4,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 import { rssFeeds, rssPluginOptions } from './rss-feeds.config';
 
 const config: Config = {
-  title: 'gl0bal01 | Notes & Research',
-  tagline: 'Security research, penetration testing, digital investigation techniques and human madness',
+  title: "gl0bal01 — Operator's Notebook",
+  tagline: 'Pentest playbooks, OSINT tradecraft, RE notes. Field-tested, opinionated, free.',
   favicon: 'icons/favicon.ico',
 
   url: 'https://gl0bal01.com',
@@ -155,7 +155,7 @@ const config: Config = {
 
   themeConfig: {
     // SEO: Social card for link previews (Open Graph, Twitter Cards)
-    image: 'img/lama.jpg',
+    image: 'img/global01.jpg',
 
     // SEO: Additional metadata tags
     metadata: [

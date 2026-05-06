@@ -76,7 +76,6 @@ function HomepageHeader() {
         <ul className={styles.heroStats}>
           <li><strong>70+</strong> investigation guides</li>
           <li><strong>17+</strong> security RSS feeds</li>
-          <li><strong>Free</strong> &amp; open-source</li>
         </ul>
       </div>
     </header>
