@@ -4,7 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 import { rssFeeds, rssPluginOptions } from './rss-feeds.config';
 
 const config: Config = {
-  title: "gl0bal01 — Operator's Notebook",
+  title: "Operator's Notebook",
   tagline: 'Pentest playbooks, OSINT tradecraft, RE notes. Field-tested, opinionated, free.',
   favicon: 'icons/favicon.ico',
 
