@@ -23,6 +23,9 @@ static/img/intel-codex/
 .omc/
 CLAUDE.md
 
+# Old side project (untracked)
+docs/superpowers/
+
 # Misc
 .DS_Store
 .env
