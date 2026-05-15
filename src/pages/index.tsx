@@ -189,7 +189,10 @@ export default function Home(): ReactNode {
               icon={<Icon.Discord className={clsx(styles.svgIcon, styles.discordSvg)} />}
               title={<>GlobalHub <span className={styles.gamingBadge} aria-hidden="true">PLAY</span></>}
               body="40+ interactive cybersecurity and OSINT exercises. Join the community where learning meets gaming."
-              links={[{ to: "https://discord.gg/T5tc9Rq8DV", label: "Join Discord Server" }]}
+              links={[
+                { to: "https://discord.gg/T5tc9Rq8DV", label: "Join Discord Server" },
+                { to: "https://lecodex.xyz/", label: "Visit LeCodex", variant: "secondary" },
+              ]}
             />
           </div>
         </section>

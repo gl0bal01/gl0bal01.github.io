@@ -231,6 +231,12 @@ const config: Config = {
         {to: '/blog', label: 'Blog', position: 'left', 'aria-label': 'Blog posts and articles'},
         {to: '/news', label: 'News', position: 'left', 'aria-label': 'Latest news and updates'},
         {
+          href: 'https://play.lecodex.xyz/',
+          position: 'right',
+          className: 'header-lecodex-link',
+          'aria-label': 'CTF game arcade — play.lecodex.xyz',
+        },
+        {
           href: 'https://github.com/gl0bal01',
           position: 'right',
           className: 'header-github-link',
@@ -282,6 +288,16 @@ footer: {
             to: '/intel-codex/Investigations/Platforms/Platforms-Index',
             'aria-label': 'Platform-specific investigation guides',
           },
+          {
+            label: 'Darkweb Investigation',
+            to: '/intel-codex/Investigations/Techniques/sop-darkweb-investigation',
+            'aria-label': 'Tor, I2P, hidden services, marketplaces, ransomware leak sites',
+          },
+          {
+            label: 'Blockchain Tracing',
+            to: '/intel-codex/Investigations/Techniques/sop-blockchain-investigation',
+            'aria-label': 'Multi-chain tracing, address clustering, sanctions, court admissibility',
+          },
         ],
       },
       {
@@ -311,6 +327,16 @@ footer: {
             label: 'Digital Forensics (DFIR)',
             to: '/intel-codex/Security/Analysis/sop-forensics-investigation',
             'aria-label': 'Digital forensics investigation procedures',
+          },
+          {
+            label: 'Cloud Forensics',
+            to: '/intel-codex/Security/Analysis/sop-cloud-forensics',
+            'aria-label': 'AWS, Azure, GCP control-plane forensics and IAM reconstruction',
+          },
+          {
+            label: 'Cloud Pentest',
+            to: '/intel-codex/Security/Pentesting/sop-cloud-pentest',
+            'aria-label': 'AWS, Azure, GCP offensive testing and SaaS collaboration plane',
           },
         ],
       },
@@ -349,8 +375,10 @@ footer: {
         items: [
           {
             label: 'Play & Learn',
-            href: '/blog/ctf-platforms-training',
-            'aria-label': 'CTF platforms and training resources',
+            href: 'https://lecodex.xyz/',
+            target: '_blank',
+            rel: 'noopener noreferrer',
+            'aria-label': 'LeCodex - CTF challenge platform',
           },
           {
             label: 'GitHub',
