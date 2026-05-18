@@ -72,7 +72,9 @@ const config: Config = {
           '**/Case-Template/**',
           '**/Student-Exercises/**',
           'CONTRIBUTING.md',
-          'README.md' // README.md is for GitHub, index.md is for Docusaurus
+          'README.md', // README.md is for GitHub, index.md is for Docusaurus
+          'CLAUDE.md',
+          '**/CLAUDE.md'
         ],
         transformations: {
           convertWikilinks: true,
@@ -231,10 +233,10 @@ const config: Config = {
         {to: '/blog', label: 'Blog', position: 'left', 'aria-label': 'Blog posts and articles'},
         {to: '/news', label: 'News', position: 'left', 'aria-label': 'Latest news and updates'},
         {
-          href: 'https://play.lecodex.xyz/',
+          href: 'https://youareplayer.com/',
           position: 'right',
           className: 'header-lecodex-link',
-          'aria-label': 'CTF game arcade — play.lecodex.xyz',
+          'aria-label': 'CTF game arcade — youareplayer.com',
         },
         {
           href: 'https://github.com/gl0bal01',
@@ -375,7 +377,7 @@ footer: {
         items: [
           {
             label: 'Play & Learn',
-            href: 'https://lecodex.xyz/',
+            href: 'https://youareplayer.com/',
             target: '_blank',
             rel: 'noopener noreferrer',
             'aria-label': 'LeCodex - CTF challenge platform',
