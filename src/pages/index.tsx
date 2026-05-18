@@ -191,7 +191,7 @@ export default function Home(): ReactNode {
               body="40+ interactive cybersecurity and OSINT exercises. Join the community where learning meets gaming."
               links={[
                 { to: "https://discord.gg/T5tc9Rq8DV", label: "Join Discord Server" },
-                { to: "https://lecodex.xyz/", label: "Visit LeCodex", variant: "secondary" },
+                { to: "https://youareplayer.com/", label: "Visit Arcade Platform", variant: "secondary" },
               ]}
             />
           </div>
