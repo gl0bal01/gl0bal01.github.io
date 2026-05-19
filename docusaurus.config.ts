@@ -142,6 +142,7 @@ const config: Config = {
           changefreq: 'weekly',
           priority: 0.5,
           ignorePatterns: [
+            '/intel-codex/**'
             '**/tags/**',
             '**/category/**',
             '/search/**',
