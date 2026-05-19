@@ -16,7 +16,7 @@ import TabItem from '@theme/TabItem';
 
 I've been dropping rclone into every new project since January. Once you watch encrypted dumps land in R2 in the time it takes to refill a coffee, every managed-backup-as-a-Service feels like paying rent on somebody else's wizard.
 
-Latest one is `play.lecodex.xyz` — small Postgres, single VPS, the kind of side project where one bad migration erases a weekend and the only insurance is the dump you forgot to run. Managed backups at $5–$20/month? Fine for a company, painful for a project paying its own server bill.
+Latest one is `youareplayer.com` — small Postgres, single VPS, the kind of side project where one bad migration erases a weekend and the only insurance is the dump you forgot to run. Managed backups at $5–$20/month? Fine for a company, painful for a project paying its own server bill.
 
 So: free, encrypted, off-site. **$0/month** if the database stays inside the R2 free tier. Here's the setup that's been running daily since.
 

@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /tags/
 Disallow: /blog/tags/
-Disallow: /intel-codex/tags/
+Disallow: /intel-codex/
 Disallow: /search
 Disallow: /page/
 Disallow: /blog/archive
