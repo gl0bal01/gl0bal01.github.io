@@ -46,6 +46,50 @@ function sanitizeUrl(url: string | undefined): string | undefined {
   return trimmedUrl;
 }
 
+/**
+ * Escape bare ampersands that are not part of a valid XML entity.
+ * Some feeds emit a raw '&' in non-CDATA fields (e.g. "AT&T" in a <title>),
+ * which makes the XML entity parser reject the whole document. Valid entities
+ * (&amp; &lt; &#123; &#x1F; …) are left untouched.
+ */
+function escapeBareAmpersands(xml: string): string {
+  return xml.replace(/&(?!(?:amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+);)/g, '&amp;');
+}
+
+/**
+ * Parse a feed URL, retrying once with sanitized XML if the first parse fails.
+ * parser.parseURL() fetches and parses in one step, so a single stray ampersand
+ * drops the whole feed. On failure we refetch the raw body, escape bare
+ * ampersands, and parse the string — turning an intermittent hard failure into a
+ * recovered feed. The retry only runs on the failure path.
+ */
+async function parseFeedResilient(
+  parser: RSSParser,
+  url: string,
+  timeout: number
+) {
+  try {
+    return await parser.parseURL(url);
+  } catch (error) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, {
+        signal: controller.signal,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; DocusaurusRSS/1.0)',
+          'Accept': 'application/rss+xml, application/xml, text/xml, */*',
+        },
+      });
+      if (!response.ok) throw error; // not a parse problem — surface the original error
+      const xml = await response.text();
+      return await parser.parseString(escapeBareAmpersands(xml));
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+}
+
 export default function multiRSSPlugin(
   context: LoadContext,
   options: PluginOptions
@@ -122,7 +166,7 @@ export default function multiRSSPlugin(
             const category = typeof feedConfig === 'object' ? feedConfig.category || 'general' : 'general';
             const customTitle = typeof feedConfig === 'object' ? feedConfig.title : null;
             
-            const feed = await parser.parseURL(feedUrl);
+            const feed = await parseFeedResilient(parser, feedUrl, options.timeout || 10000);
             
             const processedItems: RSSItem[] = feed.items
               .slice(0, maxItemsPerFeed)
