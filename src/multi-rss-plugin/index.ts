@@ -1,22 +1,21 @@
 // Multi-RSS Plugin - Main Export Index
-// This file provides convenient access to all plugin components, hooks, and utilities
+// Convenient access to all plugin components, hooks, and utilities.
+//
+// Names referenced locally (the `MultiRSSPlugin` aggregate object and the typed
+// signatures below) are imported, then re-exported. Names that are only part of
+// the public API are re-exported directly with `export … from`.
 
-// Main Components
-export { default as RSSDashboard } from './components/RSSDashboard';
-export { default as PaginatedRSSFeed } from './components/PaginatedRSSFeed';
-
-// Utility Components
-export {
+// --- Locally-used imports (needed by the default aggregate object / signatures) ---
+import RSSDashboard from './components/RSSDashboard';
+import PaginatedRSSFeed from './components/PaginatedRSSFeed';
+import {
   LatestRSSItems,
   CategoryRSSFeed,
   SingleRSSFeed,
   RSSFeedStatus,
   formatRSSDate,
-  truncateRSSText
 } from './components/RSSUtilities';
-
-// Custom Hooks
-export {
+import {
   useRSSData,
   useLatestRSSItems,
   useRSSFeed,
@@ -25,22 +24,54 @@ export {
   useRSSStats,
   useRSSHealth,
   usePaginatedRSSItems,
-  useRSSAnalytics
+  useRSSAnalytics,
 } from './hooks/useRSS';
-
-// Utility Functions
-export {
-  formatRSSDate as formatDate,
+import {
   formatRelativeTime,
   truncateText,
+  searchRSSItems,
+  filterRSSItemsByCategory,
+  sortRSSItemsByDate,
+  exportRSSData,
+} from './utils/rssUtils';
+import type { FeedConfig, PluginOptions } from './types/rss';
+
+// Re-export the locally-imported names
+export {
+  RSSDashboard,
+  PaginatedRSSFeed,
+  LatestRSSItems,
+  CategoryRSSFeed,
+  SingleRSSFeed,
+  RSSFeedStatus,
+  formatRSSDate,
+  useRSSData,
+  useLatestRSSItems,
+  useRSSFeed,
+  useRSSCategory,
+  useRSSSearch,
+  useRSSStats,
+  useRSSHealth,
+  usePaginatedRSSItems,
+  useRSSAnalytics,
+  formatRelativeTime,
+  truncateText,
+  searchRSSItems,
+  filterRSSItemsByCategory,
+  sortRSSItemsByDate,
+  exportRSSData,
+};
+export type { FeedConfig, PluginOptions };
+
+// Pure re-exports (not referenced locally)
+export { truncateRSSText } from './components/RSSUtilities';
+export {
+  formatRSSDate as formatDate,
   cleanHtml,
   extractImageFromContent,
   sanitizeTitle,
-  searchRSSItems,
-  filterRSSItemsByCategory,
   filterRSSItemsByDateRange,
   filterRSSItemsByFeed,
-  sortRSSItemsByDate,
   sortRSSItemsByTitle,
   sortRSSItemsByFeed,
   calculateRSSStats,
@@ -49,23 +80,18 @@ export {
   isValidUrl,
   isValidRSSUrl,
   normalizeUrl,
-  exportRSSData,
   debounce,
   saveUserPreferences,
   loadUserPreferences,
   getTheme,
   measurePerformance,
   createRSSError,
-  logRSSError
+  logRSSError,
 } from './utils/rssUtils';
-
-// Type Definitions
 export type {
   RSSItem,
   RSSFeed,
   ProcessedFeed,
-  FeedConfig,
-  PluginOptions,
   RSSData,
   CategoryData,
   RSSDashboardProps,
@@ -75,11 +101,8 @@ export type {
   RSSFeedStatusProps,
   RSSError,
   FeedProcessingResult,
-  PluginContent
+  PluginContent,
 } from './types/rss';
-
-// Plugin
-export { default as multiRSSPlugin } from '../plugins/multi-rss-plugin';
 
 // Constants
 export const RSS_PLUGIN_VERSION = '1.0.0';
@@ -135,7 +158,7 @@ export const createCommonRSSFeeds = () => ({
     category: 'tech',
     title: 'The Verge'
   },
-  
+
   // Development
   'dev-to': {
     url: 'https://dev.to/feed',
@@ -152,21 +175,21 @@ export const createCommonRSSFeeds = () => ({
     category: 'development',
     title: 'Smashing Magazine'
   },
-  
+
   // JavaScript
   'javascript-weekly': {
     url: 'https://javascriptweekly.com/rss/',
     category: 'javascript',
     title: 'JavaScript Weekly'
   },
-  
+
   // Design
   'design-milk': {
     url: 'https://design-milk.com/feed/',
     category: 'design',
     title: 'Design Milk'
   },
-  
+
   // General News
   'bbc-tech': {
     url: 'http://feeds.bbci.co.uk/news/technology/rss.xml',
@@ -179,7 +202,7 @@ export const createCommonRSSFeeds = () => ({
 export const debugRSSPlugin = () => {
   if (typeof window !== 'undefined') {
     console.group('🔍 RSS Plugin Debug Info');
-    
+
     try {
       const rssData = require('@site/.docusaurus/multi-rss-plugin/default/rss-data.json');
       console.log('✅ RSS Data loaded successfully');
@@ -190,7 +213,7 @@ export const debugRSSPlugin = () => {
     } catch (error) {
       console.error('❌ RSS Data not available:', error);
     }
-    
+
     console.groupEnd();
   }
 };
@@ -199,7 +222,7 @@ export const debugRSSPlugin = () => {
 export const checkRSSPluginVersion = () => {
   const currentVersion = RSS_PLUGIN_VERSION;
   console.log(`📦 Multi-RSS Plugin v${currentVersion}`);
-  
+
   // Check if newer version is available (this would need to be implemented)
   // For now, just log current version
   return currentVersion;
@@ -214,7 +237,7 @@ const MultiRSSPlugin = {
   CategoryRSSFeed,
   SingleRSSFeed,
   RSSFeedStatus,
-  
+
   // Hooks
   useRSSData,
   useLatestRSSItems,
@@ -225,7 +248,7 @@ const MultiRSSPlugin = {
   useRSSHealth,
   usePaginatedRSSItems,
   useRSSAnalytics,
-  
+
   // Utils
   formatRSSDate,
   formatRelativeTime,
@@ -234,13 +257,13 @@ const MultiRSSPlugin = {
   filterRSSItemsByCategory,
   sortRSSItemsByDate,
   exportRSSData,
-  
+
   // Helpers
   createRSSPluginConfig,
   createCommonRSSFeeds,
   debugRSSPlugin,
   checkRSSPluginVersion,
-  
+
   // Constants
   VERSION: RSS_PLUGIN_VERSION,
   NAME: RSS_PLUGIN_NAME

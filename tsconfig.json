@@ -8,7 +8,8 @@
     "esModuleInterop": true,
     "moduleResolution": "bundler",
     "paths": {
-      "@components/*": ["src/components/*"]
+      "@components/*": ["src/components/*"],
+      "@site/*": ["./*"]
     }
   },
   "include": ["src/", "docs/", "blog/", "*.ts", "*.tsx"],

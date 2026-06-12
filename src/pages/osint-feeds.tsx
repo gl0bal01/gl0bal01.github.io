@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { type ReactNode } from 'react';
 import Layout from '@theme/Layout';
 import RSSDashboard from '@site/src/multi-rss-plugin/components/RSSDashboard';
 
-export default function OSINTFeedsPage(): JSX.Element {
+export default function OSINTFeedsPage(): ReactNode {
   return (
     <Layout
       title="OSINT Feeds"

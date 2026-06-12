@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { type ReactNode } from 'react';
 import Layout from '@theme/Layout';
 import RSSDashboard from '@site/src/multi-rss-plugin/components/RSSDashboard';
 
-export default function CyberFeedsPage(): JSX.Element {
+export default function CyberFeedsPage(): ReactNode {
   return (
     <Layout
       title="Cybersecurity Feeds"
