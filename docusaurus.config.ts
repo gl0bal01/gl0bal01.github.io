@@ -40,6 +40,12 @@ const config: Config = {
       }
     ],
     [
+      './plugins/latest-posts-plugin.ts',
+      {
+        count: 4,
+      },
+    ],
+    [
       '@docusaurus/plugin-content-docs',
       {
         id: 'intel-codex',
