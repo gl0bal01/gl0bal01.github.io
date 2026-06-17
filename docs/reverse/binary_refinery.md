@@ -38,23 +38,24 @@ The techniques in this guide are intended for malware analysis, CTF challenges, 
 ## Table of Contents
 
 1. [Introduction & Core Concepts](#introduction--core-concepts)
-2. [Installation & Setup](#installation--setup)
-3. [Fundamental Operations](#fundamental-operations)
-4. [Data Transformation & Encoding](#data-transformation--encoding)
-5. [File Format Analysis](#file-format-analysis)
-6. [Advanced Deobfuscation Techniques](#advanced-deobfuscation-techniques)
-7. [Malware Analysis Workflows](#malware-analysis-workflows)
-8. [Network Traffic Analysis](#network-traffic-analysis)
-9. [Advanced Pipeline Management](#advanced-pipeline-management)
-10. [Real-World Case Studies](#real-world-case-studies)
-11. [Specialized Malware Analysis](#specialized-malware-analysis)
-12. [Advanced Threat Detection](#advanced-threat-detection)
-13. [Automated Analysis & Response](#automated-analysis--response)
-14. [Cross-Platform Considerations](#cross-platform-considerations)
-15. [Compliance & Legal Framework](#compliance--legal-framework)
-16. [Training Exercises](#training-exercises)
-17. [Integration with External Tools](#integration-with-external-tools)
-18. [Best Practices & Performance](#best-practices--performance)
+2. [CTF Quick Reference](#ctf-quick-reference)
+3. [Installation & Setup](#installation--setup)
+4. [Fundamental Operations](#fundamental-operations)
+5. [Data Transformation & Encoding](#data-transformation--encoding)
+6. [File Format Analysis](#file-format-analysis)
+7. [Advanced Deobfuscation Techniques](#advanced-deobfuscation-techniques)
+8. [Malware Analysis Workflows](#malware-analysis-workflows)
+9. [Network Traffic Analysis](#network-traffic-analysis)
+10. [Advanced Pipeline Management](#advanced-pipeline-management)
+11. [Real-World Case Studies](#real-world-case-studies)
+12. [Specialized Malware Analysis](#specialized-malware-analysis)
+13. [Advanced Threat Detection](#advanced-threat-detection)
+14. [Automated Analysis & Response](#automated-analysis--response)
+15. [Cross-Platform Considerations](#cross-platform-considerations)
+16. [Compliance & Legal Framework](#compliance--legal-framework)
+17. [Training Exercises](#training-exercises)
+18. [Integration with External Tools](#integration-with-external-tools)
+19. [Best Practices & Performance](#best-practices--performance)
 
 ## Introduction & Core Concepts
 
@@ -76,10 +77,121 @@ Binary Refinery is a collection of Python-based tools called "units" that can be
 | `peek` | Inspect data (hexdump, entropy, file type) | `emit file.bin \| peek` |
 | `b64` | Base64 encode/decode | `emit data \| b64` |
 | `xor` | XOR encryption/decryption | `emit data \| xor 0xFF` |
-| `zlib` | Zlib compression/decompression | `emit data.gz \| zlib` |
-| `strings` | Extract printable strings | `emit binary \| strings` |
-| `carve` | Extract data chunks | `emit file \| carve 100` |
+| `zl` | Zlib/gzip compression & decompression | `emit data.gz \| zl` |
+| `carve printable` | Extract printable strings (replaces `strings`) | `emit binary \| carve printable` |
+| `carve` | Extract/decode data by named format | `emit file \| carve b64` |
 | `pack` | Join processed chunks | `emit data \| chop "," \| pack` |
+
+## CTF Quick Reference
+
+Fast triage flow for CTF and forensic challenges. Every unit name below is verified against the current refinery registry — many popular cheat-sheets float commands (`pe`, `pdf`, `unzip`, `zlib`, `html`, `tcp`, `rev.put`) that **do not exist** as refinery units; the correct unit is given here.
+
+:::tip Add `| peek` anywhere
+Append `| peek` to any stage to inspect the current chunk (leading bytes, size, entropy, type guess) **without** consuming the stream.
+:::
+
+### Mental Model
+
+Every challenge is the same pipeline shape — identify, parse, transform, inspect, save:
+
+```
+FILE  →  [PARSE]   →  [TRANSFORM]   →  [INSPECT]  →  [SAVE]
+ │          │             │              │            │
+emit      pcap          b64 / xor      peek         dump
+          xtpdf         zl / lzma      carve        dump out/
+          xt            rc4 / aes      rex
+          xtmail        stego          xtp
+          xtzip         hex / url      entropy
+```
+
+```bash
+# Universal first moves on an unknown file
+emit challenge.bin | peek                    # magic bytes, size, entropy, type
+emit challenge.bin | xt                       # auto-extract any known container
+emit challenge.bin | carve printable | peek   # surface embedded readable blobs
+emit challenge.bin | xtp url,ip,email         # pull IOC / flag-looking patterns
+```
+
+### Corrected Lookup Table
+
+Left = what you want. Right = the **real** unit. Where a common cheat-sheet name is wrong, the correct replacement is noted.
+
+| You want… | Command (verified) |
+|-----------|--------------------|
+| Load a file / string | `emit file` |
+| Inspect (hexdump + entropy + type) | `emit file \| peek` |
+| Save the current stream to a file | `emit … \| dump out.bin` *(not `rev.put`)* |
+| Auto-extract any archive/container | `emit file \| xt` *(not `unzip`)* |
+| Extract ZIP / RAR / 7z explicitly | `xtzip` / `xtrar` / `xt7z` *(not `unzip`/`unrar`/`un7z`)* |
+| Extract one named file from archive | `emit a.zip \| xt path/to/flag.txt` |
+| Decode Base64 | `emit f \| b64` *(not `base64 -d`)* |
+| Encode Base64 | `emit f \| b64 -R` |
+| Decode hex | `emit f \| hex` *(not `hex -d`)* |
+| URL-decode | `emit f \| url` |
+| HTML-entity decode | `emit f \| htmlesc` *(not `html`)* |
+| XOR with a key | `emit f \| xor 0x42` or `xor key.bin` |
+| XOR find/guess the key | `emit f \| xkey` or `autoxor` |
+| Zlib **or** gzip inflate | `emit f \| zl` *(not `zlib`/`gz`)* |
+| LZMA / xz inflate | `emit f \| lzma` |
+| Reverse byte order | `emit f \| rev` *(not `rev.bytes`)* |
+| RC4 / AES / RSA decrypt | `rc4 key` / `aes …` / `rsa key.pem` |
+| Extract printable strings | `emit f \| carve printable` |
+| Carve embedded PE files | `emit f \| carve_pe` |
+| Carve by pattern type | `emit f \| carve <name>` (e.g. `carve b64`, `carve printable`) |
+| Extract URLs/IPs/emails/etc | `emit f \| xtp url,ip,email` |
+| PCAP → reassembled TCP payloads | `emit cap.pcap \| pcap` *(no separate `tcp` unit)* |
+| PCAP → HTTP objects | `emit cap.pcap \| pcap_http` |
+| PDF → extract objects/streams | `emit f.pdf \| xtpdf` *(not `pdf`)* |
+| PDF → text | `emit f.pdf \| xtpdf \| carve printable` |
+| Office doc text / VBA macros | `doctxt` / `xtdoc` / `vbastr` |
+| Email (.eml/.msg) attachments | `emit f.eml \| xtmail` |
+| LSB / image stego extraction | `emit img.png \| stego` *(`zsteg`/`stegsolve` are external)* |
+| Shannon entropy | `emit f \| peek` (entropy is in the header) |
+| Keep only some chunks | `pick 0` / `pick 2:` |
+| Conditional filter then process | `iff <cond> \| <unit>` |
+| Help for any unit | `<unit> --help` |
+
+:::note Stego
+Refinery's `stego` unit extracts image bitplanes (LSB-style). The classic CTF tools `zsteg` (Ruby) and `stegsolve` (Java) are **not** refinery units — run them separately.
+:::
+
+### Magic-Number Cheat
+
+`emit file | peek` prints the leading bytes — match them against this table to pick the right parser:
+
+| Type | Magic (hex) | ASCII |
+|------|-------------|-------|
+| PE / DOS executable | `4D 5A` | `MZ` |
+| ELF | `7F 45 4C 46` | `.ELF` |
+| Mach-O (64-bit LE) | `CF FA ED FE` | — |
+| ZIP / JAR / APK / Office (OOXML) | `50 4B 03 04` | `PK..` |
+| RAR | `52 61 72 21 1A 07` | `Rar!` |
+| 7-Zip | `37 7A BC AF 27 1C` | `7z…` |
+| GZIP | `1F 8B` | — |
+| BZIP2 | `42 5A 68` | `BZh` |
+| XZ | `FD 37 7A 58 5A` | `.7zXZ` |
+| Zlib | `78 01` / `78 9C` / `78 DA` | — |
+| PDF | `25 50 44 46` | `%PDF` |
+| PNG | `89 50 4E 47 0D 0A 1A 0A` | `.PNG` |
+| JPEG | `FF D8 FF` | — |
+| GIF | `47 49 46 38` | `GIF8` |
+| PCAP | `D4 C3 B2 A1` / `A1 B2 C3 D4` | — |
+| PCAPNG | `0A 0D 0D 0A` | — |
+| RIFF (WAV/AVI/WEBP) | `52 49 46 46` | `RIFF` |
+
+### Worked Pipelines
+
+```bash
+# PCAP → carve a PDF out of the stream → extract its text
+emit capture.pcap | pcap | carve_pdf | dump doc.pdf
+emit doc.pdf | xtpdf | carve printable
+
+# ZIP → XOR-decode inner blob → gzip inflate → flag
+emit archive.zip | xt data.bin | xor 0x42 | zl | peek
+
+# PNG → image stego → base64 → flag
+emit image.png | stego | b64 | peek
+```
 
 ## Installation & Setup
 
@@ -155,11 +267,11 @@ The `peek` unit provides comprehensive data analysis:
 # Basic inspection
 emit suspicious.bin | peek
 
-# Custom format inspection
-emit data.bin | peek --lines 20 --width 32
+# Custom format inspection (control the number of preview lines)
+emit data.bin | peek --lines 20
 
-# Entropy analysis
-emit encrypted.bin | peek --entropy
+# Entropy analysis (entropy is shown in peek's metadata header by default)
+emit encrypted.bin | peek
 ```
 
 ### String Operations
@@ -167,17 +279,15 @@ emit encrypted.bin | peek --entropy
 Extract and manipulate text data:
 
 ```bash
-# Extract all printable strings
-emit malware.exe | strings
+# Extract all printable strings (carve printable replaces the old `strings` unit)
+emit malware.exe | carve printable
 
-# Extract strings of minimum length 10
-emit binary | strings --min 10
+# Minimum match length (inherited PatternExtractor flag: --min / -n)
+emit binary | carve printable --min 10
 
-# Extract wide (Unicode) strings
-emit document.doc | strings --wide
-
-# Extract only ASCII strings
-emit data | strings --ascii
+# carve printable matches BOTH ASCII and UTF-16 (wide) by default.
+# Use -u / --no-ascii to search UTF-16-encoded patterns only:
+emit document.doc | carve printable -u
 ```
 
 ## Data Transformation & Encoding
@@ -199,9 +309,9 @@ emit "hello%20world" | url         # Decode
 emit "Hello" | hex                 # Encode to hex
 emit "48656c6c6f" | hex            # Decode from hex
 
-# HTML entity encoding
-emit "<script>" | html             # Encode
-emit "&lt;script&gt;" | html       # Decode
+# HTML entity encoding (htmlesc; there is no `html` unit)
+emit "<script>" | htmlesc -R        # Encode (escape entities)
+emit "&lt;script&gt;" | htmlesc     # Decode (unescape entities)
 ```
 
 ### Compression and Decompression
@@ -209,16 +319,16 @@ emit "&lt;script&gt;" | html       # Decode
 Handle various compression formats:
 
 ```bash
-# Zlib compression
-emit largefile.txt | zlib --encode
-emit compressed.zlib | zlib
+# Zlib compression (the `zl` unit handles zlib AND gzip; `-R` reverses to compress)
+emit largefile.txt | zl -R
+emit compressed.zlib | zl
 
-# Gzip compression
-emit data.txt | gz --encode
-emit archive.gz | gz
+# Gzip compression (use `-g` to emit a gzip header when compressing)
+emit data.txt | zl -gR
+emit archive.gz | zl
 
-# LZMA compression
-emit document.pdf | lzma --encode
+# LZMA compression (`-R` compresses, default decompresses)
+emit document.pdf | lzma -R
 emit compressed.xz | lzma
 ```
 
@@ -241,27 +351,28 @@ emit sensitive.txt | xor 0xAA | b64 | url
 Comprehensive PE file examination:
 
 ```bash
-# Basic PE metadata
+# Basic PE metadata (there is no `pe` unit; use pemeta and friends)
 emit malware.exe | pemeta
 
-# Import table analysis
-emit binary.exe | pe --imports
+# Import table analysis (pemeta -I lists imports; specify twice for addresses)
+emit binary.exe | pemeta -I
 
-# Export table analysis
-emit library.dll | pe --exports
+# Export table analysis (pemeta -E lists exports)
+emit library.dll | pemeta -E
 
-# Section information
-emit packed.exe | pe --sections
+# PE header base data — includes the section count (pemeta -B parses header base data only;
+# for a full per-section dump with raw size/entropy use `vsect <name>` or external pe-tree/readpe)
+emit packed.exe | pemeta -B
 
-# Calculate import hash (Imphash)
-emit sample.exe | pe --imphash
+# Calculate import hash (Imphash) — dedicated unit
+emit sample.exe | imphash
 
-# Extract specific sections
-emit executable.exe | pe --section .text
+# Extract a specific section by name (vsect carves PE/ELF sections)
+emit executable.exe | vsect .text
 
-# Resource extraction
-emit trojan.exe | pe --resources
-emit malware.exe | pe --resource 101  # Extract specific resource
+# Resource extraction (perc carves PE resources; it is a path-extractor)
+emit trojan.exe | perc
+emit malware.exe | perc *101*  # Select resources whose path matches
 ```
 
 ### OLE Document Analysis
@@ -269,17 +380,17 @@ emit malware.exe | pe --resource 101  # Extract specific resource
 Analyze Microsoft Office documents:
 
 ```bash
-# Map OLE structure
-emit document.doc | olemap
+# List OLE streams (xtdoc extracts OLE/OOXML streams; there is no `olemap`/`olet` unit)
+emit document.doc | xtdoc --list
 
-# Extract specific streams
-emit spreadsheet.xls | olet Workbook
+# Extract a specific stream by path
+emit spreadsheet.xls | xtdoc Workbook
 
-# Extract VBA macros
-emit macro-doc.doc | olet Macros/VBA/Module1
+# Extract VBA macro source (vbastr pulls macro strings, vbapc decompiles p-code)
+emit macro-doc.doc | vbastr
 
-# Complete macro analysis pipeline
-emit suspicious.doc | olet Macros/VBA/Module1 | strings | xtp url
+# Complete macro analysis pipeline (vbastr already yields macro text)
+emit suspicious.doc | vbastr | xtp url
 ```
 
 ### PDF Analysis
@@ -287,14 +398,14 @@ emit suspicious.doc | olet Macros/VBA/Module1 | strings | xtp url
 Examine PDF files for malicious content:
 
 ```bash
-# Extract JavaScript from PDF
-emit document.pdf | pdf --js
+# Extract objects/streams (incl. JavaScript) from a PDF — xtpdf, not `pdf`
+emit document.pdf | xtpdf
 
-# Extract embedded files
-emit suspicious.pdf | pdf --files
+# Extract embedded files (xtpdf yields each object/stream as a chunk)
+emit suspicious.pdf | xtpdf
 
-# Analyze PDF structure
-emit complex.pdf | pdf --structure
+# Inspect PDF structure (peek each extracted object)
+emit complex.pdf | xtpdf | peek
 ```
 
 ### Archive Analysis
@@ -302,17 +413,17 @@ emit complex.pdf | pdf --structure
 Handle various archive formats:
 
 ```bash
-# Extract ZIP contents
-emit archive.zip | unzip
+# Extract ZIP contents (xtzip, or the generic `xt`)
+emit archive.zip | xtzip
 
-# Password-protected archives
-emit protected.zip | unzip[password123]
+# Password-protected archives (-p sets the extraction password)
+emit protected.zip | xtzip -p password123
 
 # RAR archives
-emit data.rar | unrar
+emit data.rar | xtrar
 
 # 7-Zip archives
-emit compressed.7z | un7z
+emit compressed.7z | xt7z
 ```
 
 ## Advanced Deobfuscation Techniques
@@ -328,12 +439,12 @@ emit encrypted.bin | xor 0x42
 # Multi-byte XOR key
 emit payload.enc | xor "SecretKey"
 
-# XOR brute force (find unknown key)
-emit encoded.bin | xbr "MZ"        # Look for PE header
-emit data.enc | xbr --text         # Look for readable text
+# XOR key recovery (there is no `xbr`; xkey finds the key, autoxor finds AND applies it)
+emit encoded.bin | xkey -p MZ          # recover key from a known-plaintext crib (PE header)
+emit data.enc | autoxor                # auto-detect the key and decode readable text
 
-# Rolling XOR with pattern detection
-emit complex.enc | xbr --pattern "This program"
+# Recover a multi-byte key from a longer known-plaintext crib
+emit complex.enc | xkey -p "This program"
 ```
 
 ### Custom Deobfuscation
@@ -359,11 +470,11 @@ Handle layered obfuscation:
 # Three-layer deobfuscation
 emit triple-encoded.bin | xor 0xFF | b64 | url
 
-# Conditional deobfuscation
-emit payload.bin | iff peek:entropy[">7.5"] -- xor 0x42
+# Conditional deobfuscation (iff filters on a Python expression over metadata vars)
+emit payload.bin | iff "entropy > 7.5" | xor 0x42
 
-# Pattern-based deobfuscation
-emit mixed.bin | carve --pattern "ENCRYPTED" | xor "KEY"
+# Pattern-based deobfuscation (carve takes a format NAME, not a regex; use rex for custom patterns)
+emit mixed.bin | rex 'ENCRYPTED(.+)' '{1}' | xor KEY
 ```
 
 ## Malware Analysis Workflows
@@ -374,13 +485,13 @@ Rapid malware assessment:
 
 ```bash
 # Quick triage
-emit suspicious.exe | peek | pemeta | pe --imports
+emit suspicious.exe | peek | pemeta | pemeta -I
 
 # String-based IOC extraction
-emit malware.bin | strings | xtp url,ip,email,mutex
+emit malware.bin | carve printable | xtp url,ip,email,mutex
 
 # Entropy analysis for packed samples
-emit sample.exe | peek --entropy
+emit sample.exe | peek
 ```
 
 ### Configuration Extraction
@@ -388,14 +499,14 @@ emit sample.exe | peek --entropy
 Extract malware configuration data:
 
 ```bash
-# Extract config between delimiters
-emit bot.exe | carve -s "CONFIG_START" -e "CONFIG_END" | xor 0xAB | chop -z | pack
+# Extract config between delimiters (carve takes a format NAME, not -s/-e; use rex)
+emit bot.exe | rex 'CONFIG_START(.+?)CONFIG_END' '{1}' | xor 0xAB
 
 # Extract C2 servers from network config
-emit stealer.dll | strings | xtp url | grep -E "https?://"
+emit stealer.dll | carve printable | xtp url | grep -E "https?://"
 
 # Decode embedded strings
-emit crypter.exe | carve 1024 | xbr --text | strings --min 8
+emit crypter.exe | chop 1024 | autoxor | carve printable
 ```
 
 ### Payload Extraction
@@ -404,13 +515,13 @@ Extract embedded payloads:
 
 ```bash
 # Carve PE files from data
-emit dropper.bin | carve-pe | pemeta
+emit dropper.bin | carve_pe | pemeta
 
-# Extract from resources
-emit carrier.exe | pe --resource 101 | carve-pe
+# Extract from resources (perc carves PE resources by path)
+emit carrier.exe | perc *101* | carve_pe
 
 # Multi-stage payload extraction
-emit loader.exe | pe --resource PAYLOAD | xor 0xFF | zlib | pemeta
+emit loader.exe | perc *PAYLOAD* | xor 0xFF | zl | pemeta
 ```
 
 ## Network Traffic Analysis
@@ -422,20 +533,20 @@ Binary Refinery can extract and decode data from PCAP captures. For deeper Wires
 Analyze network captures:
 
 ```bash
-# List all TCP sessions
-emit capture.pcap | pcap --tcp
+# Reassemble all TCP conversations (pcap emits the stream parts by default)
+emit capture.pcap | pcap
 
-# Extract specific TCP stream
-emit traffic.pcap | pcap --tcp 0
+# Keep only one conversation (the `stream` meta var identifies each conversation)
+emit traffic.pcap | pcap | iff "stream == 0"
 
-# Extract HTTP objects
-emit network.pcap | pcap --http
+# Extract HTTP request/response objects (dedicated unit)
+emit network.pcap | pcap_http
 
-# Extract files from traffic
-emit capture.pcap | pcap --tcp | carve-pe
+# Carve files from the reassembled streams
+emit capture.pcap | pcap | carve_pe
 
 # Find URLs in traffic
-emit communication.pcap | pcap --tcp | strings | xtp url
+emit communication.pcap | pcap | carve printable | xtp url
 ```
 
 ### Protocol Analysis
@@ -443,14 +554,16 @@ emit communication.pcap | pcap --tcp | strings | xtp url
 Deep packet inspection:
 
 ```bash
-# DNS query analysis
-emit dns-traffic.pcap | pcap --dns
+# DNS query analysis — refinery's pcap has no DNS decoder; reassemble and pull
+# hostnames from the payloads (or use an external tool such as `tshark -Y dns`)
+emit dns-traffic.pcap | pcap | xtp domain
 
-# HTTP request/response analysis
-emit web-traffic.pcap | pcap --http | xtp url,ip
+# HTTP request/response analysis (pcap_http yields HTTP objects)
+emit web-traffic.pcap | pcap_http | xtp url,ip
 
-# TLS certificate extraction
-emit encrypted.pcap | pcap --tls-certs
+# TLS certificate extraction — no pcap TLS flag exists; carve DER certificates
+# from the reassembled stream (or use tshark/openssl)
+emit encrypted.pcap | pcap | carve_der
 ```
 
 ## Advanced Pipeline Management
@@ -460,34 +573,33 @@ emit encrypted.pcap | pcap --tls-certs
 Store and reuse data in pipelines:
 
 ```bash
-# Extract key and use for decryption
-emit encrypted.bin [|
-    carve 16 | var key |
-    tee |
-    aes ecb -k ref:key
-]
+# Store the 16-byte header as variable `key`, then AES-ECB decrypt the body.
+# There is no `var`/`tee` unit: store with `put`/`pop`, recall with the `var:` modifier.
+# The cipher key is a POSITIONAL argument (not `-k`); ECB is the default with no IV.
+emit encrypted.bin [| snip :16 | pop key | emit encrypted.bin | snip 16: | aes -m ECB var:key ]
 
-# Multi-key operations
-emit complex.enc [|
-    carve 32 | chop 16 [var key1, var key2] |
-    tee |
-    aes cbc -k ref:key1 -v ref:key2
-]
+# Two 16-byte values from a 32-byte header (AES key + IV), then CBC-decrypt the body.
+# `chop 16` splits the header into two chunks; `pop key iv` stores them in order.
+emit complex.enc [| snip :32 | chop 16 | pop key iv | emit complex.enc | snip 32: | aes -m CBC -i var:iv var:key ]
 ```
+
+:::note Verify frame semantics
+The pipelines above mirror refinery's documented multivar idiom (extract → `pop` into a variable → re-`emit` the data → recall with `var:`). Exact frame (`[| … ]`) and `pop` behaviour can vary between refinery releases — confirm against your installed version with `<unit> --help` before relying on it.
+:::
 
 ### Conditional Logic
 
 Implement branching logic:
 
 ```bash
-# Conditional processing based on file type
-emit unknown.bin | iff peek:magic["MZ"] -- pemeta
+# Conditional processing based on file type (reference the auto-derived `magic` var)
+emit unknown.bin | iff "'PE32' in magic" | pemeta
 
 # Process only if entropy is high
-emit sample.bin | iff peek:entropy[">7.0"] -- xor 0xFF
+emit sample.bin | iff "entropy > 7.0" | xor 0xFF
 
 # Multi-condition processing
-emit data.bin | iff peek:size[">1000"] and peek:entropy["<6.0"] -- strings
+emit data.bin | iff "size > 1000 and entropy < 6.0" | carve printable
 ```
 
 ### Frame Operations
@@ -495,14 +607,12 @@ emit data.bin | iff peek:size[">1000"] and peek:entropy["<6.0"] -- strings
 Manage complex data flows:
 
 ```bash
-# Process each carved section independently
-emit binary.bin | carve 1024 [pemeta]
+# Process each fixed-size block independently (chop splits into N-byte chunks)
+emit binary.bin | chop 1024 [| pemeta ]
 
-# Parallel processing with frames
-emit archive.zip | unzip [|
-    iff peek:magic["MZ"] -- pemeta |
-    iff peek:magic["PDF"] -- pdf --js
-]
+# Route extracted files by type — run one filtered pass per type
+emit archive.zip | xtzip [| iff "'PE32' in magic" | pemeta ]
+emit archive.zip | xtzip [| iff "'PDF' in magic" | xtpdf ]
 ```
 
 ## Real-World Case Studies
@@ -516,13 +626,13 @@ Complete email-to-payload analysis:
 emit phishing.eml | xtmail
 
 # Analyze ZIP attachment
-emit attachment.zip | unzip | peek
+emit attachment.zip | xtzip | peek
 
 # Examine LNK file
 emit invoice.lnk | lnk
 
 # Extract and decode PowerShell payload
-emit "powershell -enc <BASE64>" | carve --pattern "([A-Za-z0-9+/]{4})*[A-Za-z0-9+/]{2,3}=?" | b64
+emit "powershell -enc <BASE64>" | rex "([A-Za-z0-9+/]{4})*[A-Za-z0-9+/]{2,3}=?" | b64
 
 # Final payload analysis
 curl -s http://c2-server.com/payload.dat | xor 0xFF | pemeta
@@ -534,16 +644,16 @@ Analyze malicious document:
 
 ```bash
 # Map document structure
-emit malicious.doc | olemap
+emit malicious.doc | xtdoc --list
 
-# Extract macro code
-emit document.doc | olet Macros/VBA/Module1
+# Extract macro code (vbastr pulls VBA macro source/strings)
+emit document.doc | vbastr
 
-# Deobfuscate macro strings
-emit macro-code.vba | strings | xtp --decode b64,url,hex
+# Deobfuscate macro strings (carve base64 blobs and decode them; xtp has no --decode)
+emit macro-code.vba | carve b64 | b64
 
-# Extract embedded objects
-emit carrier.doc | olet ObjectPool/_1234567890/\x01Ole10Native | carve-pe
+# Extract embedded objects (xtdoc selects OLE streams by path; wildcards allowed)
+emit carrier.doc | xtdoc "ObjectPool/*/*Ole10Native*" | carve_pe
 ```
 
 ### Case Study 3: Memory Dump Analysis
@@ -552,16 +662,17 @@ Analyze process memory dumps:
 
 ```bash
 # Extract strings and URLs
-emit memory.dmp | strings --min 8 | xtp url,ip
+emit memory.dmp | carve printable --min 8 | xtp url,ip
 
 # Carve executables from memory
-emit process.dmp | carve-pe | pe --imphash
+emit process.dmp | carve_pe | imphash
 
 # Extract cryptographic keys
-emit memory.bin | carve --pattern "-----BEGIN.*KEY-----"
+emit memory.bin | rex "-----BEGIN.*KEY-----"
 
-# Find shellcode patterns
-emit dump.bin | carve 512 | sc --64
+# Disassemble candidate shellcode windows (asm disassembles; there is no `sc` unit —
+# for emulation use external scdbg/speakeasy). `asm x64` selects 64-bit mode.
+emit dump.bin | chop 512 [| asm x64 ]
 ```
 
 ## Specialized Malware Analysis
@@ -574,45 +685,45 @@ Modern cryptocurrency malware requires specialized analysis techniques to extrac
 
 ```bash
 # Extract Bitcoin addresses (Legacy, SegWit, Bech32)
-emit cryptominer.exe | strings | xtp --pattern "^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$|^bc1[a-z0-9]{39,59}$"
+emit cryptominer.exe | carve printable | rex "^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$|^bc1[a-z0-9]{39,59}$"
 
 # Extract Ethereum addresses
-emit cryptostealer.bin | strings | xtp --pattern "^0x[a-fA-F0-9]{40}$"
+emit cryptostealer.bin | carve printable | rex "^0x[a-fA-F0-9]{40}$"
 
 # Extract Monero addresses
-emit privacy-miner.exe | strings | xtp --pattern "^4[0-9AB][1-9A-HJ-NP-Za-km-z]{93}$"
+emit privacy-miner.exe | carve printable | rex "^4[0-9AB][1-9A-HJ-NP-Za-km-z]{93}$"
 
 # Multi-cryptocurrency extraction
-emit crypto-malware.dll | strings | xtp --pattern "^(1|3|bc1)[a-zA-Z0-9]{25,87}$|^0x[a-fA-F0-9]{40}$|^4[0-9AB][1-9A-HJ-NP-Za-km-z]{93}$"
+emit crypto-malware.dll | carve printable | rex "^(1|3|bc1)[a-zA-Z0-9]{25,87}$|^0x[a-fA-F0-9]{40}$|^4[0-9AB][1-9A-HJ-NP-Za-km-z]{93}$"
 ```
 
 #### Mining Configuration Analysis
 
 ```bash
 # Extract mining pool configurations
-emit cryptominer.bin | carve -s "POOL_CONFIG" -e "END_CONFIG" | xor 0x7F
+emit cryptominer.bin | rex 'POOL_CONFIG(.+?)END_CONFIG' '{1}' | xor 0x7F
 
 # Find mining algorithm specifications
-emit miner.exe | strings | grep -E "(cryptonight|ethash|kawpow|randomx)"
+emit miner.exe | carve printable | grep -E "(cryptonight|ethash|kawpow|randomx)"
 
 # Extract mining intensity settings
-emit gpu-miner.bin | strings | xtp --pattern "intensity.*[0-9]+|threads.*[0-9]+"
+emit gpu-miner.bin | carve printable | rex "intensity.*[0-9]+|threads.*[0-9]+"
 
 # Decode stratum protocol configurations
-emit poolminer.exe | strings | xtp --pattern "stratum\+tcp://.*:[0-9]+"
+emit poolminer.exe | carve printable | rex "stratum\+tcp://.*:[0-9]+"
 ```
 
 #### Blockchain Transaction Analysis
 
 ```bash
 # Extract transaction IDs
-emit blockchain-malware.exe | strings | xtp --pattern "^[a-fA-F0-9]{64}$"
+emit blockchain-malware.exe | carve printable | rex "^[a-fA-F0-9]{64}$"
 
 # Find smart contract addresses
-emit defi-malware.bin | strings | xtp --pattern "^0x[a-fA-F0-9]{40}$" | grep -v "^0x0000"
+emit defi-malware.bin | carve printable | rex "^0x[a-fA-F0-9]{40}$" | grep -v "^0x0000"
 
 # Extract private key patterns
-emit wallet-stealer.dll | strings | xtp --pattern "^[5KL][1-9A-HJ-NP-Za-km-z]{50,51}$"
+emit wallet-stealer.dll | carve printable | rex "^[5KL][1-9A-HJ-NP-Za-km-z]{50,51}$"
 ```
 
 ### Ransomware Analysis Workflows
@@ -622,46 +733,46 @@ Comprehensive ransomware analysis focusing on encryption mechanisms, ransom dema
 #### Ransom Note Extraction
 
 ```bash
-# Extract embedded ransom notes
-emit ransomware.exe | pe --resource RANSOM_NOTE | strings --unicode
+# Extract embedded ransom notes (perc carves resources by path)
+emit ransomware.exe | perc *RANSOM_NOTE* | carve printable
 
-# Find ransom note templates in data sections
-emit locker.bin | pe --section .rdata | strings | grep -A 10 -B 2 -E "(bitcoin|payment|decrypt)"
+# Find ransom note templates in data sections (vsect extracts a named section)
+emit locker.bin | vsect .rdata | carve printable | grep -A 10 -B 2 -E "(bitcoin|payment|decrypt)"
 
 # Extract HTML ransom pages
-emit web-locker.exe | carve --pattern "<!DOCTYPE html>" --end "</html>"
+emit web-locker.exe | rex '(?s)<!DOCTYPE html>.*?</html>'
 
 # Multi-language ransom note extraction
-emit international-ransomware.dll | strings --unicode | grep -E "(bitcoin|оплата|支付|pago)"
+emit international-ransomware.dll | carve printable | grep -E "(bitcoin|оплата|支付|pago)"
 ```
 
 #### Encryption Analysis
 
 ```bash
 # Find encryption key derivation functions
-emit crypto-ransomware.exe | strings | xtp --pattern "pbkdf2|scrypt|argon2|bcrypt"
+emit crypto-ransomware.exe | carve printable | rex "pbkdf2|scrypt|argon2|bcrypt"
 
 # Extract encryption algorithm indicators
-emit encryption-module.dll | strings | grep -E "(aes|chacha|salsa|rsa)"
+emit encryption-module.dll | carve printable | grep -E "(aes|chacha|salsa|rsa)"
 
 # Find key generation seeds
-emit keygen.bin | strings | xtp --pattern "[a-fA-F0-9]{32,128}"
+emit keygen.bin | carve printable | rex "[a-fA-F0-9]{32,128}"
 
 # Analyze file extension targets
-emit file-locker.exe | strings | xtp --pattern "\.(doc|pdf|jpg|xlsx|ppt|zip|rar|7z|txt|csv)$"
+emit file-locker.exe | carve printable | rex "\.(doc|pdf|jpg|xlsx|ppt|zip|rar|7z|txt|csv)$"
 ```
 
 #### C2 Communication Analysis
 
 ```bash
 # Extract payment verification endpoints
-emit ransomware-c2.bin | strings | xtp url | grep -E "(payment|verify|status|check)"
+emit ransomware-c2.bin | carve printable | xtp url | grep -E "(payment|verify|status|check)"
 
 # Find Tor onion addresses
-emit dark-ransomware.exe | strings | xtp --pattern "[a-z2-7]{16,56}\.onion"
+emit dark-ransomware.exe | carve printable | rex "[a-z2-7]{16,56}\.onion"
 
 # Extract victim identification mechanisms
-emit victim-id.dll | strings | xtp --pattern "(victim|id|machine).*[a-fA-F0-9]{8,32}"
+emit victim-id.dll | carve printable | rex "(victim|id|machine).*[a-fA-F0-9]{8,32}"
 ```
 
 ### Information Stealer Analysis
@@ -672,45 +783,45 @@ Modern information stealers target browsers, applications, and system credential
 
 ```bash
 # Extract browser path configurations
-emit stealer.exe | strings | xtp --pattern "\\\\(Chrome|Firefox|Edge|Opera|Safari)\\\\.*"
+emit stealer.exe | carve printable | rex "\\\\(Chrome|Firefox|Edge|Opera|Safari)\\\\.*"
 
 # Find browser database targeting
-emit browser-stealer.bin | strings | grep -E "(Login Data|cookies|Web Data|History)"
+emit browser-stealer.bin | carve printable | grep -E "(Login Data|cookies|Web Data|History)"
 
 # Extract browser extension targeting
-emit extension-thief.dll | strings | xtp --pattern "chrome-extension://[a-z]{32}"
+emit extension-thief.dll | carve printable | rex "chrome-extension://[a-z]{32}"
 
 # Cryptocurrency wallet browser extension patterns
-emit crypto-stealer.exe | strings | grep -E "(metamask|ledger|trezor|exodus)"
+emit crypto-stealer.exe | carve printable | grep -E "(metamask|ledger|trezor|exodus)"
 ```
 
 #### Application Credential Harvesting
 
 ```bash
 # Discord token extraction patterns
-emit discord-stealer.bin | strings | xtp --pattern "[MN][A-Za-z\d]{23}\.[X-Za-z\d]{6}\.[A-Za-z\d]{27}"
+emit discord-stealer.bin | carve printable | rex "[MN][A-Za-z\d]{23}\.[X-Za-z\d]{6}\.[A-Za-z\d]{27}"
 
 # Telegram session harvesting
-emit telegram-thief.exe | strings | xtp --pattern "tdata\\\\.*\\\\key_data"
+emit telegram-thief.exe | carve printable | rex "tdata\\\\.*\\\\key_data"
 
 # Gaming platform credentials
-emit game-stealer.dll | strings | grep -E "(steam|origin|uplay|battle\.net)"
+emit game-stealer.dll | carve printable | grep -E "(steam|origin|uplay|battle\.net)"
 
 # Email client targeting
-emit mail-stealer.bin | strings | grep -E "(outlook|thunderbird|mailbird).*password"
+emit mail-stealer.bin | carve printable | grep -E "(outlook|thunderbird|mailbird).*password"
 ```
 
 #### System Information Collection
 
 ```bash
 # Hardware fingerprinting
-emit hwid-collector.exe | strings | grep -E "(wmic|systeminfo|dxdiag)"
+emit hwid-collector.exe | carve printable | grep -E "(wmic|systeminfo|dxdiag)"
 
 # Network configuration harvesting
-emit network-stealer.bin | strings | grep -E "(ipconfig|netstat|arp|route)"
+emit network-stealer.bin | carve printable | grep -E "(ipconfig|netstat|arp|route)"
 
 # Installed software enumeration
-emit software-enum.dll | strings | grep -E "SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall"
+emit software-enum.dll | carve printable | grep -E "SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall"
 ```
 
 ### Mobile Malware (APK Analysis)
@@ -720,43 +831,44 @@ Android malware analysis requires specialized techniques for APK file structures
 #### APK Structure Analysis
 
 ```bash
-# Extract DEX files from APK
-emit malware.apk | unzip | peek --pattern "classes.*\.dex"
+# Extract DEX files from APK (xt selects archive members by path/glob)
+emit malware.apk | xt "classes*.dex"
 
-# Analyze Android manifest
-emit suspicious.apk | unzip AndroidManifest.xml | xml --decode
+# Analyze Android manifest (binary AXML needs an external decoder such as apktool;
+# xtxml only parses plain-text XML)
+emit suspicious.apk | xt AndroidManifest.xml | xtxml
 
 # Extract native libraries
-emit banking-trojan.apk | unzip | carve --pattern "lib/.*\.so$"
+emit banking-trojan.apk | xt "lib/*.so"
 
 # Find asset files and configurations
-emit mobile-malware.apk | unzip assets/ | peek
+emit mobile-malware.apk | xt "assets/*" | peek
 ```
 
 #### Permissions and Capabilities Analysis
 
 ```bash
 # Extract dangerous permissions
-emit trojan.apk | unzip AndroidManifest.xml | xml | grep -E "(SEND_SMS|CALL_PHONE|ACCESS_FINE_LOCATION|CAMERA)"
+emit trojan.apk | xt AndroidManifest.xml | xtxml | grep -E "(SEND_SMS|CALL_PHONE|ACCESS_FINE_LOCATION|CAMERA)"
 
 # Find service and receiver declarations
-emit persistent-malware.apk | unzip AndroidManifest.xml | xml | grep -E "(service|receiver).*android:name"
+emit persistent-malware.apk | xt AndroidManifest.xml | xtxml | grep -E "(service|receiver).*android:name"
 
 # Extract intent filters
-emit intent-malware.apk | unzip AndroidManifest.xml | xml | grep -A 5 "intent-filter"
+emit intent-malware.apk | xt AndroidManifest.xml | xtxml | grep -A 5 "intent-filter"
 ```
 
 #### Code Analysis
 
 ```bash
 # Extract string resources
-emit localized-malware.apk | unzip res/values/strings.xml | xml
+emit localized-malware.apk | xt res/values/strings.xml | xtxml
 
-# Find URLs in DEX files
-emit network-malware.apk | unzip classes.dex | strings | xtp url
+# Find URLs in DEX files (dexstr extracts the string pool from a DEX)
+emit network-malware.apk | xt classes.dex | dexstr | xtp url
 
 # Extract obfuscated strings
-emit obfuscated.apk | unzip classes.dex | strings | b64 --decode 2>/dev/null || true
+emit obfuscated.apk | xt classes.dex | dexstr | b64 2>/dev/null || true
 ```
 
 ### Firmware and IoT Malware Analysis
@@ -767,42 +879,42 @@ Embedded systems and IoT devices present unique analysis challenges requiring sp
 
 ```bash
 # Extract filesystem from firmware
-emit router-firmware.bin | carve --pattern "hsqs|cramfs|jffs2|ubifs"
+emit router-firmware.bin | rex "hsqs|cramfs|jffs2|ubifs"
 
 # Find bootloader and kernel sections
-emit iot-firmware.bin | carve --pattern "U-Boot|Linux version"
+emit iot-firmware.bin | rex "U-Boot|Linux version"
 
 # Extract configuration partitions
-emit device-fw.bin | carve --pattern "config|nvram|settings"
+emit device-fw.bin | rex "config|nvram|settings"
 ```
 
 #### Embedded Certificate and Key Analysis
 
 ```bash
-# Find embedded certificates
-emit iot-device.fw | carve --pattern "-----BEGIN CERTIFICATE-----" --end "-----END CERTIFICATE-----"
+# Find embedded certificates (carve has a dedicated `pem` format for PEM blocks)
+emit iot-device.fw | carve pem
 
-# Extract private keys
-emit embedded-system.bin | carve --pattern "-----BEGIN.*PRIVATE KEY-----" --end "-----END.*PRIVATE KEY-----"
+# Extract private keys (PEM private keys are also matched by the `pem` format)
+emit embedded-system.bin | carve pem
 
 # Find hardcoded credentials
-emit firmware.bin | strings | xtp --pattern "(username|password|api_key|secret)\s*[:=]\s*\S+"
+emit firmware.bin | carve printable | rex "(username|password|api_key|secret)\s*[:=]\s*\S+"
 
 # Extract SSH host keys
-emit ssh-firmware.bin | carve --pattern "ssh-(rsa|dss|ed25519)" | b64
+emit ssh-firmware.bin | rex "ssh-(rsa|dss|ed25519)" | b64
 ```
 
 #### Network Configuration Analysis
 
 ```bash
 # Extract Wi-Fi configurations
-emit wifi-firmware.bin | strings | grep -E "(ssid|psk|wpa|wep)"
+emit wifi-firmware.bin | carve printable | grep -E "(ssid|psk|wpa|wep)"
 
 # Find hardcoded IP addresses and domains
-emit network-device.fw | strings | xtp ip,domain
+emit network-device.fw | carve printable | xtp ip,domain
 
 # Extract SNMP community strings
-emit managed-device.bin | strings | grep -E "(public|private|community)"
+emit managed-device.bin | carve printable | grep -E "(public|private|community)"
 ```
 
 ## Advanced Threat Detection
@@ -815,45 +927,45 @@ Modern attacks increasingly use fileless techniques, requiring memory-based anal
 
 ```bash
 # Extract PowerShell commands from memory
-emit memory.dmp | strings | carve --pattern "powershell.*(-enc|-e|-encodedcommand)" | b64
+emit memory.dmp | carve printable | rex "powershell.*(-enc|-e|-encodedcommand)" | b64
 
 # Decode nested PowerShell obfuscation
-emit ps-payload.txt | url | b64 | carve --pattern "powershell" | b64
+emit ps-payload.txt | url | b64 | rex "powershell" | b64
 
 # Find PowerShell download cradles
-emit memory-dump.bin | strings | grep -E "(IEX|Invoke-Expression).*(DownloadString|WebClient)"
+emit memory-dump.bin | carve printable | grep -E "(IEX|Invoke-Expression).*(DownloadString|WebClient)"
 
 # Extract PowerShell Empire stagers
-emit empire-stager.ps1 | strings | xtp --pattern "http.*\/[a-zA-Z0-9]{8,}"
+emit empire-stager.ps1 | carve printable | rex "http.*\/[a-zA-Z0-9]{8,}"
 ```
 
 #### WMI Persistence Analysis
 
 ```bash
 # Extract WMI event subscriptions
-emit registry.hive | strings | grep -E "SELECT.*FROM.*Win32_.*Event"
+emit registry.hive | carve printable | grep -E "SELECT.*FROM.*Win32_.*Event"
 
 # Find WMI command execution
-emit wmi-persistence.bin | strings | grep -E "(wmic|winmgmt).*process.*call.*create"
+emit wmi-persistence.bin | carve printable | grep -E "(wmic|winmgmt).*process.*call.*create"
 
 # Analyze WMI repository artifacts
-emit wmi-repo.bin | carve --pattern "root\\\\subscription"
+emit wmi-repo.bin | rex "root\\\\subscription"
 ```
 
 #### Living-off-the-Land Binary Abuse
 
 ```bash
 # Detect certutil abuse
-emit system-logs.bin | strings | grep -E "certutil.*(-decode|-urlcache).*http"
+emit system-logs.bin | carve printable | grep -E "certutil.*(-decode|-urlcache).*http"
 
 # Find bitsadmin download activities
-emit network-logs.txt | strings | grep -E "bitsadmin.*\/transfer.*http"
+emit network-logs.txt | carve printable | grep -E "bitsadmin.*\/transfer.*http"
 
 # Detect regsvr32 script execution
-emit process-monitor.log | strings | grep -E "regsvr32.*scrobj\.dll.*http"
+emit process-monitor.log | carve printable | grep -E "regsvr32.*scrobj\.dll.*http"
 
 # PowerShell + Living-off-the-land combination
-emit suspicious-activity.bin | strings | grep -E "powershell.*certutil|bitsadmin.*powershell"
+emit suspicious-activity.bin | carve printable | grep -E "powershell.*certutil|bitsadmin.*powershell"
 ```
 
 ### Advanced Evasion Techniques
@@ -862,48 +974,48 @@ emit suspicious-activity.bin | strings | grep -E "powershell.*certutil|bitsadmin
 
 ```bash
 # Extract potential DGA domains
-emit dga-malware.exe | strings | xtp --pattern "[a-z]{8,16}\.(com|net|org|biz|info)"
+emit dga-malware.exe | carve printable | rex "[a-z]{8,16}\.(com|net|org|biz|info)"
 
 # Find DGA seed values
-emit domain-generator.bin | strings | xtp --pattern "seed.*[0-9]{8,10}"
+emit domain-generator.bin | carve printable | rex "seed.*[0-9]{8,10}"
 
 # Analyze date-based DGA patterns
-emit time-based-dga.exe | strings | grep -E "(GetSystemTime|time|date)"
+emit time-based-dga.exe | carve printable | grep -E "(GetSystemTime|time|date)"
 
 # Extract hard-coded fallback domains
-emit backup-domains.dll | strings | xtp domain | grep -v -E "[a-z]{8,16}\.(com|net|org)"
+emit backup-domains.dll | carve printable | xtp domain | grep -v -E "[a-z]{8,16}\.(com|net|org)"
 ```
 
 #### Anti-Analysis Detection
 
 ```bash
 # Find VM detection strings
-emit evasive-malware.exe | strings | xtp --pattern "(vmware|virtualbox|qemu|xen|hyperv)"
+emit evasive-malware.exe | carve printable | rex "(vmware|virtualbox|qemu|xen|hyperv)"
 
 # Detect debugger checks
-emit anti-debug.bin | strings | grep -E "(IsDebuggerPresent|CheckRemoteDebugger|ZwQueryInformation)"
+emit anti-debug.bin | carve printable | grep -E "(IsDebuggerPresent|CheckRemoteDebugger|ZwQueryInformation)"
 
 # Find sandbox evasion techniques
-emit sandbox-aware.dll | strings | grep -E "(sleep|delay|mouse|cursor|window)"
+emit sandbox-aware.dll | carve printable | grep -E "(sleep|delay|mouse|cursor|window)"
 
 # Extract environment checks
-emit env-checker.exe | strings | grep -E "(username|computername|domain)" | grep -v -E "(user|computer|workgroup)"
+emit env-checker.exe | carve printable | grep -E "(username|computername|domain)" | grep -v -E "(user|computer|workgroup)"
 ```
 
 #### Process Injection Techniques
 
 ```bash
 # Detect process hollowing indicators
-emit hollowing-malware.exe | strings | grep -E "(NtUnmapViewOfSection|CreateProcess.*SUSPENDED)"
+emit hollowing-malware.exe | carve printable | grep -E "(NtUnmapViewOfSection|CreateProcess.*SUSPENDED)"
 
 # Find DLL injection patterns
-emit dll-injector.bin | strings | grep -E "(LoadLibrary|GetProcAddress|WriteProcessMemory)"
+emit dll-injector.bin | carve printable | grep -E "(LoadLibrary|GetProcAddress|WriteProcessMemory)"
 
 # Extract reflective DLL loading
-emit reflective-dll.bin | strings | grep -E "(VirtualAlloc|ReflectiveLoader)"
+emit reflective-dll.bin | carve printable | grep -E "(VirtualAlloc|ReflectiveLoader)"
 
 # Analyze atom bombing techniques
-emit atom-bomber.exe | strings | grep -E "(GlobalAddAtom|SetWindowLong|CallWindowProc)"
+emit atom-bomber.exe | carve printable | grep -E "(GlobalAddAtom|SetWindowLong|CallWindowProc)"
 ```
 
 ### Supply Chain Attack Analysis
@@ -912,7 +1024,7 @@ emit atom-bomber.exe | strings | grep -E "(GlobalAddAtom|SetWindowLong|CallWindo
 
 ```bash
 # Extract raw DER signature from PE (Binary Refinery unit: pesig)
-emit signed-malware.exe | pesig | carve --pattern "-----BEGIN CERTIFICATE-----"
+emit signed-malware.exe | pesig | dump signature.der
 
 # Verify certificate chains (pipe pesig output to openssl)
 emit suspicious-signed.dll | pesig | openssl pkcs7 -inform DER -print_certs -noout
@@ -933,10 +1045,10 @@ for line in sys.stdin:
 
 ```bash
 # Extract build paths and environments
-emit compiled-malware.exe | strings | grep -E "(C:\\\\.*\\\\(src|build|debug|release))"
+emit compiled-malware.exe | carve printable | grep -E "(C:\\\\.*\\\\(src|build|debug|release))"
 
 # Find compiler and toolchain information
-emit binary.dll | strings | grep -E "(Microsoft|GNU|Clang|Visual Studio)"
+emit binary.dll | carve printable | grep -E "(Microsoft|GNU|Clang|Visual Studio)"
 
 # Analyze debug information (pemeta -D parses PDB path from debug directory)
 emit debug-info.exe | pemeta -D
@@ -949,13 +1061,13 @@ emit version-spoofed.dll | pemeta -V | grep -E "(FileVersion|ProductVersion)"
 
 ```bash
 # Find suspicious import patterns
-emit trojanized-lib.dll | pe --imports | grep -E "(LoadLibrary|GetProcAddress)" -A 5 -B 5
+emit trojanized-lib.dll | pemeta -I | grep -E "(LoadLibrary|GetProcAddress)" -A 5 -B 5
 
 # Analyze export functions for backdoors
-emit compromised.dll | pe --exports | grep -v -E "^(Dll|_)"
+emit compromised.dll | pemeta -E | grep -v -E "^(Dll|_)"
 
 # Extract resource manipulation
-emit resource-tampered.exe | pe --resources | grep -E "(RT_RCDATA|RT_HTML|RT_MANIFEST)"
+emit resource-tampered.exe | perc | grep -E "(RT_RCDATA|RT_HTML|RT_MANIFEST)"
 ```
 
 ## Automated Analysis & Response
@@ -988,41 +1100,41 @@ echo "=========================================" | tee -a "$OUTPUT_DIR/analysis.
 echo "[+] Basic file analysis..." | tee -a "$OUTPUT_DIR/analysis.log"
 file "$SAMPLE" > "$OUTPUT_DIR/basic/file_type.txt"
 emit "$SAMPLE" | peek > "$OUTPUT_DIR/basic/overview.txt"
-emit "$SAMPLE" | peek --entropy > "$OUTPUT_DIR/basic/entropy.txt"
+emit "$SAMPLE" | peek > "$OUTPUT_DIR/basic/entropy.txt"
 
 # Extract network indicators
 echo "[+] Extracting network IOCs..." | tee -a "$OUTPUT_DIR/analysis.log"
-emit "$SAMPLE" | strings | xtp url > "$OUTPUT_DIR/network/urls.txt"
-emit "$SAMPLE" | strings | xtp ip > "$OUTPUT_DIR/network/ips.txt"
-emit "$SAMPLE" | strings | xtp email > "$OUTPUT_DIR/network/emails.txt"
-emit "$SAMPLE" | strings | xtp domain > "$OUTPUT_DIR/network/domains.txt"
+emit "$SAMPLE" | carve printable | xtp url > "$OUTPUT_DIR/network/urls.txt"
+emit "$SAMPLE" | carve printable | xtp ip > "$OUTPUT_DIR/network/ips.txt"
+emit "$SAMPLE" | carve printable | xtp email > "$OUTPUT_DIR/network/emails.txt"
+emit "$SAMPLE" | carve printable | xtp domain > "$OUTPUT_DIR/network/domains.txt"
 
 # Cryptocurrency indicators
 echo "[+] Extracting cryptocurrency indicators..." | tee -a "$OUTPUT_DIR/analysis.log"
-emit "$SAMPLE" | strings | xtp --pattern "^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$|^bc1[a-z0-9]{39,59}$|^0x[a-fA-F0-9]{40}$" > "$OUTPUT_DIR/network/crypto_addresses.txt"
+emit "$SAMPLE" | carve printable | rex "^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$|^bc1[a-z0-9]{39,59}$|^0x[a-fA-F0-9]{40}$" > "$OUTPUT_DIR/network/crypto_addresses.txt"
 
 # Hash extraction
 echo "[+] Extracting hash values..." | tee -a "$OUTPUT_DIR/analysis.log"
-emit "$SAMPLE" | strings | xtp --pattern "\\b[A-Fa-f0-9]{32}\\b" > "$OUTPUT_DIR/signatures/md5_hashes.txt"
-emit "$SAMPLE" | strings | xtp --pattern "\\b[A-Fa-f0-9]{40}\\b" > "$OUTPUT_DIR/signatures/sha1_hashes.txt"
-emit "$SAMPLE" | strings | xtp --pattern "\\b[A-Fa-f0-9]{64}\\b" > "$OUTPUT_DIR/signatures/sha256_hashes.txt"
+emit "$SAMPLE" | carve printable | rex "\\b[A-Fa-f0-9]{32}\\b" > "$OUTPUT_DIR/signatures/md5_hashes.txt"
+emit "$SAMPLE" | carve printable | rex "\\b[A-Fa-f0-9]{40}\\b" > "$OUTPUT_DIR/signatures/sha1_hashes.txt"
+emit "$SAMPLE" | carve printable | rex "\\b[A-Fa-f0-9]{64}\\b" > "$OUTPUT_DIR/signatures/sha256_hashes.txt"
 
 # PE analysis if applicable
 if emit "$SAMPLE" | peek | grep -q "PE32"; then
     echo "[+] PE file detected - performing PE analysis..." | tee -a "$OUTPUT_DIR/analysis.log"
     
     emit "$SAMPLE" | pemeta > "$OUTPUT_DIR/basic/pe_metadata.txt"
-    emit "$SAMPLE" | pe --imphash > "$OUTPUT_DIR/signatures/imphash.txt"
-    emit "$SAMPLE" | pe --imports > "$OUTPUT_DIR/basic/imports.txt"
-    emit "$SAMPLE" | pe --exports > "$OUTPUT_DIR/basic/exports.txt"
-    emit "$SAMPLE" | pe --sections > "$OUTPUT_DIR/basic/sections.txt"
-    emit "$SAMPLE" | pe --resources > "$OUTPUT_DIR/basic/resources.txt"
+    emit "$SAMPLE" | imphash > "$OUTPUT_DIR/signatures/imphash.txt"
+    emit "$SAMPLE" | pemeta -I > "$OUTPUT_DIR/basic/imports.txt"
+    emit "$SAMPLE" | pemeta -E > "$OUTPUT_DIR/basic/exports.txt"
+    emit "$SAMPLE" | pemeta -B > "$OUTPUT_DIR/basic/pe_header.txt"   # header base data (incl. section count)
+    emit "$SAMPLE" | perc > "$OUTPUT_DIR/basic/resources.txt"
     
-    # Extract certificates if present
-    emit "$SAMPLE" | pe --certificates > "$OUTPUT_DIR/signatures/certificates.txt" 2>/dev/null
+    # Extract certificates if present (pesig dumps the raw DER Authenticode signature)
+    emit "$SAMPLE" | pesig > "$OUTPUT_DIR/signatures/certificates.txt" 2>/dev/null
     
     # Check for packed executables
-    ENTROPY=$(emit "$SAMPLE" | peek --entropy | grep "entropy" | cut -d':' -f2 | tr -d ' ')
+    ENTROPY=$(emit "$SAMPLE" | peek | grep "entropy" | cut -d':' -f2 | tr -d ' ')
     if (( $(echo "$ENTROPY > 7.0" | bc -l) )); then
         echo "[!] High entropy detected ($ENTROPY) - possibly packed" | tee -a "$OUTPUT_DIR/analysis.log"
         echo "PACKED_SUSPICIOUS" > "$OUTPUT_DIR/behavior/packing_status.txt"
@@ -1031,19 +1143,19 @@ fi
 
 # String analysis for behavioral indicators
 echo "[+] Behavioral analysis..." | tee -a "$OUTPUT_DIR/analysis.log"
-emit "$SAMPLE" | strings --min 8 | grep -i -E "(password|key|secret|token)" > "$OUTPUT_DIR/behavior/credentials.txt"
-emit "$SAMPLE" | strings | grep -i -E "(mutex|event|semaphore)" > "$OUTPUT_DIR/behavior/synchronization.txt"
-emit "$SAMPLE" | strings | grep -i -E "(registry|regedit|hkey)" > "$OUTPUT_DIR/behavior/registry.txt"
-emit "$SAMPLE" | strings | grep -i -E "(service|scm|svchost)" > "$OUTPUT_DIR/behavior/services.txt"
-emit "$SAMPLE" | strings | grep -i -E "(process|thread|inject)" > "$OUTPUT_DIR/behavior/process_ops.txt"
+emit "$SAMPLE" | carve printable --min 8 | grep -i -E "(password|key|secret|token)" > "$OUTPUT_DIR/behavior/credentials.txt"
+emit "$SAMPLE" | carve printable | grep -i -E "(mutex|event|semaphore)" > "$OUTPUT_DIR/behavior/synchronization.txt"
+emit "$SAMPLE" | carve printable | grep -i -E "(registry|regedit|hkey)" > "$OUTPUT_DIR/behavior/registry.txt"
+emit "$SAMPLE" | carve printable | grep -i -E "(service|scm|svchost)" > "$OUTPUT_DIR/behavior/services.txt"
+emit "$SAMPLE" | carve printable | grep -i -E "(process|thread|inject)" > "$OUTPUT_DIR/behavior/process_ops.txt"
 
 # Anti-analysis detection
 echo "[+] Anti-analysis detection..." | tee -a "$OUTPUT_DIR/analysis.log"
-emit "$SAMPLE" | strings | grep -i -E "(vmware|virtualbox|sandbox|debug|olly|ida)" > "$OUTPUT_DIR/behavior/anti_analysis.txt"
+emit "$SAMPLE" | carve printable | grep -i -E "(vmware|virtualbox|sandbox|debug|olly|ida)" > "$OUTPUT_DIR/behavior/anti_analysis.txt"
 
 # Generate YARA-ready strings
 echo "[+] Generating signature strings..." | tee -a "$OUTPUT_DIR/analysis.log"
-emit "$SAMPLE" | strings --min 8 | sort | uniq -c | sort -nr | head -50 > "$OUTPUT_DIR/signatures/top_strings.txt"
+emit "$SAMPLE" | carve printable --min 8 | sort | uniq -c | sort -nr | head -50 > "$OUTPUT_DIR/signatures/top_strings.txt"
 
 # Summary report
 echo "[+] Generating summary report..." | tee -a "$OUTPUT_DIR/analysis.log"
@@ -1107,13 +1219,13 @@ for sample in "$SAMPLES_DIR"/*.{exe,dll,bin,dat}; do
         echo "Sample: $(basename "$sample") | Hash: $SAMPLE_HASH" >> "$BATCH_OUTPUT/batch_summary.txt"
         
         # Extract key indicators
-        emit "$sample" | strings | xtp url | head -5 >> "$BATCH_OUTPUT/urls_all.txt"
-        emit "$sample" | strings | xtp ip | head -5 >> "$BATCH_OUTPUT/ips_all.txt"
+        emit "$sample" | carve printable | xtp url | head -5 >> "$BATCH_OUTPUT/urls_all.txt"
+        emit "$sample" | carve printable | xtp ip | head -5 >> "$BATCH_OUTPUT/ips_all.txt"
         
         # PE analysis if applicable
         if emit "$sample" | peek | grep -q "PE32"; then
-            emit "$sample" | pe --imphash >> "$BATCH_OUTPUT/imphashes.txt"
-            echo "$(basename "$sample"):$(emit "$sample" | pe --imphash)" >> "$BATCH_OUTPUT/sample_imphashes.txt"
+            emit "$sample" | imphash >> "$BATCH_OUTPUT/imphashes.txt"
+            echo "$(basename "$sample"):$(emit "$sample" | imphash)" >> "$BATCH_OUTPUT/sample_imphashes.txt"
         fi
         
         echo "---" >> "$BATCH_OUTPUT/batch_summary.txt"
@@ -1153,7 +1265,7 @@ echo "=== THREAT HUNTING ANALYSIS ===" | tee "$OUTPUT/hunt_log.txt"
 echo "[+] Extracting strings from all samples..." | tee -a "$OUTPUT/hunt_log.txt"
 find "$HUNT_DIR" -type f \( -name "*.exe" -o -name "*.dll" -o -name "*.bin" \) | while read sample; do
     HASH=$(sha256sum "$sample" | cut -d' ' -f1 | cut -c1-8)
-    emit "$sample" | strings --min 8 > "$OUTPUT/patterns/strings_$HASH.txt"
+    emit "$sample" | carve printable --min 8 > "$OUTPUT/patterns/strings_$HASH.txt"
     echo "$HASH:$(basename "$sample")" >> "$OUTPUT/sample_index.txt"
 done
 
@@ -1168,7 +1280,7 @@ awk '$1 > 2 && length($0) > 20 {print $0}' "$OUTPUT/correlations/string_frequenc
 echo "[+] Network pattern analysis..." | tee -a "$OUTPUT/hunt_log.txt"
 find "$HUNT_DIR" -type f \( -name "*.exe" -o -name "*.dll" -o -name "*.bin" \) | while read sample; do
     HASH=$(sha256sum "$sample" | cut -d' ' -f1 | cut -c1-8)
-    emit "$sample" | strings | xtp url,ip,domain >> "$OUTPUT/correlations/all_network_iocs.txt"
+    emit "$sample" | carve printable | xtp url,ip,domain >> "$OUTPUT/correlations/all_network_iocs.txt"
 done
 
 # Find IOC patterns
@@ -1196,51 +1308,51 @@ echo "[+] Threat hunting analysis complete: $OUTPUT"
 
 ```bash
 # Container escape detection
-emit container-malware.bin | strings | xtp --pattern "/proc/.*/mounts|/proc/.*/cgroups|docker\.sock"
+emit container-malware.bin | carve printable | rex "/proc/.*/mounts|/proc/.*/cgroups|docker\.sock"
 
 # Kubernetes exploitation indicators
-emit k8s-malware.exe | strings | xtp --pattern "kubectl|/var/run/secrets|serviceaccount"
+emit k8s-malware.exe | carve printable | rex "kubectl|/var/run/secrets|serviceaccount"
 
 # Container runtime exploitation
-emit runtime-exploit.bin | strings | grep -E "(runc|containerd|dockerd|cri-o)"
+emit runtime-exploit.bin | carve printable | grep -E "(runc|containerd|dockerd|cri-o)"
 
 # Extract container registry credentials
-emit registry-stealer.dll | strings | xtp --pattern "(docker\.io|quay\.io|gcr\.io|ecr\.aws)" | head -10
+emit registry-stealer.dll | carve printable | rex "(docker\.io|quay\.io|gcr\.io|ecr\.aws)" | head -10
 ```
 
 #### AWS/Azure Credential Harvesting Detection
 
 ```bash
 # AWS access key patterns
-emit cloud-stealer.bin | strings | xtp --pattern "(AKIA|ASIA)[A-Z0-9]{16}"
+emit cloud-stealer.bin | carve printable | rex "(AKIA|ASIA)[A-Z0-9]{16}"
 
 # AWS secret key patterns
-emit aws-stealer.exe | strings | xtp --pattern "[A-Za-z0-9/+=]{40}"
+emit aws-stealer.exe | carve printable | rex "[A-Za-z0-9/+=]{40}"
 
 # Azure service principal credentials
-emit azure-malware.dll | strings | xtp --pattern "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+emit azure-malware.dll | carve printable | rex "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
 
 # Google Cloud service account keys
-emit gcp-stealer.bin | strings | xtp --pattern "\"type\": \"service_account\""
+emit gcp-stealer.bin | carve printable | rex "\"type\": \"service_account\""
 
 # Cloud metadata service exploitation
-emit metadata-exploit.exe | strings | xtp --pattern "169\.254\.169\.254|metadata\.google|instance-data\.ec2"
+emit metadata-exploit.exe | carve printable | rex "169\.254\.169\.254|metadata\.google|instance-data\.ec2"
 ```
 
 #### AI/ML Model Poisoning Detection
 
 ```bash
 # Detect malicious pickle files
-emit suspicious-model.pkl | strings | grep -E "(exec|eval|import|__reduce__|__setstate__)"
+emit suspicious-model.pkl | carve printable | grep -E "(exec|eval|import|__reduce__|__setstate__)"
 
 # TensorFlow model analysis
-emit model.pb | strings | grep -E "(tensorflow|keras|torch)" | head -10
+emit model.pb | carve printable | grep -E "(tensorflow|keras|torch)" | head -10
 
 # Extract embedded code from models
-emit poisoned-model.h5 | carve --pattern "import|exec|eval" | strings
+emit poisoned-model.h5 | rex "import|exec|eval" | carve printable
 
 # PyTorch model security analysis
-emit pytorch-model.pth | strings | grep -E "(torch|pickle|dill)" | head -10
+emit pytorch-model.pth | carve printable | grep -E "(torch|pickle|dill)" | head -10
 ```
 
 ## Cross-Platform Considerations
@@ -1259,7 +1371,7 @@ emit NTUSER.DAT | winreg
 emit SOFTWARE.hive | winreg "Microsoft/Windows/CurrentVersion/Run"
 
 # Find suspicious registry modifications
-emit SYSTEM.hive | strings | grep -E "(Image Path|ServiceDll|Parameters)"
+emit SYSTEM.hive | carve printable | grep -E "(Image Path|ServiceDll|Parameters)"
 
 # Analyze Windows event logs (Binary Refinery unit: evtx)
 emit Security.evtx | evtx | grep -E "(4624|4625|4688)"
@@ -1269,7 +1381,7 @@ emit Security.evtx | evtx | grep -E "(4624|4625|4688)"
 
 ```bash
 # Windows memory dump analysis
-emit memory.dmp | strings | xtp --pattern "cmd\.exe|powershell\.exe|rundll32\.exe"
+emit memory.dmp | carve printable | rex "cmd\.exe|powershell\.exe|rundll32\.exe"
 
 # Extract Windows service information
 emit process-list.txt | grep -E "svchost|service|System"
@@ -1279,7 +1391,7 @@ emit process-list.txt | grep -E "svchost|service|System"
 emit suspicious.sys | pemeta
 
 # Extract Windows crash dump information
-emit crashdump.dmp | carve --pattern "PAGEDUMP|DMP" | peek
+emit crashdump.dmp | rex "PAGEDUMP|DMP" | peek
 ```
 
 ### Linux-Specific Analysis
@@ -1289,30 +1401,33 @@ Linux malware requires different analysis approaches, focusing on ELF binaries a
 #### ELF Binary Analysis
 
 ```bash
-# ELF header analysis
-emit linux-malware | elf --header
+# NOTE: refinery has no `elf` unit — only `carve_elf` (to carve out ELF files) and
+# `vsect` (to extract sections). For headers/symbols/dependencies use external tools.
 
-# Extract dynamic symbols
-emit binary.elf | elf --symbols
+# ELF header analysis (external)
+readelf -h linux-malware
 
-# Analyze shared library dependencies
-emit trojan.so | elf --dependencies
+# Extract dynamic symbols (external)
+readelf --dyn-syms binary.elf
 
-# Extract section information
-emit rootkit.ko | elf --sections
+# Analyze shared library dependencies (external)
+readelf -d trojan.so
+
+# Extract a section by name (vsect works on ELF as well as PE)
+emit rootkit.ko | vsect .text
 ```
 
 #### Linux System Artifacts
 
 ```bash
 # Systemd service analysis
-emit malicious.service | strings | grep -E "(ExecStart|Type|WantedBy)"
+emit malicious.service | carve printable | grep -E "(ExecStart|Type|WantedBy)"
 
 # Cron job extraction
-emit crontab-backup | strings | grep -E "^\*|^[0-9]"
+emit crontab-backup | carve printable | grep -E "^\*|^[0-9]"
 
 # Shell script deobfuscation
-emit obfuscated.sh | url | b64 | strings
+emit obfuscated.sh | url | b64 | carve printable
 
 # Log file analysis
 emit auth.log | grep -E "(Failed|Invalid|Accepted)" | head -20
@@ -1325,34 +1440,34 @@ macOS malware analysis requires understanding of Mach-O binaries and macOS-speci
 #### Mach-O Binary Analysis
 
 ```bash
-# Mach-O header analysis
-emit macos-malware | macho --header
+# Mach-O header analysis (machometa is the unit; there is no `macho` unit)
+emit macos-malware | machometa -B
 
 # Extract load commands
-emit suspicious.app | macho --load-commands
+emit suspicious.app | machometa -D
 
-# Analyze code signatures
-emit signed-binary | macho --code-signature
+# Analyze code signatures (machometa -S parses signature AND entitlement info)
+emit signed-binary | machometa -S
 
-# Extract entitlements
-emit entitled-app | macho --entitlements
+# Extract entitlements (also covered by -S; for full detail use external codesign/otool)
+emit entitled-app | machometa -S
 ```
 
 #### macOS Persistence Analysis
 
 ```bash
 # LaunchAgent/LaunchDaemon analysis
-emit com.evil.plist | plist --parse
+emit com.evil.plist | plist
 
 # Application bundle analysis
-emit Malware.app/Contents/Info.plist | plist --parse
+emit Malware.app/Contents/Info.plist | plist
 
 # Keychain analysis (use external tools: security(1) command or chainbreaker)
 # Binary Refinery has no built-in keychain unit; parse the extracted binary with:
-emit login.keychain | strings | grep -E "(password|account|service)"
+emit login.keychain | carve printable | grep -E "(password|account|service)"
 
 # Safari extension analysis
-emit extension.safariextz | unzip | peek
+emit extension.safariextz | xtzip | peek
 ```
 
 ### Cross-Platform Compatibility
@@ -1361,39 +1476,39 @@ emit extension.safariextz | unzip | peek
 
 ```bash
 # Windows path normalization
-emit windows-malware.exe | strings | sed 's/\\\\/\//g'
+emit windows-malware.exe | carve printable | sed 's/\\\\/\//g'
 
 # Unix path extraction
-emit unix-binary | strings | grep -E "^/"
+emit unix-binary | carve printable | grep -E "^/"
 
 # Universal path pattern matching
-emit cross-platform.bin | strings | xtp --pattern "[A-Za-z]:[\\\\]|^/"
+emit cross-platform.bin | carve printable | rex "[A-Za-z]:[\\\\]|^/"
 ```
 
 #### Encoding Differences
 
 ```bash
 # Windows Unicode (UTF-16LE) strings
-emit windows-app.exe | strings --encoding=utf-16le
+emit windows-app.exe | carve printable
 
 # Linux UTF-8 strings
-emit linux-binary | strings --encoding=utf-8
+emit linux-binary | carve printable
 
 # macOS CFString extraction
-emit macos-app | strings --encoding=utf-8 | grep -E "^CF"
+emit macos-app | carve printable | grep -E "^CF"
 ```
 
 #### Platform-Specific IOCs
 
 ```bash
 # Windows-specific indicators
-emit sample.exe | strings | grep -E "(C:\\\\Windows|%APPDATA%|HKEY_)"
+emit sample.exe | carve printable | grep -E "(C:\\\\Windows|%APPDATA%|HKEY_)"
 
 # Linux-specific indicators
-emit sample.elf | strings | grep -E "(/bin|/usr|/etc|/var|/tmp)"
+emit sample.elf | carve printable | grep -E "(/bin|/usr|/etc|/var|/tmp)"
 
 # macOS-specific indicators
-emit sample.macho | strings | grep -E "(/Applications|/Library|/Users|\.app/)"
+emit sample.macho | carve printable | grep -E "(/Applications|/Library|/Users|\.app/)"
 ```
 
 ## Compliance & Legal Framework
@@ -1518,19 +1633,19 @@ echo "Audit trail generated: $EVIDENCE_DIR/reports/audit_trail.txt"
 
 ```bash
 # Detect potential personally identifiable information
-emit sample.exe | strings | xtp --pattern "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" > pii_emails.txt
+emit sample.exe | carve printable | rex "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" > pii_emails.txt
 
 # Social Security Number patterns (US)
-emit data.bin | strings | xtp --pattern "\b\d{3}-\d{2}-\d{4}\b|\b\d{9}\b"
+emit data.bin | carve printable | rex "\b\d{3}-\d{2}-\d{4}\b|\b\d{9}\b"
 
 # Credit card number patterns
-emit financial-malware.exe | strings | xtp --pattern "\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b"
+emit financial-malware.exe | carve printable | rex "\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b"
 
 # Phone number patterns
-emit contact-stealer.dll | strings | xtp --pattern "\+?1?[-.\s]?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}"
+emit contact-stealer.dll | carve printable | rex "\+?1?[-.\s]?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}"
 
 # European ID patterns
-emit eu-malware.bin | strings | xtp --pattern "[A-Z]{2}\d{8,12}"
+emit eu-malware.bin | carve printable | rex "[A-Z]{2}\d{8,12}"
 ```
 
 #### Data Anonymization for Reporting
@@ -1543,7 +1658,7 @@ INPUT_FILE="$1"
 OUTPUT_FILE="$2"
 
 # Replace email addresses with generic placeholders
-emit "$INPUT_FILE" | strings | sed -E 's/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/[EMAIL_REDACTED]/g' > temp_stage1.txt
+emit "$INPUT_FILE" | carve printable | sed -E 's/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/[EMAIL_REDACTED]/g' > temp_stage1.txt
 
 # Replace IP addresses with network ranges
 emit temp_stage1.txt | sed -E 's/\b([0-9]{1,3}\.){3}[0-9]{1,3}\b/[IP_REDACTED]/g' > temp_stage2.txt
@@ -1647,10 +1762,10 @@ emit training_sample.txt | peek
 **Step 2: String Extraction**
 ```bash
 # Extract all strings from the file
-emit training_sample.txt | strings
+emit training_sample.txt | carve printable
 
 # Find potential base64 encoded data
-emit training_sample.txt | strings | grep -E "[A-Za-z0-9+/]{20,}={0,2}"
+emit training_sample.txt | carve printable | grep -E "[A-Za-z0-9+/]{20,}={0,2}"
 
 # Question: What base64 encoded string did you find?
 ```
@@ -1689,11 +1804,11 @@ emit training_sample.txt | b64 | xtp url
 # Basic PE metadata extraction
 emit sample.exe | pemeta
 
-# Section analysis
-emit sample.exe | pe --sections
+# PE header base data (includes section count; for per-section contents use `vsect <name>`)
+emit sample.exe | pemeta -B
 
 # Import table analysis
-emit sample.exe | pe --imports | head -20
+emit sample.exe | pemeta -I | head -20
 
 # Questions:
 # - How many sections does the PE have?
@@ -1704,10 +1819,10 @@ emit sample.exe | pe --imports | head -20
 **Step 2: Hash Calculation**
 ```bash
 # Calculate Imphash
-emit sample.exe | pe --imphash
+emit sample.exe | imphash
 
 # Extract unique strings for signatures
-emit sample.exe | strings --min 8 | sort | uniq | head -30
+emit sample.exe | carve printable | sort | uniq | head -30
 
 # Questions:
 # - What is the Imphash value?
@@ -1717,10 +1832,10 @@ emit sample.exe | strings --min 8 | sort | uniq | head -30
 **Step 3: Resource Analysis**
 ```bash
 # List all resources
-emit sample.exe | pe --resources
+emit sample.exe | perc
 
-# Extract a specific resource (if available)
-emit sample.exe | pe --resource 101 | peek
+# Extract a specific resource (if available) — perc selects resources by path
+emit sample.exe | perc *101* | peek
 
 # Questions:
 # - Does the PE contain resources?
@@ -1730,7 +1845,7 @@ emit sample.exe | pe --resource 101 | peek
 #### Advanced Challenge
 ```bash
 # Multi-stage analysis pipeline
-emit sample.exe | pe --resource PAYLOAD | xor 0xFF | carve-pe | pemeta
+emit sample.exe | perc *PAYLOAD* | xor 0xFF | carve_pe | pemeta
 
 # Question: What does this pipeline accomplish?
 ```
@@ -1744,10 +1859,10 @@ emit sample.exe | pe --resource PAYLOAD | xor 0xFF | carve-pe | pemeta
 **Step 1: Document Structure Analysis**
 ```bash
 # For OLE documents (older Office formats)
-emit malicious.doc | olemap
+emit malicious.doc | xtdoc --list
 
-# Identify interesting streams
-emit malicious.doc | olet Macros/VBA/Module1
+# Identify interesting streams (vbastr pulls VBA macro source/strings)
+emit malicious.doc | vbastr
 
 # Questions:
 # - What streams are present in the document?
@@ -1757,7 +1872,7 @@ emit malicious.doc | olet Macros/VBA/Module1
 **Step 2: Macro Extraction and Analysis**
 ```bash
 # Extract VBA macro code
-emit training_doc/vba_module.txt | strings
+emit training_doc/vba_module.txt | carve printable
 
 # Decode any encoded PowerShell
 emit "aGVsbG8=" | b64
@@ -1771,10 +1886,10 @@ emit "aGVsbG8=" | b64
 **Step 3: IOC Extraction**
 ```bash
 # Extract URLs and IPs from document
-emit malicious.doc | strings | xtp url,ip
+emit malicious.doc | carve printable | xtp url,ip
 
 # Find suspicious function calls
-emit malicious.doc | strings | grep -E "(CreateObject|WScript|Shell|Run)"
+emit malicious.doc | carve printable | grep -E "(CreateObject|WScript|Shell|Run)"
 
 # Questions:
 # - What network indicators were found?
@@ -1797,10 +1912,10 @@ echo "Additional data: powershell -enc c3VzcGljaW91cyBjb21tYW5k" >> memory_dump.
 **Step 1: String Analysis**
 ```bash
 # Extract all readable strings
-emit memory_dump.txt | strings --min 8
+emit memory_dump.txt | carve printable
 
 # Find network indicators
-emit memory_dump.txt | strings | xtp url,ip
+emit memory_dump.txt | carve printable | xtp url,ip
 
 # Questions:
 # - What URLs are present in memory?
@@ -1810,10 +1925,10 @@ emit memory_dump.txt | strings | xtp url,ip
 **Step 2: Encoded Content Detection**
 ```bash
 # Find base64 encoded PowerShell
-emit memory_dump.txt | strings | grep -E "powershell.*-enc" | cut -d' ' -f3 | b64
+emit memory_dump.txt | carve printable | grep -E "powershell.*-enc" | cut -d' ' -f3 | b64
 
 # Search for additional encoding
-emit memory_dump.txt | strings | url --decode 2>/dev/null | head -10
+emit memory_dump.txt | carve printable | url 2>/dev/null | head -10
 
 # Questions:
 # - What PowerShell command was decoded?
@@ -1823,10 +1938,10 @@ emit memory_dump.txt | strings | url --decode 2>/dev/null | head -10
 **Step 3: Pattern Recognition**
 ```bash
 # Look for PE headers in memory
-emit memory_dump.txt | carve --pattern "MZ" | peek
+emit memory_dump.txt | rex "MZ" | peek
 
 # Search for common malware artifacts
-emit memory_dump.txt | strings | grep -E "(mutex|pipe|registry|service)"
+emit memory_dump.txt | carve printable | grep -E "(mutex|pipe|registry|service)"
 
 # Questions:
 # - Are there embedded executables in memory?
@@ -1866,7 +1981,7 @@ emit obfuscated_challenge.txt | xor 0xAA
 emit obfuscated_challenge.txt | url | b64 | xor 0xAA
 
 # Verify the result makes sense
-emit obfuscated_challenge.txt | url | b64 | xor 0xAA | strings
+emit obfuscated_challenge.txt | url | b64 | xor 0xAA | carve printable
 
 # Questions:
 # - Did you recover the original message?
@@ -1906,7 +2021,7 @@ echo "Additional indicators: http://evil-domain.net/payload.exe and some registr
 emit challenge_sample/suspicious_attachment.zip.b64 | b64 > challenge_sample/attachment.zip
 
 # Step 2: Extract ZIP contents
-emit challenge_sample/attachment.zip | unzip | peek
+emit challenge_sample/attachment.zip | xtzip | peek
 
 # Step 3: Identify file types and extract basic IOCs
 emit challenge_sample/extracted_strings.txt | xtp url,ip,domain
@@ -1916,14 +2031,14 @@ emit challenge_sample/extracted_strings.txt | xtp url,ip,domain
 ```bash
 # Step 4: If PE file found, perform PE analysis
 # emit extracted_file.exe | pemeta
-# emit extracted_file.exe | pe --imports | head -20
+# emit extracted_file.exe | pemeta -I | head -20
 
 # Step 5: Extract and analyze any scripts or documents
-# emit document.doc | olemap
-# emit script.ps1 | strings | xtp url
+# emit document.doc | xtdoc --list
+# emit script.ps1 | carve printable | xtp url
 
 # Step 6: Search for persistence mechanisms
-# emit sample | strings | grep -E "(registry|service|startup|run)"
+# emit sample | carve printable | grep -E "(registry|service|startup|run)"
 ```
 
 **Phase 3: Reporting**
@@ -1997,7 +2112,7 @@ MD5=$(emit "$SAMPLE" | md5sum | cut -d' ' -f1)
 
 # Extract Imphash if PE file
 if emit "$SAMPLE" | peek | grep -q "PE32"; then
-    IMPHASH=$(emit "$SAMPLE" | pe --imphash)
+    IMPHASH=$(emit "$SAMPLE" | imphash)
     echo "Imphash: $IMPHASH"
     
     # Query VirusTotal for Imphash matches (requires API implementation)
@@ -2005,7 +2120,7 @@ if emit "$SAMPLE" | peek | grep -q "PE32"; then
 fi
 
 # Extract network IOCs for VT domain/IP checks
-emit "$SAMPLE" | strings | xtp url,ip,domain > iocs_for_vt.txt
+emit "$SAMPLE" | carve printable | xtp url,ip,domain > iocs_for_vt.txt
 echo "Network IOCs extracted for VirusTotal correlation"
 
 # Generate VT search queries
@@ -2030,12 +2145,12 @@ for sample in "$SAMPLE_DIR"/*.{exe,dll,bin}; do
         
         # Extract Imphash for family clustering
         if emit "$sample" | peek | grep -q "PE32"; then
-            IMPHASH=$(emit "$sample" | pe --imphash)
+            IMPHASH=$(emit "$sample" | imphash)
             echo "$(basename "$sample"):$IMPHASH" >> imphash_correlation.txt
         fi
         
         # Extract network IOCs for C2 infrastructure mapping
-        emit "$sample" | strings | xtp url,ip,domain >> all_network_iocs.txt
+        emit "$sample" | carve printable | xtp url,ip,domain >> all_network_iocs.txt
     fi
 done
 
@@ -2065,10 +2180,10 @@ OUTPUT_FILE="${RULE_NAME}.yar"
 echo "Generating YARA rule: $RULE_NAME"
 
 # Extract unique strings for rule creation
-emit "$SAMPLE" | strings --min 8 | sort | uniq | head -10 > unique_strings.txt
+emit "$SAMPLE" | carve printable | sort | uniq | head -10 > unique_strings.txt
 
 # Extract hex patterns
-emit "$SAMPLE" | carve 32 | hex | head -5 > hex_patterns.txt
+emit "$SAMPLE" | chop 32 | hex | head -5 > hex_patterns.txt
 
 # Generate YARA rule
 cat > "$OUTPUT_FILE" << EOF
@@ -2116,16 +2231,16 @@ rm unique_strings.txt hex_patterns.txt
 
 ```bash
 # Extract cryptographic constants for YARA rules
-emit crypto-malware.exe | strings | xtp --pattern "[a-fA-F0-9]{32,64}" > crypto_constants.txt
+emit crypto-malware.exe | carve printable | rex "[a-fA-F0-9]{32,64}" > crypto_constants.txt
 
 # Extract specific API call patterns
-emit malware.dll | pe --imports | grep -E "(CreateFile|WriteFile|CreateProcess)" > api_patterns.txt
+emit malware.dll | pemeta -I | grep -E "(CreateFile|WriteFile|CreateProcess)" > api_patterns.txt
 
 # Extract mutex names and synchronization objects
-emit sample.exe | strings | grep -i -E "(mutex|event|semaphore)" | sort | uniq > sync_objects.txt
+emit sample.exe | carve printable | grep -i -E "(mutex|event|semaphore)" | sort | uniq > sync_objects.txt
 
 # Extract registry persistence patterns
-emit persistent-malware.exe | strings | grep -i -E "(hkey_|software\\\\|currentversion\\\\run)" > registry_patterns.txt
+emit persistent-malware.exe | carve printable | grep -i -E "(hkey_|software\\\\|currentversion\\\\run)" > registry_patterns.txt
 
 # Generate comprehensive YARA rule with multiple pattern types
 cat > comprehensive_rule.yar << EOF
@@ -2172,19 +2287,19 @@ mkdir -p "$OUTPUT_DIR"
 echo "Preparing memory dump for Volatility analysis..."
 
 # Extract potential PE files from memory
-emit "$MEMORY_DUMP" | carve-pe > "$OUTPUT_DIR/carved_executables.bin"
+emit "$MEMORY_DUMP" | carve_pe > "$OUTPUT_DIR/carved_executables.bin"
 
 # Extract strings for correlation
-emit "$MEMORY_DUMP" | strings --min 8 > "$OUTPUT_DIR/memory_strings.txt"
+emit "$MEMORY_DUMP" | carve printable > "$OUTPUT_DIR/memory_strings.txt"
 
 # Extract network artifacts
-emit "$MEMORY_DUMP" | strings | xtp url,ip > "$OUTPUT_DIR/network_artifacts.txt"
+emit "$MEMORY_DUMP" | carve printable | xtp url,ip > "$OUTPUT_DIR/network_artifacts.txt"
 
 # Extract potential registry keys
-emit "$MEMORY_DUMP" | strings | grep -i "hkey_" > "$OUTPUT_DIR/registry_keys.txt"
+emit "$MEMORY_DUMP" | carve printable | grep -i "hkey_" > "$OUTPUT_DIR/registry_keys.txt"
 
 # Extract command line artifacts
-emit "$MEMORY_DUMP" | strings | grep -E "(cmd\.exe|powershell\.exe|wscript\.exe)" > "$OUTPUT_DIR/command_lines.txt"
+emit "$MEMORY_DUMP" | carve printable | grep -E "(cmd\.exe|powershell\.exe|wscript\.exe)" > "$OUTPUT_DIR/command_lines.txt"
 
 # Prepare summary for Volatility correlation
 cat > "$OUTPUT_DIR/analysis_summary.txt" << EOF
@@ -2211,13 +2326,13 @@ echo "Memory preparation complete: $OUTPUT_DIR"
 
 ```bash
 # Detect process injection artifacts in memory dumps
-emit memory.dmp | strings | grep -E "(CreateRemoteThread|WriteProcessMemory|VirtualAllocEx)" > injection_apis.txt
+emit memory.dmp | carve printable | grep -E "(CreateRemoteThread|WriteProcessMemory|VirtualAllocEx)" > injection_apis.txt
 
 # Find DLL injection patterns
-emit process-dump.bin | strings | grep -E "(LoadLibrary|GetProcAddress)" | head -10
+emit process-dump.bin | carve printable | grep -E "(LoadLibrary|GetProcAddress)" | head -10
 
 # Extract reflective DLL loading indicators
-emit suspicious-process.dmp | carve-pe | pe --exports | grep -i "reflective"
+emit suspicious-process.dmp | carve_pe | pemeta -E | grep -i "reflective"
 
 # Correlation script for Volatility output
 cat > correlate_injection.sh << 'EOF'
@@ -2258,9 +2373,9 @@ case "$OUTPUT_FORMAT" in
             echo "  \"file_hash\": \"$(emit "$SAMPLE" | sha256sum | cut -d' ' -f1)\","
             echo "  \"file_type\": \"$(file "$SAMPLE" | cut -d':' -f2- | sed 's/^ *//')\","
             echo "  \"network_iocs\": ["
-            emit "$SAMPLE" | strings | xtp url,ip | sed 's/^/    "/' | sed 's/$/",/' | sed '$ s/,$//'
+            emit "$SAMPLE" | carve printable | xtp url,ip | sed 's/^/    "/' | sed 's/$/",/' | sed '$ s/,$//'
             echo "  ],"
-            echo "  \"entropy\": $(emit "$SAMPLE" | peek --entropy | grep entropy | cut -d':' -f2 | tr -d ' '),"
+            echo "  \"entropy\": $(emit "$SAMPLE" | peek | grep entropy | cut -d':' -f2 | tr -d ' '),"
             echo "  \"analysis_tool\": \"Binary Refinery\""
             echo "}"
         } > "${SAMPLE}.json"
@@ -2269,15 +2384,15 @@ case "$OUTPUT_FORMAT" in
     "csv")
         {
             echo "timestamp,file_hash,file_type,network_ioc,entropy"
-            emit "$SAMPLE" | strings | xtp url,ip | while read ioc; do
-                echo "$(date -u +%Y-%m-%dT%H:%M:%SZ),$(emit "$SAMPLE" | sha256sum | cut -d' ' -f1),malware,$ioc,$(emit "$SAMPLE" | peek --entropy | grep entropy | cut -d':' -f2 | tr -d ' ')"
+            emit "$SAMPLE" | carve printable | xtp url,ip | while read ioc; do
+                echo "$(date -u +%Y-%m-%dT%H:%M:%SZ),$(emit "$SAMPLE" | sha256sum | cut -d' ' -f1),malware,$ioc,$(emit "$SAMPLE" | peek | grep entropy | cut -d':' -f2 | tr -d ' ')"
             done
         } > "${SAMPLE}.csv"
         ;;
     
     "syslog")
         HASH=$(emit "$SAMPLE" | sha256sum | cut -d' ' -f1)
-        emit "$SAMPLE" | strings | xtp url,ip | while read ioc; do
+        emit "$SAMPLE" | carve printable | xtp url,ip | while read ioc; do
             logger -p local0.info "Binary Refinery Analysis: file_hash=$HASH network_ioc=$ioc analysis_timestamp=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
         done
         ;;
@@ -2307,7 +2422,7 @@ for sample in "$SAMPLES_DIR"/*.{exe,dll,bin}; do
         HASH=$(emit "$sample" | sha256sum | cut -d' ' -f1)
         IMPHASH=""
         if emit "$sample" | peek | grep -q "PE32"; then
-            IMPHASH=$(emit "$sample" | pe --imphash)
+            IMPHASH=$(emit "$sample" | imphash)
         fi
         
         cat >> "$OUTPUT_FEED" << EOF
@@ -2318,7 +2433,7 @@ for sample in "$SAMPLES_DIR"/*.{exe,dll,bin}; do
     "first_seen": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
     "imphash": "$IMPHASH",
     "network_indicators": [
-$(emit "$sample" | strings | xtp url,ip | sed 's/^/      "/' | sed 's/$/",/' | sed '$ s/,$//')
+$(emit "$sample" | carve printable | xtp url,ip | sed 's/^/      "/' | sed 's/$/",/' | sed '$ s/,$//')
     ],
     "confidence": 85,
     "source": "Binary Refinery Analysis",
@@ -2340,14 +2455,14 @@ echo "Threat intelligence feed generated: $OUTPUT_FEED"
 
 ```bash
 # Process large files in chunks to avoid memory issues
-emit large_file.bin | carve 1048576 [analysis_pipeline] | pack
+emit large_file.bin | chop 1048576 [analysis_pipeline] | pack
 
 # Use streaming operations for better performance
-emit huge_dataset.bin | strings | grep "pattern" > results.txt
+emit huge_dataset.bin | carve printable | grep "pattern" > results.txt
 
 # Optimize pipeline order for efficiency
-# BAD: emit file.bin | strings | carve 1024 | xor 0xFF
-# GOOD: emit file.bin | carve 1024 | xor 0xFF | strings
+# BAD: emit file.bin | carve printable | chop 1024 | xor 0xFF
+# GOOD: emit file.bin | chop 1024 | xor 0xFF | carve printable
 ```
 
 #### Parallel Processing
@@ -2366,7 +2481,7 @@ analyze_sample() {
     mkdir -p "$output_dir"
     
     emit "$sample" | peek > "$output_dir/overview.txt"
-    emit "$sample" | strings | xtp url,ip > "$output_dir/iocs.txt"
+    emit "$sample" | carve printable | xtp url,ip > "$output_dir/iocs.txt"
     
     if emit "$sample" | peek | grep -q "PE32"; then
         emit "$sample" | pemeta > "$output_dir/pe_analysis.txt"
@@ -2398,7 +2513,7 @@ CACHE_FILE="$CACHE_DIR/${SAMPLE_HASH}.strings"
 # Check if strings are already cached
 if [ ! -f "$CACHE_FILE" ]; then
     echo "Extracting strings (not cached)..."
-    emit "$SAMPLE" | strings > "$CACHE_FILE"
+    emit "$SAMPLE" | carve printable > "$CACHE_FILE"
 else
     echo "Using cached strings..."
 fi
@@ -2446,8 +2561,8 @@ echo "Analysis environment: $ANALYSIS_ENV"
 
 ```bash
 # Never execute extracted content directly
-# BAD: emit malware.exe | carve-pe > extracted.exe && ./extracted.exe
-# GOOD: emit malware.exe | carve-pe | pemeta
+# BAD: emit malware.exe | carve_pe > extracted.exe && ./extracted.exe
+# GOOD: emit malware.exe | carve_pe | pemeta
 
 # Always verify file hashes before and after processing
 ORIGINAL_HASH=$(sha256sum sample.exe | cut -d' ' -f1)
@@ -2480,7 +2595,7 @@ fi
 # sudo ip link set eth0 down
 
 # Use analysis results without network access
-emit isolated_sample.exe | strings | xtp url > network_iocs.txt
+emit isolated_sample.exe | carve printable | xtp url > network_iocs.txt
 echo "Network IOCs extracted safely without network access"
 ```
 
@@ -2504,7 +2619,7 @@ analyze_with_fallback() {
     fi
     
     # Always extract strings as fallback
-    emit "$sample" | strings > strings_fallback.txt || {
+    emit "$sample" | carve printable > strings_fallback.txt || {
         echo "ERROR: Could not extract strings from $sample"
         return 1
     }
@@ -2547,22 +2662,22 @@ debug_pipe() {
 
 # Usage:
 # DEBUG=1 ./analysis_script.sh sample.exe
-debug_emit "sample.exe" | debug_pipe "after emit" | b64 | debug_pipe "after b64" | strings
+debug_emit "sample.exe" | debug_pipe "after emit" | b64 | debug_pipe "after b64" | carve printable
 ```
 
 #### Common Error Patterns and Solutions
 
 ```bash
 # Handle binary data in text operations gracefully
-emit binary_file.bin | strings 2>/dev/null | head -100
+emit binary_file.bin | carve printable 2>/dev/null | head -100
 
 # Deal with encoding issues
-emit international_text.bin | strings --encoding=utf-8 2>/dev/null || \
-emit international_text.bin | strings --encoding=utf-16le 2>/dev/null || \
-emit international_text.bin | strings
+emit international_text.bin | carve printable 2>/dev/null || \
+emit international_text.bin | carve printable 2>/dev/null || \
+emit international_text.bin | carve printable
 
 # Handle empty results
-RESULT=$(emit sample.exe | pe --imphash 2>/dev/null)
+RESULT=$(emit sample.exe | imphash 2>/dev/null)
 if [ -z "$RESULT" ]; then
     echo "No Imphash available (not a PE file or corrupted)"
 else
@@ -2627,13 +2742,13 @@ emit suspicious_file.exe | python3 custom_analysis.py
 
 ```bash
 # Complex regex for advanced IOC extraction
-emit malware.bin | strings | grep -P '(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{32,}' > potential_keys.txt
+emit malware.bin | carve printable | grep -P '(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{32,}' > potential_keys.txt
 
 # Multi-pattern extraction with context
-emit sample.exe | strings | grep -B 2 -A 2 -E "(password|secret|token|key)" > credential_context.txt
+emit sample.exe | carve printable | grep -B 2 -A 2 -E "(password|secret|token|key)" > credential_context.txt
 
 # Extract structured data patterns
-emit config.bin | strings | grep -E '^[A-Za-z_]+\s*[:=]\s*.+'
+emit config.bin | carve printable | grep -E '^[A-Za-z_]+\s*[:=]\s*.+'
 ```
 
 ## Conclusion
