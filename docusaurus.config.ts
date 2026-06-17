@@ -74,6 +74,7 @@ const config: Config = {
           '**/.obsidian/**',
           '**/.git/**',
           '**/CTF/**',
+          '**/Platforms/**',
           '**/Cases/**',
           '**/Case-Template/**',
           '**/Student-Exercises/**',
