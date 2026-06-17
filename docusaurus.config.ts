@@ -252,7 +252,7 @@ const config: Config = {
           'aria-label': 'GitHub repository',
         },
         {
-          href: 'https://discord.gg/T5tc9Rq8DV',
+          href: 'http://join.gl0bal01.com',
           position: 'right',
           className: 'header-discord-link',
           'aria-label': 'Discord community',
@@ -398,7 +398,7 @@ footer: {
           },
           {
             label: 'Discord',
-            href: 'https://discord.gg/T5tc9Rq8DV',
+            href: 'http://join.gl0bal01.com',
             target: '_blank',
             rel: 'noopener noreferrer',
             'aria-label': 'Join gl0bal01 Discord community',
@@ -530,7 +530,7 @@ footer: {
             sameAs: [
               'https://github.com/gl0bal01',
               'https://x.com/gl0bal01',
-              'https://discord.gg/T5tc9Rq8DV',
+              'http://join.gl0bal01.com',
               'https://start.me/u/gl0bal01',
             ],
           },

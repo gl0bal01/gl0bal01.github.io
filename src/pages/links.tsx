@@ -96,7 +96,7 @@ const PRIMARY: LinkItem[] = [
 const SOCIALS: SocialItem[] = [
   { label: "GitHub", href: "https://github.com/gl0bal01", icon: "github" },
   { label: "X / Twitter", href: "https://x.com/gl0bal01", icon: "x" },
-  { label: "Discord", href: "https://discord.gg/T5tc9Rq8DV", icon: "discord" },
+  { label: "Discord", href: "http://join.gl0bal01.com", icon: "discord" },
   { label: "start.me", href: "https://start.me/u/gl0bal01", icon: "startme" },
 ];
 

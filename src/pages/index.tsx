@@ -190,7 +190,7 @@ export default function Home(): ReactNode {
               title={<>GlobalHub <span className={styles.gamingBadge} aria-hidden="true">PLAY</span></>}
               body="40+ interactive cybersecurity and OSINT exercises. Join the community where learning meets gaming."
               links={[
-                { to: "https://discord.gg/T5tc9Rq8DV", label: "Join Discord Server" },
+                { to: "http://join.gl0bal01.com", label: "Join Discord Server" },
                 { to: "https://youareplayer.com/", label: "Visit Arcade Platform", variant: "secondary" },
               ]}
             />

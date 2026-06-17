@@ -78,7 +78,7 @@ All feeds are updated at build time and searchable/filterable by category.
 # External Resources
 - GitHub: https://github.com/gl0bal01
 - GitHub Repository: https://github.com/gl0bal01/gl0bal01.github.io
-- Discord Community: https://discord.gg/T5tc9Rq8DV
+- Discord Community: http://join.gl0bal01.com
 - Start.me Links: https://start.me/u/gl0bal01
 - Bookmarklets Collection: https://github.com/gl0bal01/bookmarklets
 
@@ -134,7 +134,7 @@ Built with open-source tools and frameworks.
 # Security Contact
 For security vulnerabilities: https://gl0bal01.com/.well-known/security.txt
 GitHub Issues: https://github.com/gl0bal01/gl0bal01.github.io/issues
-Discord: https://discord.gg/T5tc9Rq8DV
+Discord: http://join.gl0bal01.com
 
 # Site Metadata
 - Language: English
