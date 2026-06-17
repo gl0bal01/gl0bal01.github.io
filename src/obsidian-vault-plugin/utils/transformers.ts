@@ -11,7 +11,8 @@
 export function convertWikilinks(
   content: string,
   currentFilePath: string,
-  fileIndex?: Map<string, string>
+  fileIndex?: Map<string, string>,
+  isExcluded?: (relativePath: string) => boolean
 ): string {
   // Pattern: [[link]] or [[link|display text]]
   const wikilinkPattern = /\[\[([^\]|]+)(\|([^\]]+))?\]\]/g;
@@ -40,14 +41,11 @@ export function convertWikilinks(
 
     // Resolve using file index if available
     if (fileIndex && cleanPath) {
-      let resolved = false;
-
       if (!cleanPath.includes('/')) {
         // Filename-only: direct lookup
         const fullPath = fileIndex.get(cleanPath);
         if (fullPath) {
           cleanPath = fullPath;
-          resolved = true;
         }
       } else {
         // Partial path: check if any file ends with this path
@@ -58,16 +56,20 @@ export function convertWikilinks(
           // Check if the full path ends with the partial path
           if (fullPath.endsWith(normalizedCleanPath)) {
             cleanPath = fullPath;
-            resolved = true;
             break;
           }
         }
       }
+    }
 
-      // Unresolved means the target was excluded from the sync (e.g. Platform
-      // Guides) or does not exist. Emit plain display text instead of a broken
-      // link so the build stays clean without touching the source vault.
-      if (!resolved) {
+    // Only de-link when the target was deliberately excluded from the sync
+    // (e.g. Platform Guides). The file index spans the whole vault, so an
+    // excluded target still resolves to its real path above and matches here.
+    // Emit plain display text instead of a broken link so the build stays
+    // clean without touching the source vault. Everything else keeps its link.
+    if (isExcluded) {
+      const candidate = cleanPath.endsWith('.md') ? cleanPath : `${cleanPath}.md`;
+      if (isExcluded(candidate) || isExcluded(cleanPath)) {
         return (displayText?.trim() || extractFilename(linkPath));
       }
     }
@@ -395,6 +397,7 @@ export function transformObsidianContent(
     bannerTop?: string;
     bannerBottom?: string;
     fileIndex?: Map<string, string>;
+    isExcluded?: (relativePath: string) => boolean;
   } = {}
 ): string {
   const {
@@ -405,6 +408,7 @@ export function transformObsidianContent(
     bannerTop,
     bannerBottom,
     fileIndex,
+    isExcluded,
   } = options;
 
   // Extract frontmatter
@@ -417,7 +421,7 @@ export function transformObsidianContent(
   transformedBody = escapeMDXCharacters(transformedBody);
 
   if (doWikilinks) {
-    transformedBody = convertWikilinks(transformedBody, filename, fileIndex);
+    transformedBody = convertWikilinks(transformedBody, filename, fileIndex, isExcluded);
   }
 
   // Resolve relative markdown links (important: do this after wikilinks conversion)

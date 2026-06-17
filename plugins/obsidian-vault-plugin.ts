@@ -116,9 +116,17 @@ export default function obsidianVaultPlugin(
       // Track categories
       const categorySet = new Set<string>();
 
-      // Build file index for wikilink resolution (filename -> relative path)
+      // Build file index for wikilink resolution (filename -> relative path).
+      // Index the WHOLE vault (ignoring content excludes) so wikilinks that
+      // point at excluded notes still resolve to their real path and can be
+      // de-linked downstream, instead of leaking through as broken links.
+      const indexFiles = scanDirectory(sourcePath, sourcePath, include, [
+        '**/.obsidian/**',
+        '**/.git/**',
+        '**/node_modules/**',
+      ]);
       const fileIndex = new Map<string, string>();
-      for (const file of files) {
+      for (const file of indexFiles) {
         const relativePath = path.relative(sourcePath, file).replace(/\\/g, '/');
         const filename = path.basename(file, '.md');
         fileIndex.set(filename, relativePath.replace(/\.md$/, ''));
@@ -152,6 +160,7 @@ export default function obsidianVaultPlugin(
               bannerTop,
               bannerBottom,
               fileIndex, // Pass file index for wikilink resolution
+              isExcluded: (p: string) => shouldExclude(p, exclude), // De-link wikilinks to excluded notes
             }
           );
 
