@@ -39,31 +39,36 @@ export function convertWikilinks(
     cleanPath = cleanPath.replace(/^(\.\.\/)+/, '').replace(/^\.\//, '');
 
     // Resolve using file index if available
-    if (fileIndex) {
+    if (fileIndex && cleanPath) {
+      let resolved = false;
+
       if (!cleanPath.includes('/')) {
         // Filename-only: direct lookup
         const fullPath = fileIndex.get(cleanPath);
         if (fullPath) {
           cleanPath = fullPath;
+          resolved = true;
         }
       } else {
         // Partial path: check if any file ends with this path
         // Example: "Techniques/sop-legal-ethics" should match "Investigations/Techniques/sop-legal-ethics"
         const normalizedCleanPath = cleanPath.replace(/\\/g, '/');
-        let foundPath: string | undefined;
 
-        for (const [filename, fullPath] of fileIndex.entries()) {
+        for (const [, fullPath] of fileIndex.entries()) {
           // Check if the full path ends with the partial path
           if (fullPath.endsWith(normalizedCleanPath)) {
-            foundPath = fullPath;
+            cleanPath = fullPath;
+            resolved = true;
             break;
           }
         }
+      }
 
-        // If we found a match, use it; otherwise use the path as-is (assume it's from vault root)
-        if (foundPath) {
-          cleanPath = foundPath;
-        }
+      // Unresolved means the target was excluded from the sync (e.g. Platform
+      // Guides) or does not exist. Emit plain display text instead of a broken
+      // link so the build stays clean without touching the source vault.
+      if (!resolved) {
+        return (displayText?.trim() || extractFilename(linkPath));
       }
     }
 
