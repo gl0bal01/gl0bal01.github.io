@@ -46,6 +46,15 @@ const config: Config = {
       },
     ],
     [
+      // Intel Codex is mirrored here; lecodex.xyz is the canonical home.
+      './plugins/canonical-mirror-plugin.ts',
+      {
+        routeBasePath: 'intel-codex',
+        docsDir: 'intel-codex',
+        target: 'https://lecodex.xyz',
+      },
+    ],
+    [
       '@docusaurus/plugin-content-docs',
       {
         id: 'intel-codex',
