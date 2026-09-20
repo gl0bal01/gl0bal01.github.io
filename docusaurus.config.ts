@@ -82,6 +82,7 @@ const config: Config = {
         exclude: [
           '**/.obsidian/**',
           '**/.git/**',
+          '**/.omc/**',
           '**/CTF/**',
           '**/Platforms/**',
           '**/Cases/**',
@@ -290,11 +291,6 @@ footer: {
             label: 'Investigation Techniques',
             to: '/intel-codex/Investigations/Techniques/Techniques-Index',
             'aria-label': 'Investigation techniques and methodologies',
-          },
-          {
-            label: 'Platform Guides',
-            to: '/intel-codex/Investigations/Platforms/Platforms-Index',
-            'aria-label': 'Platform-specific investigation guides',
           },
           {
             label: 'Darkweb Investigation',
