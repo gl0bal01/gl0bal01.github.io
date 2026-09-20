@@ -15,8 +15,11 @@ const config: Config = {
   projectName: 'gl0bal01.github.io',
   trailingSlash: false,
 
-  // Keep as 'warn' until intel-codex vault broken links are resolved
-  onBrokenLinks: 'warn',
+  // The vault is authored for Obsidian, where a link resolves by basename; a link
+  // that is valid there can still point nowhere here, and only the build can see it.
+  onBrokenLinks: 'throw',
+  // Still 'warn': five headings carry emoji or an em dash, which each renderer
+  // slugifies differently, so their own table-of-contents anchors miss.
   onBrokenAnchors: 'warn',
 
   i18n: {
