@@ -98,13 +98,14 @@ export default function obsidianVaultPlugin(
         });
       }
 
-      // Ensure destination directories exist
-      if (!fs.existsSync(destPath)) {
-        fs.mkdirSync(destPath, { recursive: true });
-      }
-      if (!fs.existsSync(assetsDestPath)) {
-        fs.mkdirSync(assetsDestPath, { recursive: true });
-      }
+      // Both destinations are generated in full on every sync and are gitignored,
+      // so wipe them first. Writing over them left files that a later `exclude`
+      // had removed from the vault sync still sitting in the site — Platform
+      // Guides stayed published for months that way, and .omc came with it.
+      fs.rmSync(destPath, { recursive: true, force: true });
+      fs.rmSync(assetsDestPath, { recursive: true, force: true });
+      fs.mkdirSync(destPath, { recursive: true });
+      fs.mkdirSync(assetsDestPath, { recursive: true });
 
       // Scan vault for markdown files
       const files = scanDirectory(sourcePath, sourcePath, include, exclude);
