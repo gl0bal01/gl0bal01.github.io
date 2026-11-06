@@ -1,14 +1,13 @@
 {
   "extends": "@docusaurus/tsconfig",
   "compilerOptions": {
-    "baseUrl": ".",
     "strict": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "moduleResolution": "bundler",
+    "baseUrl": null,
     "paths": {
-      "@components/*": ["src/components/*"],
       "@site/*": ["./*"]
     }
   },
