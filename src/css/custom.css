@@ -58,8 +58,10 @@ html[data-theme='dark'] .DocSearch-Container {
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
+/* For readability concerns, you should choose a lighter palette in dark mode.
+   `html` prefix: the production build emits :root after this block, and at equal
+   specificity :root's black would win in dark mode. */
+html[data-theme='dark'] {
   --ifm-color-primary: #ffffff;
   --ifm-color-primary-dark: #e6e6e6;
   --ifm-color-primary-darker: #d9d9d9;
