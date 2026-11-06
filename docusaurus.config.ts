@@ -49,15 +49,6 @@ const config: Config = {
       },
     ],
     [
-      // Intel Codex is mirrored here; lecodex.xyz is the canonical home.
-      './plugins/canonical-mirror-plugin.ts',
-      {
-        routeBasePath: 'intel-codex',
-        docsDir: 'intel-codex',
-        target: 'https://lecodex.xyz',
-      },
-    ],
-    [
       '@docusaurus/plugin-content-docs',
       {
         id: 'intel-codex',
@@ -69,6 +60,36 @@ const config: Config = {
         showLastUpdateTime: true,
         sidebarCollapsed: true,
         breadcrumbs: true,
+        // Vault notes like 00-Case-Overview keep their prefix: links in the vault
+        // and the old lecodex.xyz URLs both use the full filename.
+        numberPrefixParser: false,
+      },
+    ],
+    [
+      // lecodex.xyz/<path> 301s to /intel-codex/<path> (Cloudflare rule). Quartz
+      // served folder listings at the bare folder path; Docusaurus has them under
+      // /category/<label slug>, so bridge those old URLs here.
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          ['Cases', 'case-studies'],
+          ['CTF', 'ctf'],
+          ['CTF/Writeups', 'writeups'],
+          ['Investigations', 'investigations'],
+          ['Investigations/Platforms', 'platform-guides'],
+          ['Investigations/Techniques', 'investigation-techniques'],
+          ['Security', 'security--analysis'],
+          ['Security/Analysis', 'analysis'],
+          ['Security/Pentesting', 'penetration-testing'],
+        ]
+          .map(([from, slug]) => ({
+            from: `/intel-codex/${from}`,
+            to: `/intel-codex/category/${slug}`,
+          }))
+          .concat({
+            from: '/intel-codex/Cases/2025-001-Example-Investigation/README',
+            to: '/intel-codex/Cases/2025-001-Example-Investigation',
+          }),
       },
     ],
     [
@@ -86,11 +107,10 @@ const config: Config = {
           '**/.obsidian/**',
           '**/.git/**',
           '**/.omc/**',
-          '**/CTF/**',
-          '**/Platforms/**',
-          '**/Cases/**',
           '**/Case-Template/**',
           '**/Student-Exercises/**',
+          // Hub for Case-Template and Student-Exercises, both excluded above.
+          '**/Cases/README.md',
           'CONTRIBUTING.md',
           'README.md', // README.md is for GitHub, index.md is for Docusaurus
           'CLAUDE.md',

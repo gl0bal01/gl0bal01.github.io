@@ -88,7 +88,7 @@ type SocialItem = { label: string; href: string; icon: keyof typeof Icon };
 
 const PRIMARY: LinkItem[] = [
   { label: "Operator's Notebook", href: "/", subtitle: "Pentest playbooks, OSINT tradecraft, RE notes. Field-tested, opinionated, free.", icon: "notebook" },
-  { label: "LeCodex", tld: ".xyz", href: "https://lecodex.xyz/", subtitle: "OSINT investigation techniques, security procedures, and case studies.", icon: "flag", external: true },
+  { label: "Intel Codex", href: "/intel-codex", subtitle: "OSINT investigation techniques, security procedures, and case studies.", icon: "flag" },
   { label: "CaseBandit", tld: ".com", href: "https://casebandit.com/", subtitle: "Capture evidence, map relationships, build timelines. Local-first, offline.", icon: "case", external: true },
   { label: "YouArePlayer", tld: ".com", href: "https://youareplayer.com/", subtitle: "50+ out-of-the-box games for fun and knowledge.", icon: "arcade", external: true },
 ];

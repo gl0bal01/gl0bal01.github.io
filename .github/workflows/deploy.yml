@@ -3,6 +3,10 @@ name: Deploy Docusaurus to GitHub Pages
 on:
   push:
     branches: [main]
+  # intel-codex pushes trigger this so vault edits go live without waiting
+  # for the daily RSS rebuild.
+  repository_dispatch:
+    types: [vault-updated]
   workflow_dispatch:
 
 permissions:
