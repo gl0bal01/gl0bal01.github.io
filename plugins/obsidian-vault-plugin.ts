@@ -127,10 +127,12 @@ export default function obsidianVaultPlugin(
         '**/node_modules/**',
       ]);
       const fileIndex = new Map<string, string>();
+      const knownPaths = new Set<string>();
       for (const file of indexFiles) {
         const relativePath = path.relative(sourcePath, file).replace(/\\/g, '/');
         const filename = path.basename(file, '.md');
         fileIndex.set(filename, relativePath.replace(/\.md$/, ''));
+        knownPaths.add(relativePath.replace(/\.md$/, ''));
       }
 
       if (debug) {
@@ -161,6 +163,7 @@ export default function obsidianVaultPlugin(
               bannerTop,
               bannerBottom,
               fileIndex, // Pass file index for wikilink resolution
+              knownPaths,
               isExcluded: (p: string) => shouldExclude(p, exclude), // De-link wikilinks to excluded notes
             }
           );

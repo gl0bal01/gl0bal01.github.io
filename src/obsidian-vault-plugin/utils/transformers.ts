@@ -1,3 +1,4 @@
+import path from 'path';
 // Obsidian → Docusaurus Transformation Utilities
 
 /**
@@ -327,25 +328,39 @@ export function escapeMDXCharacters(content: string): string {
 }
 
 /**
- * Resolve relative markdown links to work in Docusaurus
- * Handles: [text](../path/file.md) → [text](../path/file)
- *          [text](./file.md) → [text](./file)
- *          [text](path/file.md) → [text](path/file)
+ * Point relative links at the target .md file.
  *
- * Docusaurus expects links without .md extension for internal docs
+ * Docusaurus resolves `[t](x.md)` by file, but `[t](x)` against the page URL.
+ * Those only agree when the page URL mirrors the file path; a folder index
+ * (README.md, index.md) is served one level up, so its extension-less links
+ * miss by one directory. Vault notes often omit `.md`, so add it whenever the
+ * target note exists; links that do not resolve to a note keep the previous
+ * behaviour (`.md` stripped). `knownPaths` holds vault-relative paths without `.md`.
  */
-export function resolveRelativeLinks(content: string): string {
-  // Pattern: [text](path.md) where path:
-  // - starts with ./ or ../ (explicit relative)
-  // - OR is a simple path without http:// or https:// (implicit relative)
-  const relativeLinkPattern = /\[([^\]]+)\]\((?!https?:\/\/)([^)]+\.md(?:#[^)]*)?)\)/g;
+export function resolveRelativeLinks(
+  content: string,
+  currentFilePath: string,
+  knownPaths: Set<string>
+): string {
+  // [text](target#anchor) where target is not a URL scheme, anchor or absolute path
+  const linkPattern = /\[([^\]]+)\]\((?![a-z][a-z0-9+.-]*:|#|\/)([^)\s#]+)(#[^)\s]*)?\)/gi;
+  const currentDir = path.posix.dirname(currentFilePath.replace(/\\/g, '/'));
 
-  return content.replace(relativeLinkPattern, (match, linkText, linkPath) => {
-    // Remove .md extension for Docusaurus
-    // Keep anchor if present (e.g., file.md#section → file#section)
-    const cleanPath = linkPath.replace(/\.md(#|$)/, '$1');
-
-    return `[${linkText}](${cleanPath})`;
+  return content.replace(linkPattern, (match, text, target, anchor = '') => {
+    const ext = path.posix.extname(target);
+    if (ext && ext !== '.md') return match; // asset
+    const bare = ext ? target.slice(0, -ext.length) : target;
+    let decoded = bare;
+    try {
+      decoded = decodeURIComponent(bare);
+    } catch {
+      // keep the raw target
+    }
+    const resolved = path.posix.normalize(path.posix.join(currentDir, decoded));
+    if (knownPaths.has(resolved)) return `[${text}](${bare}.md${anchor})`;
+    // Target is not a note at that file path: keep the old URL-relative link
+    // (some notes, like the Docusaurus-only index.md, are written that way).
+    return ext ? `[${text}](${bare}${anchor})` : match;
   });
 }
 
@@ -397,6 +412,7 @@ export function transformObsidianContent(
     bannerTop?: string;
     bannerBottom?: string;
     fileIndex?: Map<string, string>;
+    knownPaths?: Set<string>;
     isExcluded?: (relativePath: string) => boolean;
   } = {}
 ): string {
@@ -408,6 +424,7 @@ export function transformObsidianContent(
     bannerTop,
     bannerBottom,
     fileIndex,
+    knownPaths = new Set<string>(),
     isExcluded,
   } = options;
 
@@ -426,7 +443,7 @@ export function transformObsidianContent(
 
   // Resolve relative markdown links (important: do this after wikilinks conversion)
   if (doResolveLinks) {
-    transformedBody = resolveRelativeLinks(transformedBody);
+    transformedBody = resolveRelativeLinks(transformedBody, filename, knownPaths);
   }
 
   if (doCallouts) {
