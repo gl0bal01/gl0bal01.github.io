@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import { usePluginData } from "@docusaurus/useGlobalData";
 import Layout from "@theme/Layout";
 import Heading from "@theme/Heading";
 
@@ -29,11 +30,19 @@ const Icon = {
       <path d="M8 9h7M8 13h7M8 17h5" />
     </svg>
   ),
-  Analysis: ({ className }: IconProps) => (
+  Case: ({ className }: IconProps) => (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="11" cy="11" r="6" />
-      <path d="m20 20-4.5-4.5" />
-      <path d="M11 8v6M8 11h6" />
+      <rect x="3" y="7" width="18" height="13" rx="2" />
+      <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+      <path d="M3 12h18" />
+    </svg>
+  ),
+  Arcade: ({ className }: IconProps) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M6 9h12a4 4 0 0 1 4 4v1a3 3 0 0 1-5.4 1.8L15 14H9l-1.6 1.8A3 3 0 0 1 2 14v-1a4 4 0 0 1 4-4z" />
+      <path d="M7 11v2M6 12h2" />
+      <circle cx="16" cy="11.5" r=".6" fill="currentColor" />
+      <circle cx="18" cy="13.5" r=".6" fill="currentColor" />
     </svg>
   ),
   Cheatsheet: ({ className }: IconProps) => (
@@ -82,11 +91,13 @@ function HomepageHeader() {
   );
 }
 
+type CardLink = { to: string; label: string; button?: boolean };
+
 type CardProps = {
   icon: ReactNode;
   title: ReactNode;
   body: string;
-  links: { to: string; label: string; variant?: "primary" | "secondary" }[];
+  links: CardLink[];
   variant?: "default" | "featured" | "discord";
 };
 
@@ -108,22 +119,66 @@ function CategoryCard({ icon, title, body, links, variant = "default" }: CardPro
         <p>{body}</p>
       </div>
       <div className="card__footer">
-        {links.map((l, i) => (
-          <Link
-            key={l.to}
-            className={clsx(
-              "button",
-              `button--${l.variant ?? "primary"}`,
-              "button--block"
-            )}
-            to={l.to}
-            style={i > 0 ? { marginTop: "0.5rem" } : undefined}
-          >
-            {l.label}
-          </Link>
-        ))}
+        {links.map((l) =>
+          l.button ? (
+            <Link key={l.to} className="button button--primary" to={l.to}>
+              {l.label}
+            </Link>
+          ) : (
+            <Link key={l.to} className={styles.textLink} to={l.to}>
+              {l.label} <span aria-hidden="true">→</span>
+            </Link>
+          )
+        )}
       </div>
     </article>
+  );
+}
+
+type ProjectProps = { name: string; tld: string; href: string; body: string; icon: ReactNode };
+
+function ProjectCard({ name, tld, href, body, icon }: ProjectProps) {
+  return (
+    <Link to={href} className={styles.projectCard}>
+      <div className={styles.cardIcon}>{icon}</div>
+      <div>
+        <h3 className={styles.projectName}>
+          {name}
+          <span className={styles.projectTld}>{tld}</span>
+        </h3>
+        <p>{body}</p>
+      </div>
+      <span className={styles.projectArrow} aria-hidden="true">↗</span>
+    </Link>
+  );
+}
+
+type Post = { title: string; description: string; permalink: string; date: string };
+
+function LatestPosts() {
+  const data = usePluginData("latest-posts-plugin") as { posts?: Post[] } | undefined;
+  const posts = data?.posts ?? [];
+  if (posts.length === 0) return null;
+  return (
+    <section>
+      <div className={styles.sectionHead}>
+        <h2 className={styles.sectionTitle}>Latest from the blog</h2>
+        <Link to="/blog" className={styles.textLink}>
+          All posts <span aria-hidden="true">→</span>
+        </Link>
+      </div>
+      <ul className={styles.postList}>
+        {posts.map((p) => (
+          <li key={p.permalink}>
+            <Link to={p.permalink} className={styles.postRow}>
+              <time dateTime={p.date}>{p.date}</time>
+              <span className={styles.postTitle}>{p.title}</span>
+              {p.description && <span className={styles.postDesc}>{p.description}</span>}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
@@ -132,70 +187,86 @@ export default function Home(): ReactNode {
     <Layout description="Security research, penetration testing and digital investigation techniques">
       <HomepageHeader />
       <main className={styles.main}>
-        <section className={clsx("container", styles.cardSection)}>
+        <div className={clsx("container", styles.cardSection)}>
           <CategoryCard
             variant="featured"
             icon={<Icon.Codex className={styles.svgIcon} />}
             title="Intel Codex"
-            body="Complete operational manual for digital investigators and security analysts. Field-tested SOPs, platform-specific guides, pentesting methodologies, malware analysis procedures, and real-world case studies. Available as an Obsidian vault for offline graph-based exploration."
+            body="Field-tested SOPs for investigations, pentesting and malware analysis, plus platform guides and real case studies. Read it here, or clone it as an Obsidian vault and walk the graph offline."
             links={[
-              { to: "/intel-codex", label: "Explore Intel Codex" },
-              { to: "https://github.com/gl0bal01/intel-codex", label: "Get the Obsidian vault", variant: "secondary" },
+              { to: "/intel-codex", label: "Explore Intel Codex", button: true },
+              { to: "https://github.com/gl0bal01/intel-codex", label: "Get the Obsidian vault" },
             ]}
           />
 
-          <div className={styles.cardGrid}>
-            <CategoryCard
-              icon={<Icon.Analysis className={styles.svgIcon} />}
-              title="Security Analysis SOPs"
-              body="Standard Operating Procedures for security analysis, reverse engineering, and cryptographic analysis."
-              links={[{ to: "/intel-codex/Security/Analysis/Analysis-Index", label: "View Analysis SOPs" }]}
-            />
-            <CategoryCard
-              icon={<Icon.Cheatsheet className={styles.svgIcon} />}
-              title="Cheatsheets"
-              body="Quick reference guides, command sheets, and concise technical documentation for tools, frameworks, and methodologies."
-              links={[{ to: "/cheatsheets", label: "Browse Cheatsheets" }]}
-            />
-            <CategoryCard
-              icon={<Icon.Osint className={styles.svgIcon} />}
-              title="OSINT Foundations"
-              body="Theoretical frameworks, sockpuppet operations, strategic approaches, and fundamental concepts for open-source intelligence work."
-              links={[{ to: "/osint", label: "Explore OSINT" }]}
-            />
-            <CategoryCard
-              icon={<Icon.Shield className={styles.svgIcon} />}
-              title="Cybersecurity"
-              body="Security best practices, threat intelligence, defensive strategies, and comprehensive guides for protecting digital assets."
-              links={[{ to: "/cyber", label: "View Security Guides" }]}
-            />
-            <CategoryCard
-              icon={<Icon.Reverse className={styles.svgIcon} />}
-              title="Reverse Engineering"
-              body="Binary analysis, malware dissection, and reverse engineering techniques for uncovering hidden functionality in compiled code."
-              links={[{ to: "/reverse-engineering", label: "Learn Reverse Engineering" }]}
-            />
-            <CategoryCard
-              icon={<Icon.News className={styles.svgIcon} />}
-              title="News & Blog"
-              body="Latest security news aggregated from trusted sources, plus personal insights on neurodiversity, psychology, and cybersecurity research."
-              links={[
-                { to: "/news", label: "Read News Feeds" },
-                { to: "/blog", label: "View Blog Posts", variant: "secondary" },
-              ]}
-            />
-            <CategoryCard
-              variant="discord"
-              icon={<Icon.Discord className={clsx(styles.svgIcon, styles.discordSvg)} />}
-              title={<>GlobalHub <span className={styles.gamingBadge} aria-hidden="true">PLAY</span></>}
-              body="40+ interactive cybersecurity and OSINT exercises. Join the community where learning meets gaming."
-              links={[
-                { to: "http://join.gl0bal01.com", label: "Join Discord Server" },
-                { to: "https://youareplayer.com/", label: "Visit Arcade Platform", variant: "secondary" },
-              ]}
-            />
-          </div>
-        </section>
+          <section>
+            <h2 className={styles.sectionTitle}>Other things I build</h2>
+            <div className={styles.projectGrid}>
+              <ProjectCard
+                name="CaseBandit"
+                tld=".com"
+                href="https://casebandit.com/"
+                body="Capture evidence, map relationships, build timelines. Local-first, offline."
+                icon={<Icon.Case className={styles.svgIcon} />}
+              />
+              <ProjectCard
+                name="YouArePlayer"
+                tld=".com"
+                href="https://youareplayer.com/"
+                body="50+ out-of-the-box games for fun and knowledge."
+                icon={<Icon.Arcade className={styles.svgIcon} />}
+              />
+            </div>
+          </section>
+
+          <LatestPosts />
+
+          <section>
+            <h2 className={styles.sectionTitle}>Explore</h2>
+            <div className={styles.cardGrid}>
+              <CategoryCard
+                icon={<Icon.Cheatsheet className={styles.svgIcon} />}
+                title="Cheatsheets"
+                body="Command sheets for the tools I keep reopening: Exegol, Nuclei and the rest of the ProjectDiscovery kit, Docker, Tailscale, mise, GitHub."
+                links={[{ to: "/cheatsheets", label: "Browse cheatsheets" }]}
+              />
+              <CategoryCard
+                icon={<Icon.Osint className={styles.svgIcon} />}
+                title="OSINT Foundations"
+                body="Sockpuppets done properly: infrastructure, persona development, platform tactics. The groundwork before any real investigation."
+                links={[{ to: "/osint", label: "Explore OSINT" }]}
+              />
+              <CategoryCard
+                icon={<Icon.Shield className={styles.svgIcon} />}
+                title="Cybersecurity"
+                body="Pivoting through networks, brute-forcing services, reading packet captures. Guides you can follow with a terminal open."
+                links={[{ to: "/cyber", label: "View security guides" }]}
+              />
+              <CategoryCard
+                icon={<Icon.Reverse className={styles.svgIcon} />}
+                title="Reverse Engineering"
+                body="GDB with worked examples, and Binary Refinery for peeling apart encoded payloads."
+                links={[{ to: "/reverse-engineering", label: "Learn reverse engineering" }]}
+              />
+              <CategoryCard
+                icon={<Icon.News className={styles.svgIcon} />}
+                title="News & Blog"
+                body="Security news pulled from 17+ feeds and rebuilt every morning, plus my own posts on security, neurodiversity and psychology."
+                links={[
+                  { to: "/news", label: "Read the news" },
+                  { to: "/blog", label: "Blog posts" },
+                ]}
+              />
+              <CategoryCard
+                variant="discord"
+                icon={<Icon.Discord className={clsx(styles.svgIcon, styles.discordSvg)} />}
+                title={<>GlobalHub <span className={styles.gamingBadge} aria-hidden="true">PLAY</span></>}
+                body="40+ interactive cybersecurity and OSINT exercises, and a Discord community to work through them with."
+                links={[{ to: "http://join.gl0bal01.com", label: "Join the Discord", button: true }]}
+              />
+            </div>
+          </section>
+        </div>
       </main>
     </Layout>
   );
