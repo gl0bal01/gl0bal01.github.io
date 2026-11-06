@@ -82,6 +82,9 @@ function HomepageHeader() {
           {siteConfig.title}
         </Heading>
         <p className={clsx("hero__subtitle", styles.heroSubtitle)}>{siteConfig.tagline}</p>
+        <Link className={clsx("button button--lg", styles.heroCta)} to="/intel-codex">
+          Explore Intel Codex
+        </Link>
         <ul className={styles.heroStats}>
           <li><strong>70+</strong> investigation guides</li>
           <li><strong>17+</strong> security RSS feeds</li>
@@ -194,7 +197,7 @@ export default function Home(): ReactNode {
             title="Intel Codex"
             body="Field-tested SOPs for investigations, pentesting and malware analysis, plus platform guides and real case studies. Read it here, or clone it as an Obsidian vault and walk the graph offline."
             links={[
-              { to: "/intel-codex", label: "Explore Intel Codex", button: true },
+              { to: "/intel-codex", label: "Browse the SOPs", button: true },
               { to: "https://github.com/gl0bal01/intel-codex", label: "Get the Obsidian vault" },
             ]}
           />

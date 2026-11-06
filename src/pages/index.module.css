@@ -51,6 +51,20 @@
   line-height: 1.5;
 }
 
+/* The hero is dark in both themes, so the theme primary (black in light) can't be used. */
+.heroCta {
+  margin-top: 1.75rem;
+  background: #66d9ff;
+  border-color: #66d9ff;
+  color: #07090f;
+}
+
+.heroCta:hover {
+  background: #8fe4ff;
+  border-color: #8fe4ff;
+  color: #07090f;
+}
+
 .heroStats {
   list-style: none;
   padding: 0;
