@@ -1,4 +1,5 @@
 import path from 'path';
+import { createSlugger } from '@docusaurus/utils';
 // Obsidian → Docusaurus Transformation Utilities
 
 /**
@@ -89,8 +90,12 @@ export function convertWikilinks(
     // Use display text or extract filename
     const label = displayText?.trim() || extractFilename(linkPath);
 
-    // Reconstruct with anchor if present
-    const pathWithAnchor = anchor ? `${finalPath}#${anchor}` : finalPath;
+    // Obsidian links a heading by its text ("#10. Common Pitfalls"); Docusaurus
+    // ids are that text slugged by the same slugger its heading plugin uses.
+    // Raw text with spaces would also break the markdown link syntax.
+    const pathWithAnchor = anchor
+      ? `${finalPath}#${createSlugger().slug(anchor.trim())}`
+      : finalPath;
 
     return `[${label}](${pathWithAnchor})`;
   });
