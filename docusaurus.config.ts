@@ -308,6 +308,8 @@ footer: {
         items: [
           {label: 'CaseBandit', href: 'https://casebandit.com/'},
           {label: 'YouArePlayer', href: 'https://youareplayer.com/'},
+          {label: 'Chainmap', href: 'https://chainmap.gl0bal01.com/'},
+          {label: 'Volatility Toolkit', href: 'https://github.com/gl0bal01/volatility-toolkit'},
         ],
       },
       {
@@ -321,7 +323,7 @@ footer: {
         ],
       },
     ],
-    copyright: `Copyright © ${new Date().getFullYear()} gl0bal01. Built with Docusaurus.`,
+    copyright: `Copyright © ${new Date().getFullYear()} gl0bal01.`,
   },
     prism: {
       theme: prismThemes.github,
