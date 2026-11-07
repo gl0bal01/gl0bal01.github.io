@@ -409,6 +409,7 @@ html[data-theme='dark'] .button--secondary:hover {
 .header-links-cta {
   --links-cta-grad: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
   margin-left: 0.35rem;
+  margin-right: 0.6rem; /* breathing room before the theme toggle */
   padding: 6px 16px;
   border-radius: 999px;
   color: #ffffff !important;
@@ -469,6 +470,17 @@ html[data-theme='dark'] .header-links-cta {
 .navbar-sidebar .header-links-cta:hover,
 .navbar-sidebar .header-links-cta:focus-visible {
   transform: none; /* lift feels wrong on a full-width row */
+}
+
+/* Two-state theme toggle (src/theme/Navbar/ColorModeToggle): before the first
+   click the choice is "system", so show the icon of the theme actually in use. */
+html[data-theme-choice='system'] [class*='systemToggleIcon'] {
+  display: none;
+}
+
+html[data-theme-choice='system'][data-theme='light'] [class*='lightToggleIcon'],
+html[data-theme-choice='system'][data-theme='dark'] [class*='darkToggleIcon'] {
+  display: initial;
 }
 
 /* ========================================
