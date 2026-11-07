@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { PointerEvent, ReactNode } from "react";
 import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
@@ -72,11 +72,25 @@ const Icon = {
   ),
 };
 
+// Feeds the spotlight position to CSS; the spotlight moves by transform only.
+function trackPointer(e: PointerEvent<HTMLElement>) {
+  const r = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
+  e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
+}
+
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <header className={clsx("hero", styles.heroBanner)}>
-      <div className={styles.heroGrid} aria-hidden="true" />
+    <header className={clsx("hero", styles.heroBanner)} onPointerMove={trackPointer}>
+      <div className={styles.heroBackdrop} aria-hidden="true">
+        <div className={styles.heroAurora} />
+        <div className={styles.heroFloor}>
+          <div className={styles.heroFloorGrid} />
+        </div>
+        <div className={styles.heroSpot} />
+        <div className={styles.heroGrain} />
+      </div>
       <div className="container">
         <Heading as="h1" className={clsx("hero__title", styles.heroTitle)}>
           {siteConfig.title}

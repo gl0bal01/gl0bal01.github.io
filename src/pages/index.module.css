@@ -1,10 +1,12 @@
-/* Hero — dark, security-toned, single accent line */
+/* Hero — dark "radar room": drifting halos, a perspective grid floor,
+   grain, and a pointer spotlight. Every moving layer animates transform only. */
 .heroBanner {
   position: relative;
   padding: 5rem 0 5rem 0;
   text-align: center;
   overflow: hidden;
-  background: radial-gradient(ellipse at top, #1b2033 0%, #0b0e17 60%, #07090f 100%);
+  isolation: isolate;
+  background: #05070d;
   color: #e6edf7;
   border-bottom: 1px solid rgba(120, 160, 255, 0.12);
 }
@@ -19,16 +21,142 @@
   background: linear-gradient(90deg, transparent, rgba(102, 217, 255, 0.5), transparent);
 }
 
-.heroGrid {
+.heroBackdrop {
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(120, 160, 255, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(120, 160, 255, 0.06) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
   pointer-events: none;
+}
+
+/* Indigo dome from the top + cyan bloom rising from the horizon */
+.heroBackdrop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 45% 38% at 50% 60%, rgba(102, 217, 255, 0.16), transparent 70%),
+    radial-gradient(ellipse 80% 70% at 50% 0%, rgba(99, 102, 241, 0.28), transparent 70%);
+}
+
+/* Horizon line where the floor starts */
+.heroBackdrop::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 40%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 5%, rgba(102, 217, 255, 0.75) 50%, transparent 95%);
+  box-shadow: 0 0 18px 2px rgba(102, 217, 255, 0.35);
+}
+
+/* Two soft halos (cyan, violet) drifting slowly */
+.heroAurora {
+  position: absolute;
+  inset: 0;
+}
+
+.heroAurora::before,
+.heroAurora::after {
+  content: '';
+  position: absolute;
+  width: 60vmax;
+  height: 60vmax;
+  border-radius: 50%;
+}
+
+.heroAurora::before {
+  top: -32vmax;
+  left: -18vmax;
+  background: radial-gradient(circle, rgba(102, 217, 255, 0.26), transparent 62%);
+  animation: heroDriftA 22s ease-in-out infinite alternate;
+}
+
+.heroAurora::after {
+  top: -28vmax;
+  right: -22vmax;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.26), transparent 62%);
+  animation: heroDriftB 27s ease-in-out infinite alternate;
+}
+
+@keyframes heroDriftA {
+  to { transform: translate3d(22vw, 10vmax, 0) scale(1.15); }
+}
+
+@keyframes heroDriftB {
+  to { transform: translate3d(-24vw, 14vmax, 0) scale(0.9); }
+}
+
+/* Grid floor receding to a horizon, scrolling toward the viewer */
+.heroFloor {
+  position: absolute;
+  left: -50%;
+  right: -50%;
+  bottom: 0;
+  height: 40%;
+  perspective: 360px;
+  perspective-origin: 50% 0%;
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.6) 35%, black 80%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.6) 35%, black 80%);
+}
+
+.heroFloorGrid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -200%;
+  bottom: 0;
+  background-image:
+    linear-gradient(rgba(102, 217, 255, 0.5) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(102, 217, 255, 0.5) 2px, transparent 2px);
+  background-size: 56px 56px;
+  transform-origin: 50% 100%;
+  transform: rotateX(72deg);
+  animation: heroFloorMove 2.4s linear infinite;
+}
+
+@keyframes heroFloorMove {
+  to { transform: rotateX(72deg) translateY(56px); }
+}
+
+/* Pointer spotlight: hidden until the pointer is over the hero */
+.heroSpot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 560px;
+  height: 560px;
+  margin: -280px 0 0 -280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(102, 217, 255, 0.22), transparent 65%);
+  transform: translate3d(var(--mx, 50%), var(--my, 50%), 0);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+@media (hover: hover) {
+  .heroBanner:hover .heroSpot {
+    opacity: 1;
+  }
+}
+
+/* Film grain so the gradients don't band */
+.heroGrain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroAurora::before,
+  .heroAurora::after,
+  .heroFloorGrid {
+    animation: none;
+  }
+
+  .heroSpot {
+    display: none;
+  }
 }
 
 .heroBanner :global(.container) {
@@ -45,6 +173,7 @@
 
 .heroSubtitle {
   color: #b8c4dc !important;
+  text-shadow: 0 1px 14px #05070d, 0 0 4px #05070d;
   max-width: 680px;
   margin: 0.75rem auto 0 auto;
   font-size: 1.15rem;
@@ -75,6 +204,7 @@
   gap: 0.75rem 1.75rem;
   font-size: 0.95rem;
   color: #93a3c2;
+  text-shadow: 0 1px 10px #05070d, 0 0 4px #05070d;
 }
 
 .heroStats li {
