@@ -237,7 +237,10 @@ const config: Config = {
       title: 'gl0bal01',
       logo: {
         alt: 'gl0bal01 - Security Research & OSINT',
-        src: '/icons/android-icon-48x48.png',
+        // 96px source: the logo renders at 32 CSS px, so 48px was blurry on 2x/3x screens.
+        src: '/icons/android-icon-96x96.png',
+        width: 32,
+        height: 32,
       },
       items: [
         {
@@ -246,38 +249,25 @@ const config: Config = {
           position: 'left',
           label: 'Intel Codex',
           docsPluginId: 'intel-codex',
-          'aria-label': 'Intel Codex documentation',
         },
         {
-          label: 'Practical',
+          label: 'Guides',
           position: 'left',
-          'aria-label': 'Practical resources navigation menu',
           items: [
-            {
-              to: '/osint',
-              label: 'Osint',
-              'aria-label': 'OSINT resources',
-            },
-            {
-              to: '/cyber',
-              label: 'Cyber',
-              'aria-label': 'Cybersecurity resources',
-            },
-            {
-              to: '/reverse-engineering',
-              label: 'Reverse',
-              'aria-label': 'Reverse engineering resources',
-            },
+            {to: '/osint', label: 'OSINT'},
+            {to: '/cyber', label: 'Cybersecurity'},
+            {to: '/reverse-engineering', label: 'Reverse Engineering'},
           ],
         },
-        {to: '/cheatsheets', label: 'Cheatsheets', position: 'left', 'aria-label': 'Security and development cheatsheets'},
-        {to: '/blog', label: 'Blog', position: 'left', 'aria-label': 'Blog posts and articles'},
-        {to: '/news', label: 'News', position: 'left', 'aria-label': 'Latest news and updates'},
+        {to: '/cheatsheets', label: 'Cheatsheets', position: 'left'},
+        {to: '/blog', label: 'Blog', position: 'left'},
+        {to: '/news', label: 'News', position: 'left'},
         {
           to: '/links',
           label: 'Links',
           position: 'right',
           className: 'header-links-cta',
+          // Kept: stops screen readers announcing the CSS ✦ and → glyphs around the label.
           'aria-label': 'All my links — socials, projects, community',
         },
       ],
@@ -288,146 +278,46 @@ footer: {
       {
         title: 'Intel Codex',
         items: [
-          {
-            label: 'Overview',
-            to: '/intel-codex',
-            'aria-label': 'Intel Codex overview page',
-          },
-          {
-            label: 'Download Vault',
-            href: 'https://github.com/gl0bal01/intel-codex',
-            target: '_blank',
-            rel: 'noopener noreferrer',
-            'aria-label': 'Download the Intel Codex Obsidian vault',
-          },
+          {label: 'Overview', to: '/intel-codex'},
+          {label: 'Investigations', to: '/intel-codex/Investigations/Investigations-Index'},
+          {label: 'Pentesting', to: '/intel-codex/Security/Pentesting/Pentesting-Index'},
+          {label: 'Security Analysis', to: '/intel-codex/Security/Analysis/Analysis-Index'},
+          {label: 'Get the vault', href: 'https://github.com/gl0bal01/intel-codex'},
         ],
       },
       {
-        title: 'OSINT Investigations',
+        title: 'Learn',
         items: [
-          {
-            label: 'Investigation Index',
-            to: '/intel-codex/Investigations/Investigations-Index',
-            'aria-label': 'OSINT investigation index',
-          },
-          {
-            label: 'Investigation Techniques',
-            to: '/intel-codex/Investigations/Techniques/Techniques-Index',
-            'aria-label': 'Investigation techniques and methodologies',
-          },
-          {
-            label: 'Darkweb Investigation',
-            to: '/intel-codex/Investigations/Techniques/sop-darkweb-investigation',
-            'aria-label': 'Tor, I2P, hidden services, marketplaces, ransomware leak sites',
-          },
-          {
-            label: 'Blockchain Tracing',
-            to: '/intel-codex/Investigations/Techniques/sop-blockchain-investigation',
-            'aria-label': 'Multi-chain tracing, address clustering, sanctions, court admissibility',
-          },
+          {label: 'OSINT Foundations', to: '/osint'},
+          {label: 'Cybersecurity', to: '/cyber'},
+          {label: 'Reverse Engineering', to: '/reverse-engineering'},
+          {label: 'Cheatsheets', to: '/cheatsheets'},
         ],
       },
       {
-        title: 'Security Operations',
+        title: 'Read',
         items: [
-          {
-            label: 'Security Analysis',
-            to: '/intel-codex/Security/Analysis/Analysis-Index',
-            'aria-label': 'Security analysis resources and guides',
-          },
-          {
-            label: 'Penetration Testing',
-            to: '/intel-codex/Security/Pentesting/Pentesting-Index',
-            'aria-label': 'Penetration testing methodologies and tools',
-          },
-          {
-            label: 'Malware Analysis',
-            to: '/intel-codex/Security/Analysis/sop-malware-analysis',
-            'aria-label': 'Malware analysis procedures',
-          },
-          {
-            label: 'Reverse Engineering',
-            to: '/intel-codex/Security/Analysis/sop-reverse-engineering',
-            'aria-label': 'Reverse engineering techniques',
-          },
-          {
-            label: 'Digital Forensics (DFIR)',
-            to: '/intel-codex/Security/Analysis/sop-forensics-investigation',
-            'aria-label': 'Digital forensics investigation procedures',
-          },
-          {
-            label: 'Cloud Forensics',
-            to: '/intel-codex/Security/Analysis/sop-cloud-forensics',
-            'aria-label': 'AWS, Azure, GCP control-plane forensics and IAM reconstruction',
-          },
-          {
-            label: 'Cloud Pentest',
-            to: '/intel-codex/Security/Pentesting/sop-cloud-pentest',
-            'aria-label': 'AWS, Azure, GCP offensive testing and SaaS collaboration plane',
-          },
+          {label: 'Blog', to: '/blog'},
+          {label: 'News', to: '/news'},
+          // pathname:// = static file, not a route: plain <a>, skipped by the broken-link check.
+          {label: 'RSS feed', to: 'pathname:///blog/rss.xml'},
         ],
       },
       {
-        title: 'Resources',
+        title: 'Projects',
         items: [
-          {
-            label: 'OSINT Foundations',
-            to: '/osint',
-            'aria-label': 'OSINT foundations and resources',
-          },
-          {
-            label: 'Cybersecurity',
-            to: '/cyber',
-            'aria-label': 'Cybersecurity resources and guides',
-          },
-          {
-            label: 'Cheatsheets',
-            to: '/cheatsheets',
-            'aria-label': 'Technical cheatsheets and quick references',
-          },
-          {
-            label: 'News Feeds',
-            to: '/news',
-            'aria-label': 'Security and technology news feeds',
-          },
-          {
-            label: 'Blog',
-            to: '/blog',
-            'aria-label': 'Visit our blog',
-          },
+          {label: 'CaseBandit', href: 'https://casebandit.com/'},
+          {label: 'YouArePlayer', href: 'https://youareplayer.com/'},
         ],
       },
       {
-        title: 'Community',
+        title: 'Elsewhere',
         items: [
-          {
-            label: 'Play & Learn',
-            href: 'https://youareplayer.com/',
-            target: '_blank',
-            rel: 'noopener noreferrer',
-            'aria-label': 'LeCodex - CTF challenge platform',
-          },
-          {
-            label: 'GitHub',
-            href: 'https://github.com/gl0bal01/',
-            target: '_blank',
-            rel: 'noopener noreferrer',
-            'aria-label': 'Visit gl0bal01 on GitHub',
-          },
-          {
-            label: 'Discord',
-            href: 'http://join.gl0bal01.com',
-            target: '_blank',
-            rel: 'noopener noreferrer',
-            'aria-label': 'Join gl0bal01 Discord community',
-          },
-          {
-            label: 'Start.me',
-            href: 'https://start.me/u/gl0bal01',
-            target: '_blank',
-            rel: 'noopener noreferrer',
-            'aria-label': 'Visit gl0bal01 Start.me page',
-          },
+          {label: 'GitHub', href: 'https://github.com/gl0bal01'},
+          {label: 'X', href: 'https://x.com/gl0bal01'},
+          {label: 'Discord', href: 'http://join.gl0bal01.com'},
+          {label: 'Start.me', href: 'https://start.me/u/gl0bal01'},
+          {label: 'All links', to: '/links'},
         ],
       },
     ],

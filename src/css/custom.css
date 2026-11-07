@@ -87,7 +87,21 @@ html[data-theme='dark'] {
 }
 
 .navbar__link {
-  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* The avatar has an opaque white background: a circle reads as an avatar
+   (same as /links) instead of a white square on the dark navbar. */
+.navbar__logo img {
+  border-radius: 50%;
+}
+
+/* Brand in the site's display font, like the hero title. */
+.navbar__title {
+  font-family: 'Host Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 1.125rem;
+  letter-spacing: -0.01em;
 }
 
 /* ========================================
@@ -154,24 +168,16 @@ html[data-theme='light'] .navbar__link {
 
 /* Hover state */
 html[data-theme='light'] .navbar__link:hover {
-  background-color: #e0e0e0;
+  background-color: rgba(0, 0, 0, 0.05);
   color: #000000;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Active state */
-html[data-theme='light'] .navbar__link.navbar__link--active {
-  background-color: #000000;
-  color: #ffffff;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
-}
-
-/* Active state - hover */
-html[data-theme='light'] .navbar__link.navbar__link--active:hover {
-  background-color: #ffffff;
+/* Active state (also on hover: no flip). Docusaurus never marks a desktop
+   dropdown active, so :has() lights "Guides" when one of its pages is open. */
+html[data-theme='light'] .navbar__link.navbar__link--active,
+html[data-theme='light'] .dropdown:has(.dropdown__link--active) > .navbar__link {
+  background-color: rgba(0, 0, 0, 0.09);
   color: #000000;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
-  transform: scale(1.05);
 }
 
 /* ========================================
@@ -237,24 +243,15 @@ html[data-theme='dark'] .navbar__link {
 
 /* Hover state */
 html[data-theme='dark'] .navbar__link:hover {
-  background-color: #2a2a2a;
+  background-color: rgba(255, 255, 255, 0.07);
   color: #ffffff;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
 }
 
-/* Active state */
-html[data-theme='dark'] .navbar__link.navbar__link--active {
-  background-color: #ffffff;
-  color: #000000;
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
-}
-
-/* Active state - hover */
-html[data-theme='dark'] .navbar__link.navbar__link--active:hover {
-  background-color: #000000;
+/* Active state (also on hover: no flip); :has() as in light theme */
+html[data-theme='dark'] .navbar__link.navbar__link--active,
+html[data-theme='dark'] .dropdown:has(.dropdown__link--active) > .navbar__link {
+  background-color: rgba(255, 255, 255, 0.14);
   color: #ffffff;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-  transform: scale(1.05);
 }
 
 
@@ -420,7 +417,6 @@ html[data-theme='dark'] .button--secondary:hover {
   background: var(--links-cta-grad) !important;
   box-shadow: 0 2px 10px rgba(168, 85, 247, 0.45);
   transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
-  animation: links-cta-glow 2.8s ease-in-out infinite;
 }
 
 /* Leading spark + trailing arrow, drawn in CSS so the label stays plain text */
@@ -452,15 +448,7 @@ html[data-theme='dark'] .header-links-cta {
   box-shadow: 0 2px 14px rgba(168, 85, 247, 0.6);
 }
 
-@keyframes links-cta-glow {
-  0%, 100% { box-shadow: 0 2px 10px rgba(168, 85, 247, 0.40); }
-  50%      { box-shadow: 0 2px 16px rgba(236, 72, 153, 0.60); }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .header-links-cta {
-    animation: none;
-  }
   .header-links-cta,
   .header-links-cta::after {
     transition: none;
@@ -476,7 +464,6 @@ html[data-theme='dark'] .header-links-cta {
   padding: 12px 16px;
   text-align: center;
   border-radius: 12px;
-  animation: none; /* no pulse in the menu */
 }
 
 .navbar-sidebar .header-links-cta:hover,
@@ -505,6 +492,13 @@ html[data-theme='dark'] .header-links-cta {
 }
 
 /* Footer always has dark background (style: 'dark'), base rules above apply to both themes */
+
+/* Two columns on phones instead of Infima's single stacked column. */
+@media (max-width: 996px) {
+  .footer__links .footer__col {
+    --ifm-col-width: 50%;
+  }
+}
 
 /* ========================================
    TABLE OF CONTENTS (RIGHT SIDEBAR) STYLING
